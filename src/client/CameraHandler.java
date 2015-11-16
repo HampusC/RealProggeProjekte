@@ -14,7 +14,7 @@ public class CameraHandler {
 	}
 	public boolean connectCamera(String address, int port){ //tänk på hur disconnect och numrering påverkar
 	return cameraSockets.add(new CameraSocketHandler(address,port));
-	
+	//timme 
 		
 	}
 
