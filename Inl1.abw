@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE abiword PUBLIC "-//ABISOURCE//DTD AWML 1.0 Strict//EN" "http://www.abisource.com/awml.dtd">
+<abiword template="false" xmlns:ct="http://www.abisource.com/changetracking.dtd" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:math="http://www.w3.org/1998/Math/MathML" xid-max="38" xmlns:dc="http://purl.org/dc/elements/1.1/" styles="unlocked" fileformat="1.0" xmlns:svg="http://www.w3.org/2000/svg" xmlns:awml="http://www.abisource.com/awml.dtd" xmlns="http://www.abisource.com/awml.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" version="0.99.2" xml:space="preserve" props="dom-dir:ltr; document-footnote-restart-section:0; document-endnote-type:numeric; document-endnote-place-enddoc:1; document-endnote-initial:1; lang:en-US; document-endnote-restart-section:0; document-footnote-restart-page:0; document-footnote-type:numeric; document-footnote-initial:1; document-endnote-place-endsection:0">
+<!-- ======================================================================== -->
+<!-- This file is an AbiWord document.                                        -->
+<!-- AbiWord is a free, Open Source word processor.                           -->
+<!-- More information about AbiWord is available at http://www.abisource.com/ -->
+<!-- You should not edit this file by hand.                                   -->
+<!-- ======================================================================== -->
+
+<metadata>
+<m key="abiword.date_last_changed">Fri Nov  6 14:59:55 2015
+</m>
+<m key="abiword.generator">AbiWord</m>
+<m key="dc.creator">Hampus Christensen</m>
+<m key="dc.date">Fri Nov  6 14:32:41 2015
+</m>
+<m key="dc.format">application/x-abiword</m>
+</metadata>
+<rdf>
+</rdf>
+<history version="3" edit-time="2280" last-saved="1446818395" uid="595c0384-8489-11e5-8db1-9a973225556d">
+<version id="3" started="1446816761" uid="a8e02cfa-848e-11e5-8db1-9a973225556d" auto="0" top-xid="20"/>
+</history>
+<styles>
+<s type="P" name="Normal" followedby="Current Settings" props="font-family:Times New Roman; margin-top:0pt; color:000000; margin-left:0pt; text-position:normal; widows:2; font-style:normal; text-indent:0in; font-variant:normal; font-weight:normal; margin-right:0pt; font-size:12pt; text-decoration:none; margin-bottom:0pt; line-height:1.0; bgcolor:transparent; text-align:left; font-stretch:normal"/>
+</styles>
+<pagesize pagetype="Letter" orientation="portrait" width="8.500000" height="11.000000" units="in" page-scale="1.000000"/>
+<section xid="5" props="page-margin-footer:0.5in; page-margin-header:0.5in">
+<p style="Normal" xid="6"><c>Ansvaret för våra aktiviter och passiva objekt är som följer:</c></p>
+<p style="Normal" xid="1"><c></c></p>
+<p style="Normal" xid="2" props="text-align:center"><c props="font-weight:bold; font-size:14pt">Server</c><c><br/>Aktiviteter</c></p>
+<p style="Normal" xid="8" props="text-align:left"><c props="font-weight:bold"></c><c props="font-weight:bold">read-thread: </c><c props="font-weight:normal">läsa requests från clienten. ex på requests kan vara att den vill ha en bild. </c></p>
+<p style="Normal" xid="4" props="text-align:left"><c props="font-weight:bold">write-thread:  </c><c props="font-weight:normal">skriver bildinformation på array en.</c></p>
+<p style="Normal" xid="18" props="text-align:left"><c props="font-weight:normal"></c></p>
+<p style="Normal" xid="19" props="text-align:center"><c props="font-weight:normal">Passiva objekt</c></p>
+<p style="Normal" xid="20" props="text-align:left"><c props="font-weight:normal"></c></p>
+<p style="Normal" xid="9" props="text-align:left"><c props="font-weight:normal">-</c></p>
+<p style="Normal" xid="10" props="text-align:center"><c props="font-family:Times New Roman; text-decoration:none; color:000000; font-size:14pt; text-position:normal; font-weight:bold; font-style:normal; lang:en-US">Client</c></p>
+<p style="Normal" xid="14" props="text-align:center"><c props="font-family:Times New Roman; font-size:12pt; color:000000; text-decoration:none; text-position:normal; font-weight:normal; font-style:normal; lang:en-US">Aktiviteter<br/></c></p>
+<p style="Normal" xid="12" props="margin-top:0.0000in; margin-left:0.0000in; text-indent:0.0000in; dom-dir:ltr; margin-bottom:0.0000in; line-height:1.000000; text-align:left; margin-right:0.0000in"><c props="font-family:Times New Roman; font-size:12pt; lang:en-US; text-position:normal; font-weight:bold; font-style:normal; text-decoration:none">read-thread: </c><c props="font-family:Times New Roman; text-decoration:none; lang:en-US; text-position:normal; font-weight:normal; font-style:normal; font-size:12pt">läsa arrayen från servern.</c></p>
+<p style="Normal" xid="13" props="margin-top:0.0000in; margin-left:0.0000in; text-indent:0.0000in; dom-dir:ltr; margin-bottom:0.0000in; line-height:1.000000; text-align:left; margin-right:0.0000in"><c props="font-family:Times New Roman; font-size:12pt; lang:en-US; text-position:normal; font-weight:bold; font-style:normal; text-decoration:none">write-thread:  </c><c props="font-family:Times New Roman; text-decoration:none; lang:en-US; text-position:normal; font-weight:normal; font-style:normal; font-size:12pt">skicka request of att få bild skickad.</c></p>
+<p style="Normal" xid="15" props="margin-top:0.0000in; margin-left:0.0000in; text-indent:0.0000in; dom-dir:ltr; margin-bottom:0.0000in; line-height:1.000000; text-align:left; margin-right:0.0000in"><c props="font-family:Times New Roman; text-decoration:none; lang:en-US; text-position:normal; font-weight:normal; font-style:normal; font-size:12pt"></c></p>
+<p style="Normal" xid="16" props="margin-top:0.0000in; margin-left:0.0000in; text-indent:0.0000in; dom-dir:ltr; margin-bottom:0.0000in; line-height:1.000000; text-align:center; margin-right:0.0000in"><c props="font-family:Times New Roman; text-decoration:none; lang:en-US; text-position:normal; font-weight:normal; font-style:normal; font-size:12pt">Passiva objekt</c></p>
+<p style="Normal" xid="17" props="margin-top:0.0000in; margin-left:0.0000in; text-indent:0.0000in; dom-dir:ltr; margin-bottom:0.0000in; line-height:1.000000; text-align:left; margin-right:0.0000in"><c props="font-family:Times New Roman; text-decoration:none; lang:en-US; text-position:normal; font-weight:normal; font-style:normal; font-size:12pt"></c></p>
+<p style="Normal" xid="7" props="font-family:Times New Roman; font-size:12pt; color:000000; lang:en-US; text-align:left; text-position:normal; font-weight:bold; font-style:normal; text-decoration:none"><c props="font-weight:bold">Bild-buffertar</c><c props="font-weight:normal">,  en till varje kamera(server) så att vi kan hantera synkronisering.</c></p>
+<p style="Normal" xid="21" props="font-family:Times New Roman; font-size:12pt; color:000000; lang:en-US; text-align:left; text-position:normal; font-weight:bold; font-style:normal; text-decoration:none"><c props="font-weight:bold">Monitor med ex. modet vi är i</c><c props="font-weight:normal"> (idle/movie).</c></p>
+<p style="Normal" xid="36" props="font-family:Times New Roman; font-size:12pt; color:000000; lang:en-US; text-align:left; text-position:normal; font-weight:bold; font-style:normal; text-decoration:none"><c props="font-weight:normal"></c></p>
+<p style="Normal" xid="23" props="font-family:Times New Roman; font-size:12pt; color:000000; lang:en-US; text-align:left; text-position:normal; font-weight:bold; font-style:normal; text-decoration:none"><c props="font-weight:normal">Vi kommer behöva en klass, CameraHandler, som skapar en socket anslutning, en bildbuffert , en read-thread  och en write-thread till en kamera som man önskar ansluta till. Ansluter vi till fler kameror skapar vi fler CameraHandler-objekt.</c></p>
+<p style="Normal" xid="35" props="font-family:Times New Roman; font-size:12pt; color:000000; lang:en-US; text-align:left; text-position:normal; font-weight:bold; font-style:normal; text-decoration:none"><c props="font-weight:normal"></c></p>
+<p style="Normal" xid="37" props="font-family:Times New Roman; font-size:12pt; color:000000; lang:en-US; text-align:left; text-position:normal; font-weight:bold; font-style:normal; text-decoration:none"><c props="font-weight:normal"></c></p>
+<p style="Normal" xid="24" props="font-family:Times New Roman; font-size:12pt; color:000000; lang:en-US; text-align:left; text-position:normal; font-weight:bold; font-style:normal; text-decoration:none"><c props="font-weight:bold">Sättet vårt nätverksprotokol ska fungera är genom att:</c></p>
+<p style="Normal" xid="25" props="font-family:Times New Roman; font-size:12pt; color:000000; lang:en-US; text-align:left; text-position:normal; font-weight:bold; font-style:normal; text-decoration:none"><c props="font-weight:normal"></c></p>
+<p style="Normal" xid="26" props="font-family:Times New Roman; font-size:12pt; color:000000; lang:en-US; text-align:left; text-position:normal; font-weight:bold; font-style:normal; text-decoration:none"><c props="font-weight:normal">paketet innehåller en timestamp och en bild.</c></p>
+<p style="Normal" xid="38" props="font-family:Times New Roman; font-size:12pt; color:000000; lang:en-US; text-align:left; text-position:normal; font-weight:bold; font-style:normal; text-decoration:none"><c props="font-weight:normal">en byte i början som anger typen (längden) på meddelandet. Ex. kan en bild vara typ 1 och då ska kanske 2000 bytes hämtas. Typ två kan vara ett meddelande/bekräftelse och då kanske bara 100 bytes hämtas.</c></p>
+<p style="Normal" xid="27" props="font-family:Times New Roman; font-size:12pt; color:000000; lang:en-US; text-align:left; text-position:normal; font-weight:bold; font-style:normal; text-decoration:none"><c props="font-weight:normal"></c></p>
+<p style="Normal" xid="28" props="font-family:Times New Roman; font-size:12pt; color:000000; lang:en-US; text-align:left; text-position:normal; font-weight:bold; font-style:normal; text-decoration:none"><c props="font-variant:normal; font-weight:bold; font-size:12.800000pt; text-transform:none; color:#222222; font-style:normal"> A text describing how movie mode is propagated to the other camera in case one camera detects motion. I.e. how are activities communicating this information in client and server and how is it transferred over the network?</c></p>
+<p style="Normal" xid="29" props="font-family:Times New Roman; font-size:12pt; color:000000; lang:en-US; text-align:left; text-position:normal; font-weight:bold; font-style:normal; text-decoration:none"><c></c></p>
+<p style="Normal" xid="30" props="font-family:Times New Roman; font-size:12pt; color:000000; lang:en-US; text-align:left; text-position:normal; font-weight:bold; font-style:normal; text-decoration:none"><c props="font-weight:normal">Då klienten frågar servern efter bilder är det klienten som hanterar hurvida vi ska fråga efter bild så ofta som möjligt eller var 5te sekund. När en tråd, som hanterar en kamera, får reda på att en rörelse har dektekterats så skrivs detta till en monitor som har currentMode som attribut. Detta kan sedan läsas av de andra trådarna som hanterar de andra kamerorna. Klienterna gör ett read-anrop med frågan “motionDetected?”. Då read är blocking så får vi svar först när motion har detekterats.</c></p>
+<p style="Normal" xid="31" props="font-family:Times New Roman; font-size:12pt; color:000000; lang:en-US; text-align:left; text-position:normal; font-weight:bold; font-style:normal; text-decoration:none"><c props="font-weight:normal"></c></p>
+<p style="Normal" xid="32" props="font-family:Times New Roman; font-size:12pt; color:000000; lang:en-US; text-align:left; text-position:normal; font-weight:bold; font-style:normal; text-decoration:none"><c props="font-variant:normal; font-weight:bold; font-size:12.800000pt; text-transform:none; color:#222222; font-style:normal">- A text describing your suggested method for detecting synchronous view mode and your suggested method for implementing synchronous viewing (in the client).</c></p>
+<p style="Normal" xid="33" props="font-family:Times New Roman; font-size:12pt; color:000000; lang:en-US; text-align:left; text-position:normal; font-weight:bold; font-style:normal; text-decoration:none"><c></c></p>
+<p style="Normal" xid="34" props="font-family:Times New Roman; font-size:12pt; color:000000; lang:en-US; text-align:left; text-position:normal; font-weight:bold; font-style:normal; text-decoration:none"><c props="font-weight:normal"></c></p>
+</section>
+</abiword>

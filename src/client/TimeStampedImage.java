@@ -1,0 +1,37 @@
+package client;
+
+public class TimeStampedImage implements Comparable {
+	private long timestamp;
+	private boolean motionDetected;
+	private byte[] image;
+
+	public TimeStampedImage(long timestamp, boolean motionDetected, byte[] image) {
+		this.timestamp = timestamp;
+		this.motionDetected = motionDetected;
+		this.image = image;
+	}
+
+	@Override
+	public int compareTo(Object o) {
+		// TODO Auto-generated method stub
+		if (o instanceof TimeStampedImage) {
+			TimeStampedImage temp = (TimeStampedImage) o;
+			if (timestamp - temp.timestamp < 0) {
+				return -1;
+			} else if (timestamp - temp.timestamp > 0) {
+				return 1;
+			}
+			return 0;
+		}
+		throw new ClassCastException("not of TimeStampedImage type");
+	}
+	public boolean equals(Object o){ // bilder med samma timstamp men olika bildarrays kommer vara equal varandra
+		if (o instanceof TimeStampedImage) {
+			if(this.compareTo(o) == 0){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+}
