@@ -9,6 +9,7 @@ import java.awt.event.*;
 import java.awt.image.*;
 
 import se.lth.cs.eda040.fakecamera.*; // To gain access to maximum image size
+// REASDLJALSKDJ REMOVE THIS FOR FUCKS SAKE
 
 public class JPEGHTTPClient {
 
