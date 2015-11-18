@@ -19,7 +19,7 @@ public class CameraHandler {
 	}
 
 
-	public int cameraIndex() {
+	public synchronized int cameraIndex() {
 		// TODO Auto-generated method stub
 		int temp = index;
 		index= (index+1)%2; // modolu division med 2 ifall vi anropar fler gånger än 2?
