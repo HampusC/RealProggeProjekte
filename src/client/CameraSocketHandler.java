@@ -8,7 +8,9 @@ public class CameraSocketHandler {
 private Socket socket;
 private ClientWriteThread cWriteThread;
 private ClientReadThread cReadThread;
-	public CameraSocketHandler(String address, int port){
+private CameraHandler camH; //monjuitor med bildbuffertar
+private int cameraIndex;
+	public CameraSocketHandler(String address, int port, CameraHandler camH){
 		try {
 			socket = new Socket(address,  port);
 			cWriteThread = new ClientWriteThread(socket.getOutputStream());
@@ -23,5 +25,7 @@ private ClientReadThread cReadThread;
 			e.printStackTrace();
 			
 		}
+		this.camH = camH;
+		cameraIndex=camH.cameraIndex();
 	}
 }
