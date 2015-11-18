@@ -30,6 +30,9 @@ public class Server {
 		}
 	}
 	
+	/**
+	 * Waits for a message from the client and then starts the ReadThread.
+	 */
 	public void execute() throws IOException{
 		while(true) {
 			clientSocket = serverSocket.accept();
@@ -40,6 +43,9 @@ public class Server {
 			
 	}
 	
+	/**
+	 * Confirm that the message from the client was a request and sends back an image.
+	 */
 	public void requestRecieved(){
 		try {
 			if (!camera.connect()) {
