@@ -15,7 +15,10 @@ public class CameraHandler {
 		imageBuffers.set(1, new ArrayList<TimeStampedImage>());
 		index = 0;
 	}
-
+/**
+ * Get index of which imagebuffer to use
+ * @return index
+ */
 	public synchronized int cameraIndex() {
 		// TODO Auto-generated method stub
 		int temp = index;
@@ -24,16 +27,21 @@ public class CameraHandler {
 		return temp;
 	}
 
-	public synchronized void byteToRead() {
-		// TODO Auto-generated method stub
-
-	}
-
+/**
+ * Write to the imagebuffer specified by the index
+ * @param timestamp - time the image was captured
+ * @param motionDetected - true if motion was detected when the image was captured
+ * @param image - the image
+ * @param cameraIndex - index for the buffer
+ */
 	public synchronized void writeToBuffer(long timestamp, boolean motionDetected, byte[] image, int cameraIndex) {
 		imageBuffers.get(cameraIndex).add(new TimeStampedImage(timestamp, motionDetected, image));
 
 	}
-
+/**
+ * Blocking method that returns when the last messages has been handled. 
+ * To be used to wait until read-thread has handled the answer of the most recent request.
+ */
 	public synchronized void request() {
 
 		while (!packageRead) { // ändra logic ifall slow-mode
@@ -48,6 +56,9 @@ public class CameraHandler {
 		notifyAll();
 		
 	}
+	/**
+	 * When read-thread has handled theanswer of the most recent request
+	 */
 	public synchronized void confirmRead(){
 		packageRead = true;
 		notifyAll();

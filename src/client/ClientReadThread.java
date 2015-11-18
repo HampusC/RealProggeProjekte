@@ -2,6 +2,7 @@ package client;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 
 public class ClientReadThread extends Thread {
 private InputStream input;
@@ -31,10 +32,16 @@ private int cameraIndex;
 		 read = read+result;
 		}
 		//bufffer logic
-		if(true){ // vilkor = är bild
+		if(buffer[0] == 1){ // vilkor = är bild
+			boolean motionDetected;
+			if(buffer[1]==1){
+				motionDetected=true;  
+				
+			}else{
+				motionDetected=false;  
+				}
 			long timestamp =0; //ngra av bytsen i buffer
-			boolean motionDetected=false;  //ngra av bytsen i buffer
-			byte[] image = buffer; //ngra av bytsen i buffer
+			byte[] image = Arrays.copyOfRange(buffer, 10, buffer.length); //ngra av bytsen i buffer
 			camH.writeToBuffer(timestamp, motionDetected, image , cameraIndex);
 		}
 		camH.confirmRead();
