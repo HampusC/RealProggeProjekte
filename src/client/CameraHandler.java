@@ -14,6 +14,7 @@ public class CameraHandler {
 		imageBuffers.set(0, new ArrayList<TimeStampedImage>());
 		imageBuffers.set(1, new ArrayList<TimeStampedImage>());
 		index = 0;
+		packageRead = true; //true from start
 	}
 /**
  * Get index of which imagebuffer to use
@@ -57,7 +58,7 @@ public class CameraHandler {
 		
 	}
 	/**
-	 * When read-thread has handled theanswer of the most recent request
+	 * When read-thread has handled the answer of the most recent request
 	 */
 	public synchronized void confirmRead(){
 		packageRead = true;
