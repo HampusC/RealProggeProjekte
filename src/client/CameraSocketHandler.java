@@ -11,10 +11,12 @@ private ClientReadThread cReadThread;
 private CameraHandler camH; //monjuitor med bildbuffertar
 private int cameraIndex;
 	public CameraSocketHandler(String address, int port, CameraHandler camH){
+		this.camH = camH;
+		cameraIndex=camH.cameraIndex();
 		try {
 			socket = new Socket(address,  port);
-			cWriteThread = new ClientWriteThread(socket.getOutputStream());
-			cReadThread = new ClientReadThread(socket.getInputStream());
+			cWriteThread = new ClientWriteThread(socket.getOutputStream(), camH);
+			cReadThread = new ClientReadThread(socket.getInputStream(), camH, cameraIndex);
 			cWriteThread.start();
 			cReadThread.start();
 		} catch (UnknownHostException e) {
@@ -25,7 +27,6 @@ private int cameraIndex;
 			e.printStackTrace();
 			
 		}
-		this.camH = camH;
-		cameraIndex=camH.cameraIndex();
+
 	}
 }
