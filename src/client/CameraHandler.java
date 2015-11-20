@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class CameraHandler {
 	private int index;
 	private boolean packageRead;
+	private TimeStampedImageComparator comparator;
 
 	private ArrayList<ArrayList<TimeStampedImage>> imageBuffers;
 
@@ -15,6 +16,7 @@ public class CameraHandler {
 		imageBuffers.add( new ArrayList<TimeStampedImage>());
 		index = 0;
 		packageRead = true; //true from start
+		comparator= new TimeStampedImageComparator();
 	}
 /**
  * Get index of which imagebuffer to use
@@ -63,6 +65,10 @@ public class CameraHandler {
 	public synchronized void confirmRead(){
 		packageRead = true;
 		notifyAll();
+	}
+	public synchronized TimeStampedImage getLatestImage(int index){ //should it remove?
+		imageBuffers.get(index).sort(comparator); // reaally create new comp?
+		return imageBuffers.get(index).remove(0);
 	}
 
 }
