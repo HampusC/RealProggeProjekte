@@ -17,6 +17,7 @@ public class ClientWriteThread extends Thread{
 		
 		try {
 			output.write(1);
+			//flush
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
