@@ -6,22 +6,23 @@ import java.io.InputStream;
 public class ReadThread extends Thread {
 	
 	private InputStream is;
-	private Server server;
+	private ServerMonitor sm;
 	
-	public ReadThread(Server server, InputStream is){
+	public ReadThread(ServerMonitor sm, InputStream is){
 		this.is = is;
-		this.server = server;
+		this.sm = sm;
 	}
 	
 	public void run(){
-		try {
-			int temp = is.read();
-			if(temp == 1) {     //Ska förmodligen kolla efter något annat
-				server.requestRecieved();
+		while(true) {
+			try {
+				int temp = is.read();
+				if (temp == 1) { // Ska förmodligen kolla efter något annat
+					sm.requestRecieved();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
+		}	
 	}
 }
