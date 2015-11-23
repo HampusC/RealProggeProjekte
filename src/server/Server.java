@@ -37,19 +37,33 @@ public class Server {
 	 * Waits for a message from the client and then starts the ReadThread.
 	 */
 	public void execute() throws IOException{
-		while(true) {
+		while(true){
 			clientSocket = serverSocket.accept();
-			rt = new ReadThread(sm, clientSocket.getInputStream()); // request 1
-			wt = new WriteThread(camera, clientSocket.getOutputStream(), sm);
 			sm = new ServerMonitor(rt, wt, serverSocket, clientSocket, camera);
+			rt = new ReadThread(sm, clientSocket.getInputStream()); 
+			wt = new WriteThread(camera, clientSocket.getOutputStream(), sm);
 			rt.start();
 			wt.start();
-		}
+			while (!clientSocket.isClosed()){
+				try {
+					wait();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			disconnect();
 			
+		}	
 	}
 	
 	public void disconnect() {
-		
+		rt.interrupt();
+		wt.interrupt();
+		try {
+			serverSocket.close(); //Ska denna stängas här?
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void destroy() {
