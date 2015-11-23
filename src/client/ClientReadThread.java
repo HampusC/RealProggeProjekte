@@ -41,6 +41,9 @@ private int cameraIndex;
 				motionDetected=false;  
 				}
 			long timestamp =0; //ngra av bytsen i buffer
+			for (int i = 2; i < 10; i++){
+			   timestamp = (timestamp << 8) + (buffer[i] & 0xff);
+			}
 			byte[] image = Arrays.copyOfRange(buffer, 10, buffer.length); //ngra av bytsen i buffer
 			camH.writeToBuffer(timestamp, motionDetected, image , cameraIndex);
 		}

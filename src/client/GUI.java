@@ -3,6 +3,7 @@ package client;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Image;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -13,7 +14,7 @@ import javax.swing.JPanel;
 
 
 public class GUI extends JFrame {
-	
+	private ImageIcon icon;
 	public GUI(){
 		super();
 		setSize(750,750);
@@ -21,7 +22,7 @@ public class GUI extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
-		ImageIcon icon = new ImageIcon();
+		icon = new ImageIcon();
 		JLabel label = new JLabel(icon);
 		panel.add(label, BorderLayout.CENTER);
 		panel.setPreferredSize(new Dimension(500, 500));
@@ -34,6 +35,15 @@ public class GUI extends JFrame {
 		add(text, BorderLayout.SOUTH);
 		add(new JButton("Hampeee"), BorderLayout.CENTER);
 		setVisible(true);
+	}
+	public void refresh(byte[] data) {
+		Image theImage = getToolkit().createImage(data);
+		getToolkit().prepareImage(theImage,-1,-1,null);	    
+		icon.setImage(theImage);
+		icon.paintIcon(this, this.getGraphics(), 5, 5);
+		validate();
+		repaint();
+		System.out.println("img");
 	}
 
 }
