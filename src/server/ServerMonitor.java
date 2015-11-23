@@ -12,6 +12,7 @@ public class ServerMonitor {
 	private ServerSocket serverSocket;
 	private Socket clientSocket;
 	private AxisM3006V camera;
+	private boolean requestRecieved;
 	
 	public ServerMonitor(ReadThread rt, WriteThread wt, ServerSocket ss, Socket s, AxisM3006V camera) throws IOException{
 		this.serverSocket = ss;
@@ -19,19 +20,10 @@ public class ServerMonitor {
 		this.camera = camera;
 		this.rt = rt;
 		this.wt = wt;
+		requestRecieved=false;
 	}
 	
-	/**
-	 * Waits for a message from the client and then starts the ReadThread.
-	 */
-	public synchronized void execute() throws IOException{
-		while(true) {
-			clientSocket = serverSocket.accept();
-			rt.start();
-		}
-			
-	}
-	
+
 	/**
 	 * Confirm that the message from the client was a request and sends back an image.
 	 */
@@ -39,7 +31,25 @@ public class ServerMonitor {
 		if (!camera.connect()) { //bugletande
 			System.out.println("Failed to connect to camera!");
 		}
-		wt.start();
+		requestRecieved=true;
+		notifyAll();
+//		wt.start();
+	}
+
+
+	public synchronized boolean shouldSend() {
+		while(!requestRecieved){
+			try {
+				wait();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		requestRecieved=false;
+		notifyAll();
+		return true;
+		
 	}
 	
 }

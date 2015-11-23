@@ -14,20 +14,18 @@ public class Server {
 	private Socket clientSocket;
 	private AxisM3006V camera;
 	
-	public Server() throws IOException{
+	public Server(int port) throws IOException{
 		camera = new AxisM3006V();
 		camera.init();
-		camera.setProxy("argus-1.student.lth.se", 20541); //ändra andressen
-		serverSocket = new ServerSocket(20541);
-		rt = new ReadThread(sm, clientSocket.getInputStream()); // request 1
-		wt = new WriteThread(camera, clientSocket.getOutputStream());
-		sm = new ServerMonitor(rt, wt, serverSocket, clientSocket, camera);
+		camera.setProxy("argus-1.student.lth.se", port); //ändra andressen
+		serverSocket = new ServerSocket(port);
+		
 	}
 	
 	public static void main(String[] args){
 		try {
-			Server s = new Server();
-			s.sm.execute();
+			Server s = new Server(Integer.parseInt(args[0]));
+			s.execute();
 		} catch(IOException e) {
 			System.out.println("Error!");
 			e.printStackTrace();
@@ -35,12 +33,31 @@ public class Server {
 		}
 	}
 	
-	public synchronized void destroy() {
+	/**
+	 * Waits for a message from the client and then starts the ReadThread.
+	 */
+	public void execute() throws IOException{
+		while(true) {
+			clientSocket = serverSocket.accept();
+			rt = new ReadThread(sm, clientSocket.getInputStream()); // request 1
+			wt = new WriteThread(camera, clientSocket.getOutputStream(), sm);
+			sm = new ServerMonitor(rt, wt, serverSocket, clientSocket, camera);
+			rt.start();
+			wt.start();
+		}
+			
+	}
+	
+	public void disconnect() {
+		
+	}
+	
+	public void destroy() {
 		camera.destroy();
 	}
 	
 
-	public synchronized void closeSocket() throws IOException{
+	public void closeSocket() throws IOException{
 		clientSocket.close();
 	}
 	
