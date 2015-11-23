@@ -47,8 +47,5 @@ public class ViewThread extends Thread {
 		}
 	}
 
-	public static void main(String[] args) {
-		ViewThread viewThread = new ViewThread(new CameraHandler());
-		viewThread.start();
-	}
+
 }

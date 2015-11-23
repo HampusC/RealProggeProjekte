@@ -29,6 +29,7 @@ public class WriteThread extends Thread {
 			try {
 				os.write(jpeg);
 				os.flush(); // flushar den innan klienten hinner läsa den?
+				System.out.println("sent");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

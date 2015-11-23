@@ -46,6 +46,7 @@ private int cameraIndex;
 			}
 			byte[] image = Arrays.copyOfRange(buffer, 10, buffer.length); //ngra av bytsen i buffer
 			camH.writeToBuffer(timestamp, motionDetected, image , cameraIndex);
+			System.out.println("recieved");
 		}
 		camH.confirmRead();
 	}

@@ -5,13 +5,31 @@ import java.util.ArrayList;
 public class Client {
 	private ArrayList<CameraSocketHandler> cameraSockets;
 	private CameraHandler camh;
-	public Client (String address, int port, CameraHandler camh){
+
+	public Client(String address, int port, CameraHandler camh) {
 		this.camh = camh;
-		
+		cameraSockets = new ArrayList<CameraSocketHandler>();
+		connectCamera(address, port);
+
 	}
-	public boolean connectCamera(String address, int port){ //tänk på hur disconnect och numrering påverkar
-	return cameraSockets.add(new CameraSocketHandler(address,port, camh));
-	//timme 
-		
+
+	public boolean connectCamera(String address, int port) { // tänk på hur
+																// disconnect
+																// och numrering
+		System.out.println("connect " + cameraSockets);														// påverkar
+		return cameraSockets.add(new CameraSocketHandler(address, port, camh));
+		// timme
+
+	}
+
+	public static void main(String[] args) {
+		CameraHandler camH = new CameraHandler();
+		ViewThread viewThread = new ViewThread(camH);
+		if (args.length != 2) {
+			System.out.println("Syntax: JPEGHTTPClient <address> <port>");
+			System.exit(1);
+		}
+		Client c = new Client(args[0], Integer.parseInt(args[1]), camH);
+		viewThread.start();
 	}
 }
