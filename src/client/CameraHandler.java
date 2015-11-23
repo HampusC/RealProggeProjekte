@@ -70,5 +70,8 @@ public class CameraHandler {
 		imageBuffers.get(index).sort(comparator); // reaally create new comp?
 		return imageBuffers.get(index).remove(0);
 	}
+	public synchronized void getLatestImages(){
+		
+	}
 
 }
