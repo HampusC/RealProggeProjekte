@@ -49,6 +49,16 @@ public class ServerMonitor {
 		requestRecieved=false;
 		notifyAll();
 		return true;
+	}
+	
+	public synchronized void waitForDisconnect(){
+		while (!clientSocket.isClosed()){
+			try {
+				wait();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 		
 	}
 	

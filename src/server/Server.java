@@ -44,15 +44,8 @@ public class Server {
 			wt = new WriteThread(camera, clientSocket.getOutputStream(), sm);
 			rt.start();
 			wt.start();
-			while (!clientSocket.isClosed()){
-				try {
-					wait();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
+			sm.waitForDisconnect();
 			disconnect();
-			
 		}	
 	}
 	
