@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 
+import se.lth.cs.eda040.fakecamera.AxisM3006V;
+
 public class ClientReadThread extends Thread {
 private InputStream input;
 private CameraHandler camH;
@@ -17,13 +19,13 @@ private int cameraIndex;
 		while(true){
 			
 		
-		byte[] buffer = new byte[100];
-		
+			int maxToRead= AxisM3006V.IMAGE_BUFFER_SIZE + 10;
+		byte[] buffer = new byte[maxToRead];
 		int read = 0;
 		int result = 0;
-		while (read<100 && result!=-1) {
+		while (read<maxToRead && result!=-1) {
 		 try {
-			result = input.read(buffer,read,100-read);
+			result = input.read(buffer,read,maxToRead-read);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -41,10 +43,11 @@ private int cameraIndex;
 				motionDetected=false;  
 				}
 			long timestamp =0; //ngra av bytsen i buffer
-			for (int i = 2; i < 10; i++){
+			int length = buffer[2];
+			for (int i = 3; i < 10; i++){
 			   timestamp = (timestamp << 8) + (buffer[i] & 0xff);
 			}
-			byte[] image = Arrays.copyOfRange(buffer, 10, buffer.length); //ngra av bytsen i buffer
+			byte[] image = Arrays.copyOfRange(buffer, 10, length+10); //ngra av bytsen i buffer
 			camH.writeToBuffer(timestamp, motionDetected, image , cameraIndex);
 			System.out.println("recieved");
 		}

@@ -66,8 +66,13 @@ public class CameraHandler {
 		packageRead = true;
 		notifyAll();
 	}
+	public synchronized boolean isEmpty(int index){
+		return imageBuffers.get(index).isEmpty();
+	}
 	public synchronized TimeStampedImage getLatestImage(int index){ //should it remove?
+		
 		imageBuffers.get(index).sort(comparator); // reaally create new comp?
+		
 		return imageBuffers.get(index).remove(0);
 	}
 

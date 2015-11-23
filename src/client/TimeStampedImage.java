@@ -38,5 +38,10 @@ public class TimeStampedImage implements Comparable {
 		// TODO Auto-generated method stub
 		return timestamp;
 	}
+
+	public byte[] getImage() {
+		// TODO Auto-generated method stub
+		return image;
+	}
 	
 }

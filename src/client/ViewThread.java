@@ -20,7 +20,17 @@ public class ViewThread extends Thread {
 	public void run() {
 		testImage();
 		 while(true){
-			 
+			 while(camH.isEmpty(0)){
+				 try {
+					sleep(100);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			 }
+			TimeStampedImage temp = camH.getLatestImage(0);
+			
+			gui.refresh(temp.getImage());
 		
 		 }
 
