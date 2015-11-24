@@ -14,6 +14,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.Icon;
 
 public class GUI extends JFrame {
 	private ImageIcon icon;
@@ -40,44 +41,64 @@ public class GUI extends JFrame {
 	 * Create the frame.
 	 */
 	public GUI() {
-		setSize(750,750);
+		super();
 		setResizable(false);
+		setSize(1000,750);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		JPanel panel = new JPanel();
-		panel.setBounds(0, 0, 748, 500);
-		panel.setLayout(new BorderLayout());
 		icon = new ImageIcon();
 		getContentPane().setLayout(null);
 		JLabel label = new JLabel(icon);
-		panel.add(label, BorderLayout.CENTER);
+		panel.add(label);
 		panel.setPreferredSize(new Dimension(500, 500));
 		getContentPane().add(panel);
-		JLabel text = new JLabel("Hampeee");
-		text.setBounds(0, 710, 748, 15);
-		
-		text.setForeground(Color.red);
-		getContentPane().add(text);
-		JButton button = new JButton("Hampeee");
-		button.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		button.setBounds(10, 512, 177, 49);
-		getContentPane().add(button);
 		
 		JButton btnIdle = new JButton("Idle");
 		btnIdle.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnIdle.setBounds(199, 512, 177, 49);
+		btnIdle.setBounds(12, 552, 235, 49);
 		getContentPane().add(btnIdle);
 		
 		JButton btnMovie = new JButton("Movie");
-		btnMovie.setBounds(388, 512, 177, 49);
+		btnMovie.setBounds(259, 552, 235, 49);
 		getContentPane().add(btnMovie);
+		
+		JPanel panel_1 = new JPanel();
+		panel_1.setPreferredSize(new Dimension(500, 500));
+		panel_1.setBounds(504, 12, 482, 429);
+		getContentPane().add(panel_1);
+		
+		JLabel label_1 = new JLabel((Icon) null);
+		panel_1.add(label_1);
+		
+		JButton btnConnect = new JButton("Connect");
+		btnConnect.setBounds(12, 453, 235, 49);
+		getContentPane().add(btnConnect);
+		
+		JButton btnDisconnect = new JButton("Disconnect");
+		btnDisconnect.setBounds(259, 453, 235, 49);
+		getContentPane().add(btnDisconnect);
+		
+		JButton button = new JButton("Connect");
+		button.setBounds(504, 453, 235, 49);
+		getContentPane().add(button);
+		
+		JButton button_1 = new JButton("Disconnect");
+		button_1.setBounds(751, 453, 235, 49);
+		getContentPane().add(button_1);
+		
+		JButton btnSynchroniz = new JButton(" Synchronous");
+		btnSynchroniz.setBounds(504, 552, 235, 49);
+		getContentPane().add(btnSynchroniz);
+		
+		JButton btnAsynchronous = new JButton(" Asynchronous");
+		btnAsynchronous.setBounds(751, 552, 235, 49);
+		getContentPane().add(btnAsynchronous);
 		setVisible(true);
 	}
+	
 	
 	public void refresh(byte[] data) {
 		Image theImage = getToolkit().createImage(data);
