@@ -21,9 +21,11 @@ public class ViewThread extends Thread {
 		 while(true){
 			camH.newImage();
 				 
-				 TimeStampedImage temp = camH.getLatestImage(0);
+				 TimeStampedImage temp1 = camH.getLatestImage(0);
+				 TimeStampedImage temp2 = camH.getLatestImage(0);
 				 
-				 gui.refresh(temp.getImage() , 0);
+				 gui.refresh(temp1.getImage() , 0);
+				gui.refresh(temp1.getImage() , 1);
 			 }
 		
 		 }
