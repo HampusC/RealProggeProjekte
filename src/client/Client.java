@@ -3,6 +3,8 @@ package client;
 import java.util.ArrayList;
 
 public class Client {
+	public final static int IDLE_MODE = 0;
+	public final static int MOVIE_MODE = 1;
 	private ArrayList<CameraSocketHandler> cameraSockets;
 	private CameraHandler camh;
 
@@ -10,6 +12,7 @@ public class Client {
 		this.camh = camh;
 		cameraSockets = new ArrayList<CameraSocketHandler>();
 		connectCamera(address, port);
+		
 
 	}
 
@@ -31,5 +34,13 @@ public class Client {
 		}
 		Client c = new Client(args[0], Integer.parseInt(args[1]), camH);
 		viewThread.start();
+	}
+	public void disconnect( int index){
+		CameraSocketHandler temp =cameraSockets.get(index);		
+		temp.disconnect();
+		cameraSockets.remove(index);
+	}
+	public void setMode(int mode, int index){
+		cameraSockets.get(index).setMode(mode);
 	}
 }

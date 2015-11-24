@@ -18,7 +18,6 @@ public class ViewThread extends Thread {
 	}
 
 	public void run() {
-		testImage();
 		 while(true){
 			 while(camH.isEmpty(0)){
 				 try {
