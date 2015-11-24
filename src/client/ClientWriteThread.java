@@ -14,12 +14,12 @@ public class ClientWriteThread extends Thread{
 	public void run(){
 		while(true){
 			camH.request();
-			try {
-				sleep(1000); //used to slow down, remove
-			} catch (InterruptedException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+//			try {
+//				sleep(1000); //used to slow down, remove
+//			} catch (InterruptedException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
 		
 		try {
 			output.write(1);

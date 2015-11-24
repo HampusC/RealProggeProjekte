@@ -31,22 +31,23 @@ public class WriteThread extends Thread {
 																	// istället)
 		while (true) {
 			sm.shouldSend();
-			jpeg[0] = (byte) 1;
+			jpeg[0] = (byte) 1; // 1 if image
 			jpeg[1] = (byte) (camera.motionDetected() ? 1 : 0);
 			camera.getTime(jpeg, 2);
+
+			// the image, written on 14 and onwards
 			int len = camera.getJPEG(jpeg, 6 + AxisM3006V.TIME_ARRAY_SIZE);
-			System.out.println("first bit in pic " + jpeg[6 + AxisM3006V.TIME_ARRAY_SIZE] + " last byte " + jpeg[6 + AxisM3006V.TIME_ARRAY_SIZE + len]);
+			System.out.println("first bit in pic " + jpeg[6 + AxisM3006V.TIME_ARRAY_SIZE] + " last byte "
+					+ jpeg[6 + AxisM3006V.TIME_ARRAY_SIZE + len - 1]);
+
+			// the length of the image, converted from int to 4 byte
 			ByteBuffer b = ByteBuffer.allocate(4);
-			
-			// b.order(ByteOrder.BIG_ENDIAN); // optional, the initial order of
-			// a byte buffer is always BIG_ENDIAN.
 			b.putInt(len);
 			byte[] result = b.array();
 			for (int i = 0; i < 4; i++) {
-				jpeg[i+2] = result[i];
+				jpeg[i + 2] = result[i];
 			}
 
-			System.out.println(len );
 			try {
 				os.write(jpeg);
 				os.flush(); // flushar den innan klienten hinner läsa den?

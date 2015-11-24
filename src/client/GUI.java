@@ -41,7 +41,7 @@ public class GUI extends JFrame {
 		getToolkit().prepareImage(theImage,-1,-1,null);	    
 		icon.setImage(theImage);
 		icon.paintIcon(this, this.getGraphics(), 5, 5);
-		validate();
+
 		repaint();
 		System.out.println("img");
 	}
