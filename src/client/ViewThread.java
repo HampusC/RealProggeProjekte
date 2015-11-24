@@ -18,22 +18,25 @@ public class ViewThread extends Thread {
 	}
 
 	public void run() {
-		 while(true){
+		while (true) {
 			camH.newImage();
-				 
-				 TimeStampedImage temp1 = camH.getLatestImage(0);
-				 TimeStampedImage temp2 = camH.getLatestImage(0);
-				 
-				 gui.refresh(temp1.getImage() , 0);
-				gui.refresh(temp1.getImage() , 1);
-			 }
-		
-		 }
 
-	
-/**
- * Method to display a static test image.
- */
+			TimeStampedImage temp1 = camH.getLatestImage(0);
+			TimeStampedImage temp2 = camH.getLatestImage(1);
+			
+			if (temp1 != null) {
+				gui.refresh(temp1.getImage(), 0);
+			}
+			if (temp2 != null) {
+				gui.refresh(temp2.getImage(), 1);
+			}
+		}
+
+	}
+
+	/**
+	 * Method to display a static test image.
+	 */
 	private void testImage() {
 		byte[] imageInByte;
 
@@ -52,6 +55,5 @@ public class ViewThread extends Thread {
 			e.printStackTrace();
 		}
 	}
-
 
 }

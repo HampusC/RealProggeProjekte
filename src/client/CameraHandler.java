@@ -75,6 +75,7 @@ public class CameraHandler {
 		return imageBuffers.get(index).isEmpty();
 	}
 	public synchronized TimeStampedImage getLatestImage(int index){ //should it remove?
+		System.out.println("get latest");
 		if(imageBuffers.get(index).isEmpty()){
 			return null; //throw error?
 		}

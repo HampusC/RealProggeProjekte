@@ -37,8 +37,8 @@ public class WriteThread extends Thread {
 
 			// the image, written on 14 and onwards
 			int len = camera.getJPEG(jpeg, 6 + AxisM3006V.TIME_ARRAY_SIZE);
-			System.out.println("first bit in pic " + jpeg[6 + AxisM3006V.TIME_ARRAY_SIZE] + " last byte "
-					+ jpeg[6 + AxisM3006V.TIME_ARRAY_SIZE + len - 1]);
+//			System.out.println("first bit in pic " + jpeg[6 + AxisM3006V.TIME_ARRAY_SIZE] + " last byte "
+//					+ jpeg[6 + AxisM3006V.TIME_ARRAY_SIZE + len - 1]);
 
 			// the length of the image, converted from int to 4 byte
 			ByteBuffer b = ByteBuffer.allocate(4);
@@ -51,7 +51,7 @@ public class WriteThread extends Thread {
 			try {
 				os.write(jpeg);
 				os.flush(); // flushar den innan klienten hinner läsa den?
-				System.out.println("sent");
+			
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

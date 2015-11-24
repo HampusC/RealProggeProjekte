@@ -22,14 +22,13 @@ public class ClientReadThread extends Thread {
 		while (true) {
 
 			int maxToRead = AxisM3006V.IMAGE_BUFFER_SIZE + 10; // should be + 14
-			System.out.println(maxToRead);
 			byte[] buffer = new byte[maxToRead];
 			int read = 0;
 			int result = 0;
 			while (read < maxToRead && result != -1) {
 				try {
 					result = input.read(buffer, read, maxToRead - read);
-					System.out.println("recieved 1");
+					
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
