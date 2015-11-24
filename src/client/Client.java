@@ -12,8 +12,6 @@ public class Client {
 		this.camh = camh;
 		cameraSockets = new ArrayList<CameraSocketHandler>();
 		connectCamera(address, port);
-		
-
 	}
 
 	public boolean connectCamera(String address, int port) { // tänk på hur

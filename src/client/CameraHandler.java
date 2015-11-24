@@ -6,6 +6,7 @@ public class CameraHandler {
 	private int index;
 	private boolean packageRead;
 	private TimeStampedImageComparator comparator;
+	private int imagesAvailable;
 
 	private ArrayList<ArrayList<TimeStampedImage>> imageBuffers;
 
@@ -17,6 +18,7 @@ public class CameraHandler {
 		index = 0;
 		packageRead = true; //true from start
 		comparator= new TimeStampedImageComparator();
+		imagesAvailable=0;
 	}
 /**
  * Get index of which imagebuffer to use
@@ -39,6 +41,9 @@ public class CameraHandler {
  */
 	public synchronized void writeToBuffer(long timestamp, boolean motionDetected, byte[] image, int cameraIndex) {
 		imageBuffers.get(cameraIndex).add(new TimeStampedImage(timestamp, motionDetected, image));
+		imagesAvailable++;
+		notifyAll();
+		
 
 	}
 /**
@@ -70,10 +75,23 @@ public class CameraHandler {
 		return imageBuffers.get(index).isEmpty();
 	}
 	public synchronized TimeStampedImage getLatestImage(int index){ //should it remove?
-		
+		if(imageBuffers.get(index).isEmpty()){
+			return null; //throw error?
+		}
 		imageBuffers.get(index).sort(comparator); // reaally create new comp?
-		
+		imagesAvailable--;
+		notifyAll();
 		return imageBuffers.get(index).remove(0);
+	}
+	public synchronized void newImage() {
+		while(imagesAvailable<1){
+			try {
+				wait();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 
 

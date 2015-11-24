@@ -19,21 +19,16 @@ public class ViewThread extends Thread {
 
 	public void run() {
 		 while(true){
-			 while(camH.isEmpty(0)){
-				 try {
-					sleep(100);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+			camH.newImage();
+				 
+				 TimeStampedImage temp = camH.getLatestImage(0);
+				 
+				 gui.refresh(temp.getImage() , 0);
 			 }
-			TimeStampedImage temp = camH.getLatestImage(0);
-			
-			gui.refresh(temp.getImage());
 		
 		 }
 
-	}
+	
 /**
  * Method to display a static test image.
  */
@@ -48,7 +43,7 @@ public class ViewThread extends Thread {
 			baos.flush();
 			imageInByte = baos.toByteArray();
 			baos.close();
-			gui.refresh(imageInByte);
+			gui.refresh(imageInByte, 0);
 			System.out.println();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
