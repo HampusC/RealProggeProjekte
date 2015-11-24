@@ -1,25 +1,21 @@
 package client;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
+
 import java.awt.EventQueue;
 import java.awt.Image;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JLabel;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
-import javax.swing.Icon;
+import java.awt.Canvas;
 
 public class GUI extends JFrame {
 	private ImageIcon icon;
 
-	private JPanel contentPane;
+	ArrayList<Canvas> canvas = new ArrayList<Canvas>();
 
 	/**
 	 * Launch the application.
@@ -45,20 +41,24 @@ public class GUI extends JFrame {
 		setResizable(false);
 		setSize(1316,800);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		JPanel panel = new JPanel();
-		panel.setBounds(12, 12, 640, 480);
 		icon = new ImageIcon();
 		getContentPane().setLayout(null);
-		JLabel label = new JLabel(icon);
-		panel.add(label);
-		panel.setPreferredSize(new Dimension(500, 500));
-		getContentPane().add(panel);
+		canvas.add(new Canvas());
+		canvas.get(0).setBounds(12, 12, 640, 480);
+		getContentPane().add(canvas.get(0));
+		
+		
+		canvas.add(new Canvas());
+		canvas.get(1).setBounds(663, 12, 640, 480);
+		getContentPane().add(canvas.get(1));
 		
 		JButton btnIdle = new JButton("Idle");
 		btnIdle.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
+			
 		});
+		
 		btnIdle.setBounds(12, 565, 314, 49);
 		getContentPane().add(btnIdle);
 		
@@ -82,30 +82,23 @@ public class GUI extends JFrame {
 		button_1.setBounds(989, 504, 314, 49);
 		getContentPane().add(button_1);
 		
-		JButton btnSynchroniz = new JButton(" Synchronous");
+		JButton btnSynchroniz = new JButton("Synchronous");
 		btnSynchroniz.setBounds(664, 565, 314, 49);
 		getContentPane().add(btnSynchroniz);
 		
-		JButton btnAsynchronous = new JButton(" Asynchronous");
+		JButton btnAsynchronous = new JButton("Asynchronous");
 		btnAsynchronous.setBounds(989, 565, 314, 49);
 		getContentPane().add(btnAsynchronous);
 		
-		JPanel panel_1 = new JPanel();
-		panel_1.setPreferredSize(new Dimension(500, 500));
-		panel_1.setBounds(663, 12, 640, 480);
-		getContentPane().add(panel_1);
 		
-		JLabel label_1 = new JLabel((Icon) null);
-		panel_1.add(label_1);
 		setVisible(true);
 	}
 	
-	
-	public void refresh(byte[] data) {
+	public void refresh(byte[] data, int index) {
 		Image theImage = getToolkit().createImage(data);
 		getToolkit().prepareImage(theImage,-1,-1,null);	    
 		icon.setImage(theImage);
-		icon.paintIcon(this, this.getGraphics(), 5, 5);
+		icon.paintIcon(this, canvas.get(index).getGraphics(), 0, 0);
 		System.out.println("img");
 	}
 }
