@@ -43,9 +43,10 @@ public class GUI extends JFrame {
 	public GUI() {
 		super();
 		setResizable(false);
-		setSize(1000,750);
+		setSize(1316,800);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		JPanel panel = new JPanel();
+		panel.setBounds(12, 12, 640, 480);
 		icon = new ImageIcon();
 		getContentPane().setLayout(null);
 		JLabel label = new JLabel(icon);
@@ -58,44 +59,44 @@ public class GUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnIdle.setBounds(12, 552, 235, 49);
+		btnIdle.setBounds(12, 565, 314, 49);
 		getContentPane().add(btnIdle);
 		
 		JButton btnMovie = new JButton("Movie");
-		btnMovie.setBounds(259, 552, 235, 49);
+		btnMovie.setBounds(338, 565, 314, 49);
 		getContentPane().add(btnMovie);
+		
+		JButton btnConnect = new JButton("Connect");
+		btnConnect.setBounds(12, 504, 314, 49);
+		getContentPane().add(btnConnect);
+		
+		JButton btnDisconnect = new JButton("Disconnect");
+		btnDisconnect.setBounds(338, 504, 314, 49);
+		getContentPane().add(btnDisconnect);
+		
+		JButton button = new JButton("Connect");
+		button.setBounds(663, 504, 314, 49);
+		getContentPane().add(button);
+		
+		JButton button_1 = new JButton("Disconnect");
+		button_1.setBounds(989, 504, 314, 49);
+		getContentPane().add(button_1);
+		
+		JButton btnSynchroniz = new JButton(" Synchronous");
+		btnSynchroniz.setBounds(664, 565, 314, 49);
+		getContentPane().add(btnSynchroniz);
+		
+		JButton btnAsynchronous = new JButton(" Asynchronous");
+		btnAsynchronous.setBounds(989, 565, 314, 49);
+		getContentPane().add(btnAsynchronous);
 		
 		JPanel panel_1 = new JPanel();
 		panel_1.setPreferredSize(new Dimension(500, 500));
-		panel_1.setBounds(504, 12, 482, 429);
+		panel_1.setBounds(663, 12, 640, 480);
 		getContentPane().add(panel_1);
 		
 		JLabel label_1 = new JLabel((Icon) null);
 		panel_1.add(label_1);
-		
-		JButton btnConnect = new JButton("Connect");
-		btnConnect.setBounds(12, 453, 235, 49);
-		getContentPane().add(btnConnect);
-		
-		JButton btnDisconnect = new JButton("Disconnect");
-		btnDisconnect.setBounds(259, 453, 235, 49);
-		getContentPane().add(btnDisconnect);
-		
-		JButton button = new JButton("Connect");
-		button.setBounds(504, 453, 235, 49);
-		getContentPane().add(button);
-		
-		JButton button_1 = new JButton("Disconnect");
-		button_1.setBounds(751, 453, 235, 49);
-		getContentPane().add(button_1);
-		
-		JButton btnSynchroniz = new JButton(" Synchronous");
-		btnSynchroniz.setBounds(504, 552, 235, 49);
-		getContentPane().add(btnSynchroniz);
-		
-		JButton btnAsynchronous = new JButton(" Asynchronous");
-		btnAsynchronous.setBounds(751, 552, 235, 49);
-		getContentPane().add(btnAsynchronous);
 		setVisible(true);
 	}
 	
@@ -105,8 +106,6 @@ public class GUI extends JFrame {
 		getToolkit().prepareImage(theImage,-1,-1,null);	    
 		icon.setImage(theImage);
 		icon.paintIcon(this, this.getGraphics(), 5, 5);
-		validate();
-		repaint();
 		System.out.println("img");
 	}
 }
