@@ -9,10 +9,12 @@ private Socket socket;
 private ClientWriteThread cWriteThread;
 private ClientReadThread cReadThread;
 private CameraHandler camH; //monjuitor med bildbuffertar
+
 private int cameraIndex;
 	public CameraSocketHandler(String address, int port, CameraHandler camH){
 		this.camH = camH;
 		cameraIndex=camH.cameraIndex();
+	
 		try {
 			socket = new Socket(address,  port);
 			cWriteThread = new ClientWriteThread(socket.getOutputStream(), camH);
@@ -28,5 +30,25 @@ private int cameraIndex;
 			
 		}
 
+	}
+	public void disconnect() {
+		try {
+	
+			socket.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		cWriteThread.interrupt();
+		cReadThread.interrupt();
+		
+		
+	}
+	public void setMode(int mode) {
+		if(mode == Client.IDLE_MODE)
+			cWriteThread.idleMode(true);
+		if(mode == Client.MOVIE_MODE)
+			cWriteThread.idleMode(false);
+		
 	}
 }

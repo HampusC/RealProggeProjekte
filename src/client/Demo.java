@@ -17,6 +17,8 @@ public class Demo {
 		}
 		Client1 c = new Client1();
 		c.start();
+	
+	
 	}
 	
 	private static class Server1 extends Thread {
