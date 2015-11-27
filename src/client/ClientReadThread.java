@@ -28,7 +28,7 @@ public class ClientReadThread extends Thread {
 			while (read < maxToRead && result != -1) {
 				try {
 					result = input.read(buffer, read, maxToRead - read);
-					
+
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -66,7 +66,7 @@ public class ClientReadThread extends Thread {
 				// " last byte " + image[image.length-1]);
 				camH.writeToBuffer(timestamp, motionDetected, image, cameraIndex);
 			}
-			camH.confirmRead();
+			camH.confirmRead(cameraIndex);
 		}
 
 	}

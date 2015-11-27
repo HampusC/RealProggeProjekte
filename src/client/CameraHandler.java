@@ -2,9 +2,11 @@ package client;
 
 import java.util.ArrayList;
 
+import com.sun.org.apache.xerces.internal.util.SynchronizedSymbolTable;
+
 public class CameraHandler {
 	private int index;
-	private boolean packageRead;
+	private boolean[] packageRead;
 	private TimeStampedImageComparator comparator;
 	private int imagesAvailable;
 
@@ -16,9 +18,13 @@ public class CameraHandler {
 		imageBuffers.add(new ArrayList<TimeStampedImage>()); //tänk över struktur
 		imageBuffers.add( new ArrayList<TimeStampedImage>());
 		index = 0;
-		packageRead = true; //true from start
+		packageRead = new boolean[2]; //true from start
+		packageRead[0] = true;
+		packageRead[1] = true;
+		
 		comparator= new TimeStampedImageComparator();
 		imagesAvailable=0;
+		
 	}
 /**
  * Get index of which imagebuffer to use
@@ -43,6 +49,7 @@ public class CameraHandler {
 		imageBuffers.get(cameraIndex).add(new TimeStampedImage(timestamp, motionDetected, image));
 		imagesAvailable++;
 		notifyAll();
+	 System.out.println("imgs in " + cameraIndex + " added");
 		
 
 	}
@@ -50,9 +57,9 @@ public class CameraHandler {
  * Blocking method that returns when the last messages has been handled. 
  * To be used to wait until read-thread has handled the answer of the most recent request.
  */
-	public synchronized void request() {
+	public synchronized void request(int cameraIndex) {
 
-		while (!packageRead) { // ändra logic ifall slow-mode
+		while (!packageRead[cameraIndex]) { // ändra logic ifall slow-mode
 			try {
 				wait();
 			} catch (InterruptedException e) {
@@ -60,15 +67,15 @@ public class CameraHandler {
 				e.printStackTrace();
 			}
 		}
-		packageRead=false;
+		packageRead[cameraIndex]=false;
 		notifyAll();
 		
 	}
 	/**
 	 * When read-thread has handled the answer of the most recent request
 	 */
-	public synchronized void confirmRead(){
-		packageRead = true;
+	public synchronized void confirmRead(int cameraIndex){
+		packageRead[cameraIndex] = true;
 		notifyAll();
 	}
 	public synchronized boolean isEmpty(int index){
@@ -81,11 +88,12 @@ public class CameraHandler {
 		}
 		imageBuffers.get(index).sort(comparator); // reaally create new comp?
 		imagesAvailable--;
+		TimeStampedImage temp = imageBuffers.get(index).remove(0);
 		notifyAll();
-		return imageBuffers.get(index).remove(0);
+		return temp;
 	}
 	public synchronized void newImage() {
-		while(imagesAvailable<1){
+		while(imageBuffers.get(0).isEmpty() || imageBuffers.get(1).isEmpty() ){
 			try {
 				wait();
 			} catch (InterruptedException e) {
@@ -93,7 +101,9 @@ public class CameraHandler {
 				e.printStackTrace();
 			}
 		}
+		System.out.println("imnages ready");
 	}
+
 
 
 }

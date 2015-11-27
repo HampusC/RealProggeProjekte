@@ -54,7 +54,7 @@ public class ServerMonitor {
 	public synchronized void waitForDisconnect(){
 		while (!clientSocket.isClosed()){
 			try {
-				wait();
+			wait(); //kanske måste cvara wait(1000)
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

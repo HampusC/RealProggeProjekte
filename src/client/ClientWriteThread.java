@@ -9,17 +9,19 @@ public class ClientWriteThread extends Thread {
 	private boolean idleMode;
 	private long lastTime;
 	private boolean firstTime;
+	private int cameraIndex;
 
-	public ClientWriteThread(OutputStream os, CameraHandler camH) {
+	public ClientWriteThread(OutputStream os, CameraHandler camH, int cameraIndex) {
 		this.output = os;
 		this.camH = camH;
+		this.cameraIndex = cameraIndex;
 		lastTime = System.currentTimeMillis();
 		firstTime = true;
 	}
 
 	public void run() {
 		while (true) {
-			camH.request();
+			camH.request(cameraIndex);
 			// try {
 			// sleep(1000); //used to slow down, remove
 			// } catch (InterruptedException e1) {
@@ -31,6 +33,7 @@ public class ClientWriteThread extends Thread {
 				long diff = System.currentTimeMillis() - lastTime;
 				while (diff < 5000) {
 					try {
+						System.out.println(diff);
 						sleep(5000 - diff);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
@@ -38,6 +41,7 @@ public class ClientWriteThread extends Thread {
 					}
 					diff = System.currentTimeMillis() - lastTime;
 				}
+				System.out.println("out of diff");
 			}
 			if (firstTime) {
 				firstTime = false;
