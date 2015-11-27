@@ -5,6 +5,8 @@ import java.util.ArrayList;
 public class Client {
 	public final static int IDLE_MODE = 0;
 	public final static int MOVIE_MODE = 1;
+	public final static int SYNCHRONOUS_MODE = 0;
+	public final static int ASYNCHRONOUS_MODE = 1;
 	private ArrayList<CameraSocketHandler> cameraSockets;
 	private CameraHandler camh;
 
@@ -45,5 +47,9 @@ public class Client {
 	}
 	public void setMode(int mode, int index){
 		cameraSockets.get(index).setMode(mode);
+	}
+	
+	public void setType(int type){
+		//Synchronisering/asynchronisering här
 	}
 }
