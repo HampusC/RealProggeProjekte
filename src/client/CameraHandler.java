@@ -13,7 +13,7 @@ public class CameraHandler {
 	public CameraHandler() {
 		imageBuffers = new ArrayList<ArrayList<TimeStampedImage>>(2);
 
-		imageBuffers.add(new ArrayList<TimeStampedImage>());
+		imageBuffers.add(new ArrayList<TimeStampedImage>()); //tänk över struktur
 		imageBuffers.add( new ArrayList<TimeStampedImage>());
 		index = 0;
 		packageRead = true; //true from start

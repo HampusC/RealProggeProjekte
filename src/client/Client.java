@@ -33,8 +33,8 @@ public class Client {
 		}
 		Client c = new Client(args[0], Integer.parseInt(args[1]), camH);
 		c.connectCamera(args[2], Integer.parseInt(args[3]));
-//		c.setMode(Client.IDLE_MODE, 0);
-//		c.setMode(Client.IDLE_MODE, 1);
+		c.setMode(Client.IDLE_MODE, 0);
+		c.setMode(Client.IDLE_MODE, 1);
 		viewThread.start();
 	}
 	public void disconnect( int index){
