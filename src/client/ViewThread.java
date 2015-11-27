@@ -11,9 +11,9 @@ public class ViewThread extends Thread {
 	CameraHandler camH;
 	GUI gui;
 
-	public ViewThread(CameraHandler camH) {
+	public ViewThread(CameraHandler camH, Client client) {
 		this.camH = camH;
-		gui = new GUI();
+		gui = new GUI(client);
 
 	}
 

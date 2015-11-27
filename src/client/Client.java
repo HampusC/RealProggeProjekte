@@ -26,7 +26,7 @@ public class Client {
 
 	public static void main(String[] args) {
 		CameraHandler camH = new CameraHandler();
-		ViewThread viewThread = new ViewThread(camH);
+		
 		if (args.length != 4) {
 			System.out.println("Syntax: JPEGHTTPClient <address> <port>");
 			System.exit(1);
@@ -35,6 +35,7 @@ public class Client {
 		c.connectCamera(args[2], Integer.parseInt(args[3]));
 		c.setMode(Client.IDLE_MODE, 0);
 		c.setMode(Client.IDLE_MODE, 1);
+		ViewThread viewThread = new ViewThread(camH, c);
 		viewThread.start();
 	}
 	public void disconnect( int index){

@@ -14,6 +14,7 @@ import java.awt.Canvas;
 
 public class GUI extends JFrame {
 	private ImageIcon icon;
+	private Client client;
 
 	ArrayList<Canvas> canvas = new ArrayList<Canvas>();
 
@@ -24,8 +25,8 @@ public class GUI extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					GUI frame = new GUI();
-					frame.setVisible(true);
+					//GUI frame = new GUI();
+					//frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -36,8 +37,10 @@ public class GUI extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public GUI() {
+	public GUI(Client client) {
 		super();
+		this.client = client;
+		
 		setResizable(false);
 		setSize(1316,800);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -95,6 +98,7 @@ public class GUI extends JFrame {
 	}
 	
 	public void refresh(byte[] data, int index) {
+		
 		Image theImage = getToolkit().createImage(data);
 		getToolkit().prepareImage(theImage,-1,-1,null);	    
 		icon.setImage(theImage);
