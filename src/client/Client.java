@@ -52,7 +52,7 @@ public class Client {
 	}
 	
 	public void setSyncType(int syncType){
-		//Synchronisering/asynchronisering här
+		ACTIVE_SYNC_MODE = syncType;
 	}
 	
 }
