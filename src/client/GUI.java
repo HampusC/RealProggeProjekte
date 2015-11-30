@@ -28,8 +28,9 @@ public class GUI extends JFrame {
 	private JTextField textField_2;
 	private JTextField textField_3;
 	private JTextField textField_4;
-	JLabel lblModeDisplay;
-	JLabel lblSyncTypeDisplay;
+	private JLabel lblModeDisplay;
+	private JLabel lblSyncTypeDisplay;
+	JButton btnIdle, btnMovie, btnConnect1, btnDisconnect1, btnConnect2, btnDisconnect2, btnSynchronous, btnAsynchronous, btnAuto;
 
 	/**
 	 * Launch the application.
@@ -66,7 +67,7 @@ public class GUI extends JFrame {
 		canvas.get(1).setBounds(663, 12, 640, 480);
 		getContentPane().add(canvas.get(1));
 		
-		JButton btnIdle = new JButton("Idle");
+		btnIdle = new JButton("Idle");
 		btnIdle.setBounds(12, 725, 314, 49);
 		getContentPane().add(btnIdle);
 		btnIdle.addActionListener(new ActionListener() {
@@ -81,7 +82,7 @@ public class GUI extends JFrame {
 			}
 		});
 		
-		JButton btnMovie = new JButton("Movie");
+		btnMovie = new JButton("Movie");
 		btnMovie.setBounds(338, 725, 314, 49);
 		getContentPane().add(btnMovie);
 		btnMovie.addActionListener(new ActionListener() {
@@ -96,7 +97,7 @@ public class GUI extends JFrame {
 			}
 		});
 		
-		JButton btnConnect1 = new JButton("Connect");
+		btnConnect1 = new JButton("Connect");
 		btnConnect1.setBounds(12, 664, 314, 49);
 		getContentPane().add(btnConnect1);
 		btnConnect1.addActionListener(new ActionListener() {
@@ -114,7 +115,7 @@ public class GUI extends JFrame {
 			}
 		});
 		
-		JButton btnDisconnect1 = new JButton("Disconnect");
+		btnDisconnect1 = new JButton("Disconnect");
 		btnDisconnect1.setBounds(338, 664, 314, 49);
 		getContentPane().add(btnDisconnect1);
 		btnDisconnect1.addActionListener(new ActionListener() {
@@ -129,7 +130,7 @@ public class GUI extends JFrame {
 			}
 		});
 		
-		JButton btnConnect2 = new JButton("Connect");
+		btnConnect2 = new JButton("Connect");
 		btnConnect2.setBounds(663, 664, 314, 49);
 		getContentPane().add(btnConnect2);
 		btnConnect2.addActionListener(new ActionListener() {
@@ -147,7 +148,7 @@ public class GUI extends JFrame {
 			}
 		});
 		
-		JButton btnDisconnect2 = new JButton("Disconnect");
+		btnDisconnect2 = new JButton("Disconnect");
 		btnDisconnect2.setBounds(989, 664, 314, 49);
 		getContentPane().add(btnDisconnect2);
 		btnDisconnect2.addActionListener(new ActionListener() {
@@ -162,7 +163,7 @@ public class GUI extends JFrame {
 			}
 		});
 		
-		JButton btnSynchronous = new JButton("Synchronous");
+		btnSynchronous = new JButton("Synchronous");
 		btnSynchronous.setBounds(664, 725, 314, 49);
 		getContentPane().add(btnSynchronous);
 		btnSynchronous.addActionListener(new ActionListener() {
@@ -177,7 +178,7 @@ public class GUI extends JFrame {
 			}
 		});
 		
-		JButton btnAsynchronous = new JButton("Asynchronous");
+		btnAsynchronous = new JButton("Asynchronous");
 		btnAsynchronous.setBounds(989, 725, 314, 49);
 		getContentPane().add(btnAsynchronous);
 		btnAsynchronous.addActionListener(new ActionListener() {
@@ -192,7 +193,7 @@ public class GUI extends JFrame {
 			}
 		});
 		
-		JButton btnAuto = new JButton("Auto");
+		btnAuto = new JButton("Auto");
 		btnAuto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Thread queryThread = new Thread() {
@@ -283,6 +284,9 @@ public class GUI extends JFrame {
 		setVisible(true);
 	}
 	
+	/**
+	 * Updates the GUI
+	 */
 	public void refresh(byte[] data, int index) {
 		SwingUtilities.invokeLater(new Runnable() {
 		    public void run() {
@@ -296,25 +300,51 @@ public class GUI extends JFrame {
 		
 	}
 	
+	/**
+	 * Sets the operating mode of the system. 0 or 1
+	 */
 	public void setMode(int mode){
 		if(mode == Client.IDLE_MODE){
 			lblModeDisplay.setText("Idle");
+			btnAuto.setEnabled(true);
+			btnIdle.setEnabled(false);
+			btnMovie.setEnabled(true);
 		}
 		else if(mode == Client.MOVIE_MODE){
 			lblModeDisplay.setText("Movie");
+			btnAuto.setEnabled(true);
+			btnIdle.setEnabled(true);
+			btnMovie.setEnabled(false);
 		}
 	}
 	
+	/**
+	 * Sets the synchronization type of the system. 0 or 1
+	 */
 	public void setSyncType(int type){
 		if(type == Client.SYNCHRONOUS_MODE){
 			lblSyncTypeDisplay.setText("Synchronous");
+			btnAuto.setEnabled(true);
+			btnSynchronous.setEnabled(false);
+			btnAsynchronous.setEnabled(true);
 		}
 		else if(type == Client.ASYNCHRONOUS_MODE){
+			btnAuto.setEnabled(true);
+			btnSynchronous.setEnabled(true);
+			btnAsynchronous.setEnabled(false);
 			lblSyncTypeDisplay.setText("Asynchronous");
 		}
 	}
 	
+	/**
+	 * Sets auto mode
+	 */
 	public void setAuto(){
+		btnAuto.setEnabled(false);
+		btnIdle.setEnabled(true);
+		btnMovie.setEnabled(true);
+		btnSynchronous.setEnabled(true);
+		btnAsynchronous.setEnabled(true);
 		lblModeDisplay.setText("Auto");
 		lblSyncTypeDisplay.setText("Auto");
 	}
