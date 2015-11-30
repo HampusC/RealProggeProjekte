@@ -291,7 +291,7 @@ public class GUI extends JFrame {
 	/**
 	 * Updates the GUI
 	 */
-	public void refresh(byte[] data, int index) {
+	public void refresh(byte[] data, int index, long timestamp) {
 		SwingUtilities.invokeLater(new Runnable() {
 		    public void run() {
 		    	System.out.println("img");
@@ -299,7 +299,7 @@ public class GUI extends JFrame {
 				getToolkit().prepareImage(theImage,-1,-1,null);
 		    	icon.setImage(theImage);
 		    	icon.paintIcon(GUI.this, canvas.get(index).getGraphics(), 0, 0);
-		    	
+		    	updateDelay(timestamp, index);
 		    }
 		 });
 	}
@@ -370,11 +370,10 @@ public class GUI extends JFrame {
 		 });
 	}
 	
+	/**
+	 * Updates the delay label
+	 */
 	public void updateDelay(long delay, int index){
-		SwingUtilities.invokeLater(new Runnable() {
-		    public void run() {
-		    	delays.get(index).setText(delay + "");
-		    }
-		 });
+		delays.get(index).setText(delay + "");
 	}
 }
