@@ -23,14 +23,15 @@ public class GUI extends JFrame {
 	private ImageIcon icon;
 	private Client client;
 
-	ArrayList<Canvas> canvas = new ArrayList<Canvas>();
+	private ArrayList<Canvas> canvas = new ArrayList<Canvas>();
 	private JTextField textField_1;
 	private JTextField textField_2;
 	private JTextField textField_3;
 	private JTextField textField_4;
 	private JLabel lblModeDisplay;
 	private JLabel lblSyncTypeDisplay;
-	JButton btnIdle, btnMovie, btnConnect1, btnDisconnect1, btnConnect2, btnDisconnect2, btnSynchronous, btnAsynchronous, btnAuto;
+	private JButton btnIdle, btnMovie, btnConnect1, btnDisconnect1, btnConnect2, btnDisconnect2, btnSynchronous, btnAsynchronous, btnAuto;
+	private ArrayList<JLabel> delays = new ArrayList<JLabel>();
 
 	/**
 	 * Launch the application.
@@ -74,7 +75,6 @@ public class GUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				Thread queryThread = new Thread() {
 				      public void run() {
-				        client.setMode(Client.IDLE_MODE);
 				        setMode(Client.IDLE_MODE);
 				      }
 				};
@@ -89,7 +89,6 @@ public class GUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				Thread queryThread = new Thread() {
 				      public void run() {
-				        client.setMode(Client.MOVIE_MODE);
 				        setMode(Client.MOVIE_MODE);
 				      }
 				};
@@ -170,7 +169,6 @@ public class GUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				Thread queryThread = new Thread() {
 				      public void run() {
-				        client.setSyncType(Client.SYNCHRONOUS_MODE); 
 				        setSyncType(Client.SYNCHRONOUS_MODE);
 				      }
 				};
@@ -185,7 +183,6 @@ public class GUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				Thread queryThread = new Thread() {
 				      public void run() {
-				        client.setSyncType(Client.ASYNCHRONOUS_MODE); 
 				        setSyncType(Client.ASYNCHRONOUS_MODE);
 				      }
 				};
@@ -198,7 +195,6 @@ public class GUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				Thread queryThread = new Thread() {
 				      public void run() {
-				        client.setAutoMode(Client.AUTO_MODE);
 				        setAuto();
 				      }
 				};
@@ -209,7 +205,7 @@ public class GUI extends JFrame {
 		getContentPane().add(btnAuto);
 		
 		JLabel lblDelay = new JLabel("Delay: ");
-		lblDelay.setBounds(12, 500, 314, 15);
+		lblDelay.setBounds(12, 500, 62, 15);
 		getContentPane().add(lblDelay);
 		
 		textField_1 = new JTextField();
@@ -237,7 +233,7 @@ public class GUI extends JFrame {
 		getContentPane().add(textField_4);
 		
 		JLabel label = new JLabel("Delay: ");
-		label.setBounds(663, 500, 314, 15);
+		label.setBounds(663, 500, 70, 15);
 		getContentPane().add(label);
 		
 		JLabel lblServerAddress = new JLabel("Server address");
@@ -266,11 +262,11 @@ public class GUI extends JFrame {
 		lblSynctype.setBounds(663, 612, 85, 15);
 		getContentPane().add(lblSynctype);
 		
-		lblModeDisplay = new JLabel("soigdsg");
+		lblModeDisplay = new JLabel("");
 		lblModeDisplay.setBounds(420, 612, 70, 15);
 		getContentPane().add(lblModeDisplay);
 		
-		lblSyncTypeDisplay = new JLabel("kdjfg");
+		lblSyncTypeDisplay = new JLabel("");
 		lblSyncTypeDisplay.setBounds(760, 612, 167, 15);
 		getContentPane().add(lblSyncTypeDisplay);
 		
@@ -279,6 +275,14 @@ public class GUI extends JFrame {
 		progressBar.setMaximum(5);
 		progressBar.setBounds(12, 474, 314, 14);
 		getContentPane().add(progressBar);
+		
+		delays.add(new JLabel(""));
+		delays.get(0).setBounds(86, 500, 70, 15);
+		getContentPane().add(delays.get(0));
+		
+		delays.add(new JLabel(""));
+		delays.get(1).setBounds(745, 500, 70, 15);
+		getContentPane().add(delays.get(1));
 		
 		
 		setVisible(true);
@@ -295,57 +299,82 @@ public class GUI extends JFrame {
 				getToolkit().prepareImage(theImage,-1,-1,null);
 		    	icon.setImage(theImage);
 		    	icon.paintIcon(GUI.this, canvas.get(index).getGraphics(), 0, 0);
+		    	
 		    }
 		 });
-		
 	}
 	
 	/**
 	 * Sets the operating mode of the system. 0 or 1
 	 */
 	public void setMode(int mode){
-		if(mode == Client.IDLE_MODE){
-			lblModeDisplay.setText("Idle");
-			btnAuto.setEnabled(true);
-			btnIdle.setEnabled(false);
-			btnMovie.setEnabled(true);
-		}
-		else if(mode == Client.MOVIE_MODE){
-			lblModeDisplay.setText("Movie");
-			btnAuto.setEnabled(true);
-			btnIdle.setEnabled(true);
-			btnMovie.setEnabled(false);
-		}
+		SwingUtilities.invokeLater(new Runnable() {
+		    public void run() {
+		    	if(mode == Client.IDLE_MODE){
+					lblModeDisplay.setText("Idle");
+					btnAuto.setEnabled(true);
+					btnIdle.setEnabled(false);
+					btnMovie.setEnabled(true);
+					client.setMode(Client.IDLE_MODE);
+				}
+				else if(mode == Client.MOVIE_MODE){
+					lblModeDisplay.setText("Movie");
+					btnAuto.setEnabled(true);
+					btnIdle.setEnabled(true);
+					btnMovie.setEnabled(false);
+					client.setMode(Client.MOVIE_MODE);
+				}
+		    }
+		 });	
 	}
 	
 	/**
 	 * Sets the synchronization type of the system. 0 or 1
 	 */
 	public void setSyncType(int type){
-		if(type == Client.SYNCHRONOUS_MODE){
-			lblSyncTypeDisplay.setText("Synchronous");
-			btnAuto.setEnabled(true);
-			btnSynchronous.setEnabled(false);
-			btnAsynchronous.setEnabled(true);
-		}
-		else if(type == Client.ASYNCHRONOUS_MODE){
-			btnAuto.setEnabled(true);
-			btnSynchronous.setEnabled(true);
-			btnAsynchronous.setEnabled(false);
-			lblSyncTypeDisplay.setText("Asynchronous");
-		}
+		SwingUtilities.invokeLater(new Runnable() {
+		    public void run() {
+		    	if(type == Client.SYNCHRONOUS_MODE){
+					lblSyncTypeDisplay.setText("Synchronous");
+					btnAuto.setEnabled(true);
+					btnSynchronous.setEnabled(false);
+					btnAsynchronous.setEnabled(true);
+					client.setSyncType(Client.SYNCHRONOUS_MODE);
+				}
+				else if(type == Client.ASYNCHRONOUS_MODE){
+					btnAuto.setEnabled(true);
+					btnSynchronous.setEnabled(true);
+					btnAsynchronous.setEnabled(false);
+					lblSyncTypeDisplay.setText("Asynchronous");
+					client.setSyncType(Client.ASYNCHRONOUS_MODE);
+				}
+		    }
+		 });
 	}
 	
 	/**
 	 * Sets auto mode
 	 */
 	public void setAuto(){
-		btnAuto.setEnabled(false);
-		btnIdle.setEnabled(true);
-		btnMovie.setEnabled(true);
-		btnSynchronous.setEnabled(true);
-		btnAsynchronous.setEnabled(true);
-		lblModeDisplay.setText("Auto");
-		lblSyncTypeDisplay.setText("Auto");
+		SwingUtilities.invokeLater(new Runnable() {
+		    public void run() {
+		    	btnAuto.setEnabled(false);
+				btnIdle.setEnabled(true);
+				btnMovie.setEnabled(true);
+				btnSynchronous.setEnabled(true);
+				btnAsynchronous.setEnabled(true);
+				lblModeDisplay.setText("Auto");
+				lblSyncTypeDisplay.setText("Auto");
+				client.setAutoMode(Client.AUTO_MODE);
+		    }
+		 });
+	}
+	
+	public void updateDelay(long delay, int index){
+		SwingUtilities.invokeLater(new Runnable() {
+		    public void run() {
+		    	delays.get(index).setText(delay + "");
+		    }
+		 });
 	}
 }
