@@ -14,18 +14,20 @@ import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import java.awt.Canvas;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.JProgressBar;
 
 public class GUI extends JFrame {
 	private ImageIcon icon;
 	private Client client;
 
 	ArrayList<Canvas> canvas = new ArrayList<Canvas>();
-	private JTextField textField;
 	private JTextField textField_1;
 	private JTextField textField_2;
 	private JTextField textField_3;
+	private JTextField textField_4;
 	JLabel lblModeDisplay;
 	JLabel lblSyncTypeDisplay;
 
@@ -72,7 +74,7 @@ public class GUI extends JFrame {
 				Thread queryThread = new Thread() {
 				      public void run() {
 				        client.setMode(Client.IDLE_MODE);
-				        setMode(client.IDLE_MODE);
+				        setMode(Client.IDLE_MODE);
 				      }
 				};
 				queryThread.start();
@@ -87,7 +89,7 @@ public class GUI extends JFrame {
 				Thread queryThread = new Thread() {
 				      public void run() {
 				        client.setMode(Client.MOVIE_MODE);
-				        setMode(client.MOVIE_MODE);
+				        setMode(Client.MOVIE_MODE);
 				      }
 				};
 				queryThread.start();
@@ -101,8 +103,11 @@ public class GUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				Thread queryThread = new Thread() {
 				      public void run() {
-				        client.connectCamera("localhost", 6077); //Kanske att man ska ange adress/port när man klickar på connect.
-				        System.out.println("Button clicked");
+				    	  try {
+				    		  client.connectCamera(textField_1.getText(), Integer.parseInt(textField_2.getText())); 
+				    	  } catch (Exception e) {
+				    		  JOptionPane.showMessageDialog(GUI.this, "Couldn't connect to the server", "Error", JOptionPane.ERROR_MESSAGE);
+				    	  }
 				      }
 				};
 				queryThread.start();
@@ -131,8 +136,11 @@ public class GUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				Thread queryThread = new Thread() {
 				      public void run() {
-				        client.connectCamera("localhost", 6078); //Kanske att man ska ange adress/port när man klickar på connect. 
-				        System.out.println("Button clicked");
+				    	  try {
+				    		  client.connectCamera(textField_3.getText(), Integer.parseInt(textField_4.getText())); 
+				    	  } catch (Exception e) {
+				    		  JOptionPane.showMessageDialog(GUI.this, "Couldn't connect to the server", "Error", JOptionPane.ERROR_MESSAGE);
+				    	  }
 				      }
 				};
 				queryThread.start();
@@ -162,7 +170,7 @@ public class GUI extends JFrame {
 				Thread queryThread = new Thread() {
 				      public void run() {
 				        client.setSyncType(Client.SYNCHRONOUS_MODE); 
-				        setSyncType(client.SYNCHRONOUS_MODE);
+				        setSyncType(Client.SYNCHRONOUS_MODE);
 				      }
 				};
 				queryThread.start();
@@ -177,7 +185,7 @@ public class GUI extends JFrame {
 				Thread queryThread = new Thread() {
 				      public void run() {
 				        client.setSyncType(Client.ASYNCHRONOUS_MODE); 
-				        setSyncType(client.ASYNCHRONOUS_MODE);
+				        setSyncType(Client.ASYNCHRONOUS_MODE);
 				      }
 				};
 				queryThread.start();
@@ -189,7 +197,7 @@ public class GUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				Thread queryThread = new Thread() {
 				      public void run() {
-				        client.setAutoMode();
+				        client.setAutoMode(Client.AUTO_MODE);
 				        setAuto();
 				      }
 				};
@@ -203,29 +211,29 @@ public class GUI extends JFrame {
 		lblDelay.setBounds(12, 500, 314, 15);
 		getContentPane().add(lblDelay);
 		
-		textField = new JTextField();
-		textField.setToolTipText("Server address");
-		textField.setBounds(12, 540, 314, 19);
-		getContentPane().add(textField);
-		textField.setColumns(10);
-		
 		textField_1 = new JTextField();
-		textField_1.setToolTipText("Port number");
-		textField_1.setColumns(10);
-		textField_1.setBounds(338, 540, 314, 19);
+		textField_1.setToolTipText("Server address");
+		textField_1.setBounds(12, 540, 314, 19);
 		getContentPane().add(textField_1);
+		textField_1.setColumns(10);
 		
 		textField_2 = new JTextField();
-		textField_2.setToolTipText("Server address");
+		textField_2.setToolTipText("Port number");
 		textField_2.setColumns(10);
-		textField_2.setBounds(663, 540, 314, 19);
+		textField_2.setBounds(338, 540, 314, 19);
 		getContentPane().add(textField_2);
 		
 		textField_3 = new JTextField();
-		textField_3.setToolTipText("Port number");
+		textField_3.setToolTipText("Server address");
 		textField_3.setColumns(10);
-		textField_3.setBounds(989, 540, 314, 19);
+		textField_3.setBounds(663, 540, 314, 19);
 		getContentPane().add(textField_3);
+		
+		textField_4 = new JTextField();
+		textField_4.setToolTipText("Port number");
+		textField_4.setColumns(10);
+		textField_4.setBounds(989, 540, 314, 19);
+		getContentPane().add(textField_4);
 		
 		JLabel label = new JLabel("Delay: ");
 		label.setBounds(663, 500, 314, 15);
@@ -265,6 +273,12 @@ public class GUI extends JFrame {
 		lblSyncTypeDisplay.setBounds(760, 612, 167, 15);
 		getContentPane().add(lblSyncTypeDisplay);
 		
+		JProgressBar progressBar = new JProgressBar();
+		progressBar.setToolTipText("Progress");
+		progressBar.setMaximum(5);
+		progressBar.setBounds(12, 474, 314, 14);
+		getContentPane().add(progressBar);
+		
 		
 		setVisible(true);
 	}
@@ -283,19 +297,19 @@ public class GUI extends JFrame {
 	}
 	
 	public void setMode(int mode){
-		if(mode == client.IDLE_MODE){
+		if(mode == Client.IDLE_MODE){
 			lblModeDisplay.setText("Idle");
 		}
-		else if(mode == client.MOVIE_MODE){
+		else if(mode == Client.MOVIE_MODE){
 			lblModeDisplay.setText("Movie");
 		}
 	}
 	
 	public void setSyncType(int type){
-		if(type == client.SYNCHRONOUS_MODE){
+		if(type == Client.SYNCHRONOUS_MODE){
 			lblSyncTypeDisplay.setText("Synchronous");
 		}
-		else if(type == client.ASYNCHRONOUS_MODE){
+		else if(type == Client.ASYNCHRONOUS_MODE){
 			lblSyncTypeDisplay.setText("Asynchronous");
 		}
 	}

@@ -14,7 +14,7 @@ public class Client {
 	
 	
 	private ArrayList<CameraSocketHandler> cameraSockets;
-	private CameraHandler camh;final
+	private CameraHandler camh;
 
 	public Client(String address, int port, CameraHandler camh) {
 		this.camh = camh;
