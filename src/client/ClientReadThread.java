@@ -47,16 +47,17 @@ public class ClientReadThread extends Thread {
 					motionDetected = false;
 				}
 
-				// Timestamp 4 bytes
+				// Timestamp 8 bytes
 				long timestamp = 0;
-				for (int i = 6; i < 14; i++) {
+				for (int i = 2; i < 10; i++) {
 					timestamp = (timestamp << 8) + (buffer[i] & 0xff);
 				}
 				// Image, lentgh long
 				ByteBuffer b = ByteBuffer.allocate(4);
-				b.put(buffer, 2, 4);
+				b.put(buffer, 10, 4);
 				b.position(0);
 				int length = b.getInt();
+				
 				byte[] image = Arrays.copyOfRange(buffer, 14, length + 14); // ngra
 																			// av
 																			// bytsen

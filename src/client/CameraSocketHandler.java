@@ -17,6 +17,7 @@ private int cameraIndex;
 	
 		try {
 			socket = new Socket(address,  port);
+			socket.setTcpNoDelay(true);
 			cWriteThread = new ClientWriteThread(socket.getOutputStream(), camH, cameraIndex);
 			cReadThread = new ClientReadThread(socket.getInputStream(), camH, cameraIndex);
 			cWriteThread.start();
