@@ -10,26 +10,94 @@ import javax.imageio.ImageIO;
 public class ViewThread extends Thread {
 	CameraHandler camH;
 	GUI gui;
+	private int offSyncImages;
+	private final int offSyncLimit = 10;
 
 	public ViewThread(CameraHandler camH, Client client) {
 		this.camH = camH;
 		gui = new GUI(client);
+		offSyncImages = 0;
 
 	}
 
 	public void run() {
-		while (true) {
-			camH.newImage();
+		camH.newImage();
 
-			TimeStampedImage temp1 = camH.getLatestImage(0);
-			TimeStampedImage temp2 = camH.getLatestImage(1);
-			
-			if (temp1 != null) {
-				gui.refresh(temp1.getImage(), 0);
+		TimeStampedImage temp1 = camH.getLatestImage(0);
+		TimeStampedImage temp2 = camH.getLatestImage(1);
+		long time1 = temp1.getTimestamp();
+		long time2 = temp2.getTimestamp();
+
+		while (true) {
+			long diff = time1 - time2;
+
+			// if more than ~10 images offsync "in row" make asyncro, if back to
+			// 0 make synchro
+			if (Math.abs(diff) > Client.MAX_DIFF) {
+				offSyncImages++;
+				if (offSyncImages > offSyncLimit) {
+					// gui.setsynchroniuz(false)
+					offSyncImages = offSyncLimit;
+				}
+			} else {
+				offSyncImages--;
+				if (offSyncImages < 0) {
+					// gui.setsynchroniuz(true)
+					offSyncImages = 0;
+				}
 			}
-			if (temp2 != null) {
+			// ha en if som kollar synchronious mode, if true gör det nedan
+			if (Client.ACTIVE_SYNC_MODE==Client.SYNCHRONOUS_MODE) {
+				if (diff > 0) {
+					gui.refresh(temp2.getImage(), 1);
+					System.out.println("should pic");
+					camH.newImage();
+					temp2 = camH.getLatestImage(1);
+					time2 = temp2.getTimestamp();
+				}
+				if (diff < 0) {
+					gui.refresh(temp1.getImage(), 0);
+					System.out.println("should pic2");
+					camH.newImage();
+					temp1 = camH.getLatestImage(0);
+					time1 = temp1.getTimestamp();
+				} else {
+					gui.refresh(temp1.getImage(), 0);
+					gui.refresh(temp2.getImage(), 1);
+					camH.newImage();
+					temp1 = camH.getLatestImage(0);
+					temp2 = camH.getLatestImage(1);
+					time1 = temp1.getTimestamp();
+					time2 = temp2.getTimestamp();
+				}
+			}else{
+				gui.refresh(temp1.getImage(), 0); //samma som ovanstående else, duplicerad kod?
 				gui.refresh(temp2.getImage(), 1);
+				camH.newImage();
+				temp1 = camH.getLatestImage(0);
+				temp2 = camH.getLatestImage(1);
+				time1 = temp1.getTimestamp();
+				time2 = temp2.getTimestamp();
 			}
+			// else{
+			// long diff = time2-time1;
+			// System.out.println(" (time2) diffen är " +diff);
+			// gui.refresh(temp1.getImage(), 0);
+			// try {
+			// sleep(diff);
+			// } catch (InterruptedException e) {
+			// // TODO Auto-generated catch block
+			// e.printStackTrace();
+			// }
+			// gui.refresh(temp2.getImage(), 1);
+			// }
+
+			// if (temp1 != null) {
+			// gui.refresh(temp1.getImage(), 0);
+			// }
+			// if (temp2 != null) {
+			// gui.refresh(temp2.getImage(), 1);
+			// }
 		}
 
 	}

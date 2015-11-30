@@ -37,6 +37,7 @@ public class WriteThread extends Thread {
 
 			// the image, written on 14 and onwards
 			int len = camera.getJPEG(jpeg, 6 + AxisM3006V.TIME_ARRAY_SIZE);
+		
 //			System.out.println("first bit in pic " + jpeg[6 + AxisM3006V.TIME_ARRAY_SIZE] + " last byte "
 //					+ jpeg[6 + AxisM3006V.TIME_ARRAY_SIZE + len - 1]);
 
@@ -45,7 +46,7 @@ public class WriteThread extends Thread {
 			b.putInt(len);
 			byte[] result = b.array();
 			for (int i = 0; i < 4; i++) {
-				jpeg[i + 2] = result[i];
+				jpeg[i + 10] = result[i];
 			}
 
 			try {

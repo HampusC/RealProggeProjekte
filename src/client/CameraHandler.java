@@ -1,6 +1,7 @@
 package client;
 
 import java.util.ArrayList;
+import java.util.PriorityQueue;
 
 import com.sun.org.apache.xerces.internal.util.SynchronizedSymbolTable;
 
@@ -8,22 +9,22 @@ public class CameraHandler {
 	private int index;
 	private boolean[] packageRead;
 	private TimeStampedImageComparator comparator;
-	private int imagesAvailable;
+	
 
-	private ArrayList<ArrayList<TimeStampedImage>> imageBuffers;
+	private ArrayList<PriorityQueue<TimeStampedImage>> imageBuffers;
 
 	public CameraHandler() {
-		imageBuffers = new ArrayList<ArrayList<TimeStampedImage>>(2);
+		imageBuffers = new ArrayList<PriorityQueue<TimeStampedImage>>(2);
 
-		imageBuffers.add(new ArrayList<TimeStampedImage>()); //tänk över struktur
-		imageBuffers.add( new ArrayList<TimeStampedImage>());
+		imageBuffers.add(new PriorityQueue<TimeStampedImage>()); //tänk över struktur
+		imageBuffers.add( new PriorityQueue<TimeStampedImage>());
 		index = 0;
 		packageRead = new boolean[2]; //true from start
 		packageRead[0] = true;
 		packageRead[1] = true;
 		
 		comparator= new TimeStampedImageComparator();
-		imagesAvailable=0;
+		
 		
 	}
 /**
@@ -47,9 +48,8 @@ public class CameraHandler {
  */
 	public synchronized void writeToBuffer(long timestamp, boolean motionDetected, byte[] image, int cameraIndex) {
 		imageBuffers.get(cameraIndex).add(new TimeStampedImage(timestamp, motionDetected, image));
-		imagesAvailable++;
+	
 		notifyAll();
-	 System.out.println("imgs in " + cameraIndex + " added");
 		
 
 	}
@@ -82,13 +82,12 @@ public class CameraHandler {
 		return imageBuffers.get(index).isEmpty();
 	}
 	public synchronized TimeStampedImage getLatestImage(int index){ //should it remove?
-		System.out.println("get latest");
 		if(imageBuffers.get(index).isEmpty()){
 			return null; //throw error?
 		}
-		imageBuffers.get(index).sort(comparator); // reaally create new comp?
-		imagesAvailable--;
-		TimeStampedImage temp = imageBuffers.get(index).remove(0);
+		
+
+		TimeStampedImage temp = imageBuffers.get(index).poll();
 		notifyAll();
 		return temp;
 	}

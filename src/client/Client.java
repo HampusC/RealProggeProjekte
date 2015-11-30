@@ -7,6 +7,8 @@ public class Client {
 	public final static int MOVIE_MODE = 1;
 	public final static int SYNCHRONOUS_MODE = 0;
 	public final static int ASYNCHRONOUS_MODE = 1;
+	public final static long MAX_DIFF = 200;
+	public static int ACTIVE_SYNC_MODE = 0;
 	private ArrayList<CameraSocketHandler> cameraSockets;
 	private CameraHandler camh;
 
