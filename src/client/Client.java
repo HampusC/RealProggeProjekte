@@ -8,9 +8,13 @@ public class Client {
 	public final static int SYNCHRONOUS_MODE = 0;
 	public final static int ASYNCHRONOUS_MODE = 1;
 	public final static long MAX_DIFF = 200;
-	public static int ACTIVE_SYNC_MODE = 0;
+	public final static int AUTO_MODE = 1;
+	private int auto = AUTO_MODE;
+	private int activeSyncMode = SYNCHRONOUS_MODE; //static ofinal, använda getter?
+	
+	
 	private ArrayList<CameraSocketHandler> cameraSockets;
-	private CameraHandler camh;
+	private CameraHandler camh;final
 
 	public Client(String address, int port, CameraHandler camh) {
 		this.camh = camh;
@@ -52,13 +56,19 @@ public class Client {
 			s.setMode(mode);
 		}
 	}
-	
+	public boolean isAutoMode(){
+		return auto==AUTO_MODE;
+	}
+	public boolean isSyncMode(){
+		return activeSyncMode == SYNCHRONOUS_MODE;
+	}
 	public void setSyncType(int syncType){
-		ACTIVE_SYNC_MODE = syncType;
+		activeSyncMode = syncType;
 	}
 	
-	public void setAutoMode(){ 
+	public void setAutoMode(int mode){ 
 		//Systemet ska gå in i auto mode, alltså att den byter mellan idle/movie och sync/async automatiskt 
+		auto = mode;
 	}
 	
 	

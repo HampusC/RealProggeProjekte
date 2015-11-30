@@ -8,14 +8,16 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class ViewThread extends Thread {
-	CameraHandler camH;
-	GUI gui;
+	private CameraHandler camH;
+	private GUI gui;
+	private Client client;
 	private int offSyncImages;
 	private final int offSyncLimit = 10;
 
 	public ViewThread(CameraHandler camH, Client client) {
 		this.camH = camH;
 		gui = new GUI(client);
+		this.client = client;
 		offSyncImages = 0;
 
 	}
@@ -30,6 +32,7 @@ public class ViewThread extends Thread {
 
 		while (true) {
 			long diff = time1 - time2;
+			System.out.println("diff = " + diff);
 
 			// if more than ~10 images offsync "in row" make asyncro, if back to
 			// 0 make synchro
@@ -47,17 +50,18 @@ public class ViewThread extends Thread {
 				}
 			}
 			// ha en if som kollar synchronious mode, if true gör det nedan
-			if (Client.ACTIVE_SYNC_MODE==Client.SYNCHRONOUS_MODE) {
+			if (client.isSyncMode()) {
+				System.out.println("mode = sync");
 				if (diff > 0) {
 					gui.refresh(temp2.getImage(), 1);
-					System.out.println("should pic");
+			
 					camH.newImage();
 					temp2 = camH.getLatestImage(1);
 					time2 = temp2.getTimestamp();
 				}
 				if (diff < 0) {
 					gui.refresh(temp1.getImage(), 0);
-					System.out.println("should pic2");
+				
 					camH.newImage();
 					temp1 = camH.getLatestImage(0);
 					time1 = temp1.getTimestamp();
@@ -70,8 +74,10 @@ public class ViewThread extends Thread {
 					time1 = temp1.getTimestamp();
 					time2 = temp2.getTimestamp();
 				}
-			}else{
-				gui.refresh(temp1.getImage(), 0); //samma som ovanstående else, duplicerad kod?
+			} else {
+				System.out.println("mode = NoSync");
+				gui.refresh(temp1.getImage(), 0); // samma som ovanstående else,
+													// duplicerad kod?
 				gui.refresh(temp2.getImage(), 1);
 				camH.newImage();
 				temp1 = camH.getLatestImage(0);
