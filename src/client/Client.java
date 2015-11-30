@@ -49,7 +49,7 @@ public class Client {
 		cameraSockets.get(index).setMode(mode);
 	}
 	
-	public void setType(int type){
+	public void setSyncType(int syncType){
 		//Synchronisering/asynchronisering här
 	}
 }

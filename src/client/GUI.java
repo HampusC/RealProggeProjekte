@@ -154,7 +154,7 @@ public class GUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				Thread queryThread = new Thread() {
 				      public void run() {
-				        client.setType(Client.SYNCHRONOUS_MODE); 
+				        client.setSyncType(Client.SYNCHRONOUS_MODE); 
 				        System.out.println("Button clicked");
 				      }
 				};
@@ -169,7 +169,7 @@ public class GUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				Thread queryThread = new Thread() {
 				      public void run() {
-				        client.setType(Client.ASYNCHRONOUS_MODE); 
+				        client.setSyncType(Client.ASYNCHRONOUS_MODE); 
 				        System.out.println("Button clicked");
 				      }
 				};
