@@ -45,11 +45,5 @@ private int cameraIndex;
 		
 		
 	}
-	public void setMode(int mode) {
-		if(mode == Client.IDLE_MODE)
-			cWriteThread.idleMode(true);
-		if(mode == Client.MOVIE_MODE)
-			cWriteThread.idleMode(false);
-		
-	}
+
 }

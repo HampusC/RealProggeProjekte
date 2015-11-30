@@ -42,6 +42,7 @@ public class ClientReadThread extends Thread {
 				boolean motionDetected;
 				if (buffer[1] == 1) {
 					motionDetected = true;
+					System.out.println("motion detected");
 
 				} else {
 					motionDetected = false;

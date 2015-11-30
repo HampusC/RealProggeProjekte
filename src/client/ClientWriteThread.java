@@ -6,7 +6,7 @@ import java.io.OutputStream;
 public class ClientWriteThread extends Thread {
 	private OutputStream output;
 	private CameraHandler camH;
-	private boolean idleMode;
+	
 	private long lastTime;
 	private boolean firstTime;
 	private int cameraIndex;
@@ -22,14 +22,8 @@ public class ClientWriteThread extends Thread {
 	public void run() {
 		while (true) {
 			camH.request(cameraIndex);
-			// try {
-			// sleep(1000); //used to slow down, remove
-			// } catch (InterruptedException e1) {
-			// // TODO Auto-generated catch block
-			// e1.printStackTrace();
-			// }
-
-			if (idleMode) {
+			
+			if (camH.idleMode() && !firstTime) {
 				long diff = System.currentTimeMillis() - lastTime;
 				while (diff < 5000) {
 					try {
@@ -41,7 +35,7 @@ public class ClientWriteThread extends Thread {
 					}
 					diff = System.currentTimeMillis() - lastTime;
 				}
-				System.out.println("out of diff");
+				
 			}
 			if (firstTime) {
 				firstTime = false;
@@ -57,8 +51,5 @@ public class ClientWriteThread extends Thread {
 		}
 	}
 
-	public void idleMode(boolean b) {
-		idleMode = b;
-	}
 
 }

@@ -52,9 +52,12 @@ public class Client {
 		cameraSockets.remove(index);
 	}
 	public void setMode(int mode){
-		for(CameraSocketHandler s:cameraSockets) {
-			s.setMode(mode);
+		if(mode == IDLE_MODE){
+			camh.setIdle(true);
+		}else if( mode == MOVIE_MODE){
+			camh.setIdle(false);
 		}
+		
 	}
 	public boolean isAutoMode(){
 		return auto==AUTO_MODE;

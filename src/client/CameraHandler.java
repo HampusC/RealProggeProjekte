@@ -8,6 +8,8 @@ import com.sun.org.apache.xerces.internal.util.SynchronizedSymbolTable;
 public class CameraHandler {
 	private int index;
 	private boolean[] packageRead;
+	private boolean idleMode;
+	
 	private TimeStampedImageComparator comparator;
 	
 
@@ -22,6 +24,7 @@ public class CameraHandler {
 		packageRead = new boolean[2]; //true from start
 		packageRead[0] = true;
 		packageRead[1] = true;
+		idleMode = true;
 		
 		comparator= new TimeStampedImageComparator();
 		
@@ -101,6 +104,13 @@ public class CameraHandler {
 			}
 		}
 		System.out.println("imnages ready");
+	}
+	public synchronized boolean idleMode(){
+		return idleMode;
+	}
+	public synchronized void setIdle(boolean b) {
+		idleMode = b;
+		
 	}
 
 

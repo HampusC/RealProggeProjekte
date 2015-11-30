@@ -29,45 +29,52 @@ public class ViewThread extends Thread {
 		TimeStampedImage temp2 = camH.getLatestImage(1);
 		long time1 = temp1.getTimestamp();
 		long time2 = temp2.getTimestamp();
+		
 
 		while (true) {
+			if((temp1.getMotionDetected() || temp2.getMotionDetected()) && client.isAutoMode() ){
+				gui.setMode(Client.MOVIE_MODE);
+				System.out.println("mode motion changed to motion movie");
+			}
 			long diff = time1 - time2;
 			System.out.println("diff = " + diff);
 
 			// if more than ~10 images offsync "in row" make asyncro, if back to
 			// 0 make synchro
-			if (Math.abs(diff) > Client.MAX_DIFF) {
-				offSyncImages++;
-				if (offSyncImages > offSyncLimit) {
-					// gui.setsynchroniuz(false)
-					offSyncImages = offSyncLimit;
-				}
-			} else {
-				offSyncImages--;
-				if (offSyncImages < 0) {
-					// gui.setsynchroniuz(true)
-					offSyncImages = 0;
+			if (client.isAutoMode()) {
+				if (Math.abs(diff) > Client.MAX_DIFF) {
+					offSyncImages++;
+					if (offSyncImages > offSyncLimit) {
+						gui.setSyncType(Client.ASYNCHRONOUS_MODE);
+						offSyncImages = offSyncLimit;
+					}
+				} else {
+					offSyncImages--;
+					if (offSyncImages < 0) {
+						gui.setSyncType(Client.SYNCHRONOUS_MODE);
+						offSyncImages = 0;
+					}
 				}
 			}
-			// ha en if som kollar synchronious mode, if true gör det nedan
+
 			if (client.isSyncMode()) {
 				System.out.println("mode = sync");
 				if (diff > 0) {
-					gui.refresh(temp2.getImage(), 1);
-			
+					gui.refresh(temp2.getImage(), 1, System.currentTimeMillis()-temp2.getTimestamp());
+
 					camH.newImage();
 					temp2 = camH.getLatestImage(1);
 					time2 = temp2.getTimestamp();
 				}
 				if (diff < 0) {
-					gui.refresh(temp1.getImage(), 0);
-				
+					gui.refresh(temp1.getImage(), 0, System.currentTimeMillis()-temp1.getTimestamp());
+
 					camH.newImage();
 					temp1 = camH.getLatestImage(0);
 					time1 = temp1.getTimestamp();
 				} else {
-					gui.refresh(temp1.getImage(), 0);
-					gui.refresh(temp2.getImage(), 1);
+					gui.refresh(temp1.getImage(), 0, System.currentTimeMillis()-temp1.getTimestamp());
+					gui.refresh(temp2.getImage(), 1, System.currentTimeMillis()-temp2.getTimestamp());
 					camH.newImage();
 					temp1 = camH.getLatestImage(0);
 					temp2 = camH.getLatestImage(1);
@@ -76,9 +83,9 @@ public class ViewThread extends Thread {
 				}
 			} else {
 				System.out.println("mode = NoSync");
-				gui.refresh(temp1.getImage(), 0); // samma som ovanstående else,
+				gui.refresh(temp1.getImage(), 0, System.currentTimeMillis()-temp1.getTimestamp()); // samma som ovanstående else,
 													// duplicerad kod?
-				gui.refresh(temp2.getImage(), 1);
+				gui.refresh(temp2.getImage(), 1 , System.currentTimeMillis()-temp2.getTimestamp());
 				camH.newImage();
 				temp1 = camH.getLatestImage(0);
 				temp2 = camH.getLatestImage(1);
@@ -122,7 +129,7 @@ public class ViewThread extends Thread {
 			baos.flush();
 			imageInByte = baos.toByteArray();
 			baos.close();
-			gui.refresh(imageInByte, 0);
+			gui.refresh(imageInByte, 0, 0);
 			System.out.println();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

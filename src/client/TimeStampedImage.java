@@ -43,5 +43,8 @@ public class TimeStampedImage implements Comparable {
 		// TODO Auto-generated method stub
 		return image;
 	}
+	public boolean getMotionDetected(){
+		return motionDetected;
+	}
 	
 }
