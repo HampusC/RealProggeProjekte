@@ -47,12 +47,19 @@ public class Client {
 		temp.disconnect();
 		cameraSockets.remove(index);
 	}
-	public void setMode(int mode, int index){
-		cameraSockets.get(index).setMode(mode);
+	public void setMode(int mode){
+		for(CameraSocketHandler s:cameraSockets) {
+			s.setMode(mode);
+		}
 	}
 	
 	public void setSyncType(int syncType){
 		ACTIVE_SYNC_MODE = syncType;
 	}
+	
+	public void setAutoMode(){ 
+		//Systemet ska gå in i auto mode, alltså att den byter mellan idle/movie och sync/async automatiskt 
+	}
+	
 	
 }

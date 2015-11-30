@@ -71,8 +71,7 @@ public class GUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				Thread queryThread = new Thread() {
 				      public void run() {
-				        client.setMode(Client.IDLE_MODE, 0); //borde inte behöva index
-				        client.setMode(Client.IDLE_MODE, 1);
+				        client.setMode(Client.IDLE_MODE);
 				        setMode(client.IDLE_MODE);
 				      }
 				};
@@ -87,8 +86,7 @@ public class GUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				Thread queryThread = new Thread() {
 				      public void run() {
-				        client.setMode(Client.MOVIE_MODE, 0);
-				        client.setMode(Client.MOVIE_MODE, 1);
+				        client.setMode(Client.MOVIE_MODE);
 				        setMode(client.MOVIE_MODE);
 				      }
 				};
