@@ -16,9 +16,6 @@ import java.awt.Canvas;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-import javax.swing.JTextPane;
-import javax.swing.JProgressBar;
-import javax.swing.JCheckBox;
 
 public class GUI extends JFrame {
 	private ImageIcon icon;
@@ -79,6 +76,9 @@ public class GUI extends JFrame {
 				Thread queryThread = new Thread() {
 				      public void run() {
 				        setMode(Client.IDLE_MODE);
+				        btnAuto.setEnabled(true);
+						btnIdle.setEnabled(false);
+						btnMovie.setEnabled(true);
 				        lblAuto.setText("Manual");	
 				        client.setAutoMode(Client.MANUAL_MODE);
 				      }
@@ -94,9 +94,12 @@ public class GUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				Thread queryThread = new Thread() {
 				      public void run() {
-				        setMode(Client.MOVIE_MODE);
-				        lblAuto.setText("Manual");	
-				        client.setAutoMode(Client.MANUAL_MODE);
+						btnAuto.setEnabled(true);
+						btnIdle.setEnabled(true);
+						btnMovie.setEnabled(false);
+						lblAuto.setText("Manual");
+						setMode(Client.MOVIE_MODE);
+						client.setAutoMode(Client.MANUAL_MODE);
 				      }
 				};
 				queryThread.start();
@@ -176,9 +179,12 @@ public class GUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				Thread queryThread = new Thread() {
 				      public void run() {
-				        setSyncType(Client.SYNCHRONOUS_MODE);
-				        lblAuto.setText("Manual");	
-				        client.setAutoMode(Client.MANUAL_MODE);
+						btnAuto.setEnabled(true);
+						btnSynchronous.setEnabled(false);
+						btnAsynchronous.setEnabled(true);
+						setSyncType(Client.SYNCHRONOUS_MODE);
+						lblAuto.setText("Manual");
+						client.setAutoMode(Client.MANUAL_MODE);
 				      }
 				};
 				queryThread.start();
@@ -192,9 +198,12 @@ public class GUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				Thread queryThread = new Thread() {
 				      public void run() {
-				        setSyncType(Client.ASYNCHRONOUS_MODE);
-				        lblAuto.setText("Manual");	
-				        client.setAutoMode(Client.MANUAL_MODE);
+						btnAuto.setEnabled(true);
+						btnSynchronous.setEnabled(true);
+						btnAsynchronous.setEnabled(false);
+						setSyncType(Client.ASYNCHRONOUS_MODE);
+						lblAuto.setText("Manual");
+						client.setAutoMode(Client.MANUAL_MODE);
 				      }
 				};
 				queryThread.start();
@@ -281,12 +290,6 @@ public class GUI extends JFrame {
 		lblSyncTypeDisplay.setBounds(760, 612, 167, 15);
 		getContentPane().add(lblSyncTypeDisplay);
 		
-		JProgressBar progressBar = new JProgressBar();
-		progressBar.setToolTipText("Progress");
-		progressBar.setMaximum(5);
-		progressBar.setBounds(12, 474, 314, 14);
-		getContentPane().add(progressBar);
-		
 		delays.add(new JLabel(""));
 		delays.get(0).setBounds(86, 500, 70, 15);
 		getContentPane().add(delays.get(0));
@@ -302,6 +305,7 @@ public class GUI extends JFrame {
 		if(client.isAutoMode()){
 			setAuto();
 		}
+		lblModeDisplay.setText("Idle");
 		
 		setVisible(true);
 	}
@@ -330,16 +334,10 @@ public class GUI extends JFrame {
 		    public void run() {
 		    	if(mode == Client.IDLE_MODE){
 					lblModeDisplay.setText("Idle");
-					btnAuto.setEnabled(true);
-					btnIdle.setEnabled(false);
-					btnMovie.setEnabled(true);
 					client.setMode(Client.IDLE_MODE);
 				}
 				else if(mode == Client.MOVIE_MODE){
 					lblModeDisplay.setText("Movie");
-					btnAuto.setEnabled(true);
-					btnIdle.setEnabled(true);
-					btnMovie.setEnabled(false);
 					client.setMode(Client.MOVIE_MODE);
 				}
 		    }
@@ -354,15 +352,9 @@ public class GUI extends JFrame {
 		    public void run() {
 		    	if(type == Client.SYNCHRONOUS_MODE){
 					lblSyncTypeDisplay.setText("Synchronous");
-					btnAuto.setEnabled(true);
-					btnSynchronous.setEnabled(false);
-					btnAsynchronous.setEnabled(true);
 					client.setSyncType(Client.SYNCHRONOUS_MODE);
 				}
 				else if(type == Client.ASYNCHRONOUS_MODE){
-					btnAuto.setEnabled(true);
-					btnSynchronous.setEnabled(true);
-					btnAsynchronous.setEnabled(false);
 					lblSyncTypeDisplay.setText("Asynchronous");
 					client.setSyncType(Client.ASYNCHRONOUS_MODE);
 				}
