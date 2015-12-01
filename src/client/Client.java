@@ -27,9 +27,9 @@ public class Client {
 	public boolean connectCamera(String address, int port) { // tänk på hur
 																// disconnect
 																// och numrering
-		System.out.println("connect " + cameraSockets);
+		System.out.println("connect " + address + port);
 		boolean temp =cameraSockets.add(new CameraSocketHandler(address, port, camh));
-			camh.onlyOneCamera(cameraSockets.size()<2);
+			//camh.onlyOneCamera(cameraSockets.size()<2);
 		// påverkar
 		return temp;
 		// timme
@@ -54,7 +54,7 @@ public class Client {
 		camh.onlyOneCamera(true);
 		CameraSocketHandler temp =cameraSockets.get(index);		
 		temp.disconnect();
-		//cameraSockets.remove(index);
+		cameraSockets.remove(index);
 		
 		
 	}

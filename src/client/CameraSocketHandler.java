@@ -14,6 +14,7 @@ private int cameraIndex;
 	public CameraSocketHandler(String address, int port, CameraHandler camH){
 		this.camH = camH;
 		cameraIndex=camH.cameraIndex();
+		System.out.println("camindex = " + cameraIndex);
 	
 		try {
 			socket = new Socket(address,  port);
