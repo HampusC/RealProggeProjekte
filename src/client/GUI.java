@@ -182,7 +182,7 @@ public class GUI extends JFrame {
 						btnAuto.setEnabled(true);
 						btnSynchronous.setEnabled(false);
 						btnAsynchronous.setEnabled(true);
-						setSyncType(Client.SYNCHRONOUS_MODE);
+						setSyncType(true);
 						lblAuto.setText("Manual");
 						client.setAutoMode(Client.MANUAL_MODE);
 				      }
@@ -201,7 +201,7 @@ public class GUI extends JFrame {
 						btnAuto.setEnabled(true);
 						btnSynchronous.setEnabled(true);
 						btnAsynchronous.setEnabled(false);
-						setSyncType(Client.ASYNCHRONOUS_MODE);
+						setSyncType(false);
 						lblAuto.setText("Manual");
 						client.setAutoMode(Client.MANUAL_MODE);
 				      }
@@ -347,16 +347,16 @@ public class GUI extends JFrame {
 	/**
 	 * Sets the synchronization type of the system. 0 or 1
 	 */
-	public void setSyncType(int type){
+	public void setSyncType(boolean isSynced){
 		SwingUtilities.invokeLater(new Runnable() {
 		    public void run() {
-		    	if(type == Client.SYNCHRONOUS_MODE){
+		    	if(isSynced){
 					lblSyncTypeDisplay.setText("Synchronous");
-					client.setSyncType(Client.SYNCHRONOUS_MODE);
+					client.setSyncMode(isSynced);
 				}
-				else if(type == Client.ASYNCHRONOUS_MODE){
+				else{
 					lblSyncTypeDisplay.setText("Asynchronous");
-					client.setSyncType(Client.ASYNCHRONOUS_MODE);
+					client.setSyncMode(isSynced);
 				}
 		    }
 		 });

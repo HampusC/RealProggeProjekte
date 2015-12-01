@@ -4,11 +4,13 @@ public class TimeStampedImage implements Comparable {
 	private long timestamp;
 	private boolean motionDetected;
 	private byte[] image;
+	private int cameraNbr;
 
-	public TimeStampedImage(long timestamp, boolean motionDetected, byte[] image) {
+	public TimeStampedImage(long timestamp, boolean motionDetected, byte[] image, int cameraNbr) {
 		this.timestamp = timestamp;
 		this.motionDetected = motionDetected;
 		this.image = image;
+		this.cameraNbr = cameraNbr; 
 	}
 
 	@Override
@@ -45,6 +47,11 @@ public class TimeStampedImage implements Comparable {
 	}
 	public boolean getMotionDetected(){
 		return motionDetected;
+	}
+
+	public int getCameraIndex() {
+		// TODO Auto-generated method stub
+		return cameraNbr;
 	}
 	
 }

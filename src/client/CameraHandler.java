@@ -9,6 +9,11 @@ public class CameraHandler {
 	private int index;
 	private boolean[] packageRead;
 	private boolean idleMode;
+	private int offSyncImages;
+	private final int offSyncLimit = 10;
+	private boolean syncMode;
+	private boolean oneCamera;
+	
 	
 	private TimeStampedImageComparator comparator;
 	
@@ -25,6 +30,10 @@ public class CameraHandler {
 		packageRead[0] = true;
 		packageRead[1] = true;
 		idleMode = true;
+		offSyncImages =0;
+		syncMode = true;
+		oneCamera=true;
+		
 		
 		comparator= new TimeStampedImageComparator();
 		
@@ -50,7 +59,7 @@ public class CameraHandler {
  * @param cameraIndex - index for the buffer
  */
 	public synchronized void writeToBuffer(long timestamp, boolean motionDetected, byte[] image, int cameraIndex) {
-		imageBuffers.get(cameraIndex).add(new TimeStampedImage(timestamp, motionDetected, image));
+		imageBuffers.get(cameraIndex).add(new TimeStampedImage(timestamp, motionDetected, image, cameraIndex));
 	
 		notifyAll();
 		
@@ -85,26 +94,101 @@ public class CameraHandler {
 		return imageBuffers.get(index).isEmpty();
 	}
 	public synchronized TimeStampedImage getLatestImage(int index){ //should it remove?
-		if(imageBuffers.get(index).isEmpty()){
-			return null; //throw error?
-		}
 		
-
-		TimeStampedImage temp = imageBuffers.get(index).poll();
-		notifyAll();
-		return temp;
-	}
-	public synchronized void newImage() {
-		while(imageBuffers.get(0).isEmpty() || imageBuffers.get(1).isEmpty() ){
+		while(imageBuffers.get(index).isEmpty()){
 			try {
 				wait();
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		
+		}
+		TimeStampedImage temp = imageBuffers.get(index).poll();
+		notifyAll();
+		System.out.println("crnt size imgae buffer 1 " + imageBuffers.get(0).size() + " img buffer 2 = " + imageBuffers.get(1).size());
+		return temp;
+	}
+	public synchronized TimeStampedImage nextImageToShow(){
+		TimeStampedImage temp = null;
+		if(syncMode && !oneCamera){
+		while(imageBuffers.get(0).isEmpty()||imageBuffers.get(1).isEmpty()){
+			try {
+				wait();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+		}
+	
+		TimeStampedImage temp1 = imageBuffers.get(0).peek();
+		TimeStampedImage temp2 = imageBuffers.get(1).peek();
+		checkDelayDiff(temp1.getTimestamp(), temp2.getTimestamp());
+		if(temp1.getTimestamp() >temp2.getTimestamp()){
+			
+			temp =imageBuffers.get(1).poll();
+		}else{
+			temp =imageBuffers.get(0).poll();
+		}
+		
+		System.out.println("sync mode");
+		
+		notifyAll();
+	
+	}else{
+		while(imageBuffers.get(0).isEmpty()&&imageBuffers.get(1).isEmpty()){
+			try {
+				wait();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+		}
+		TimeStampedImage temp1 = imageBuffers.get(0).peek();
+		TimeStampedImage temp2 = imageBuffers.get(1).peek();
+		if(temp1==null){
+			temp = imageBuffers.get(1).poll();
+		}else {
+			temp = imageBuffers.get(0).poll();
+		
+	}
+		System.out.println("no sync mode");
+	}
+		return temp;
+	}
+		
+private void checkDelayDiff(long temp1, long temp2) {
+	if(Client.auto==Client.AUTO_MODE){
+		long diff = temp1-temp2;
+		if (Math.abs(diff) > Client.MAX_DIFF) {
+			offSyncImages++;
+			if (offSyncImages > offSyncLimit) {
+				syncMode=false;
+				offSyncImages = offSyncLimit;
+			}
+		} else {
+			offSyncImages--;
+			if (offSyncImages < 0) {
+				syncMode=true;
+				offSyncImages = 0;
+			}
 		}
 		
 	}
+}
+//	public synchronized void newImage() {
+//		while(imageBuffers.get(0).isEmpty() || imageBuffers.get(1).isEmpty() ){
+//			try {
+//				wait();
+//			} catch (InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
+//		
+//	}
 	public synchronized boolean idleMode(){
 		return idleMode;
 	}
@@ -128,6 +212,21 @@ public class CameraHandler {
 	}
 	public synchronized void setIdle(boolean b) {
 		idleMode = b;
+		notifyAll();
+		
+	}
+	public synchronized void setSyncMode(boolean mode) {
+		syncMode=mode;
+		notifyAll();
+		
+	}
+	public boolean isSyncMode() {
+		// TODO Auto-generated method stub
+		return syncMode;
+	}
+	public synchronized void onlyOneCamera(boolean b) {
+		oneCamera = b;
+		System.out.println("onbly one camera = " + b);
 		notifyAll();
 		
 	}

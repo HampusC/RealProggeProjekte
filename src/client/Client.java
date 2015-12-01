@@ -10,7 +10,7 @@ public class Client {
 	public final static long MAX_DIFF = 200;
 	public final static int AUTO_MODE = 1;
 	public static final int MANUAL_MODE = 0;
-	private int auto = AUTO_MODE;
+	public static int auto = AUTO_MODE; //ändra .... flytta till camhandler?
 	private int activeSyncMode = SYNCHRONOUS_MODE; //static ofinal, använda getter?
 	
 	
@@ -27,8 +27,11 @@ public class Client {
 	public boolean connectCamera(String address, int port) { // tänk på hur
 																// disconnect
 																// och numrering
-		System.out.println("connect " + cameraSockets);														// påverkar
-		return cameraSockets.add(new CameraSocketHandler(address, port, camh));
+		System.out.println("connect " + cameraSockets);
+		boolean temp =cameraSockets.add(new CameraSocketHandler(address, port, camh));
+			camh.onlyOneCamera(cameraSockets.size()<2);
+		// påverkar
+		return temp;
 		// timme
 
 	}
@@ -48,9 +51,12 @@ public class Client {
 		viewThread.start();
 	}
 	public void disconnect( int index){
+		camh.onlyOneCamera(true);
 		CameraSocketHandler temp =cameraSockets.get(index);		
 		temp.disconnect();
-		cameraSockets.remove(index);
+		//cameraSockets.remove(index);
+		
+		
 	}
 	public void setMode(int mode){
 		if(mode == IDLE_MODE){
@@ -63,11 +69,11 @@ public class Client {
 	public boolean isAutoMode(){
 		return auto==AUTO_MODE;
 	}
-	public boolean isSyncMode(){
-		return activeSyncMode == SYNCHRONOUS_MODE;
+	public boolean isSynced(){
+		return camh.isSyncMode();
 	}
-	public void setSyncType(int syncType){
-		activeSyncMode = syncType;
+	public void setSyncMode(boolean syncMode){
+	camh.setSyncMode(syncMode);
 	}
 	
 	public void setAutoMode(int mode){ 
