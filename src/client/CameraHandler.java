@@ -103,13 +103,32 @@ public class CameraHandler {
 				e.printStackTrace();
 			}
 		}
-		System.out.println("imnages ready");
+		
 	}
 	public synchronized boolean idleMode(){
 		return idleMode;
 	}
+	public synchronized void waitInIdle(long lastTime){
+		
+		if (idleMode) {
+			long diff = System.currentTimeMillis() - lastTime;
+			while ((diff < 5000) && idleMode) {
+				try {
+					System.out.println(diff);
+					wait(5000 - diff);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				diff = System.currentTimeMillis() - lastTime;
+			}
+			
+		}
+	
+	}
 	public synchronized void setIdle(boolean b) {
 		idleMode = b;
+		notifyAll();
 		
 	}
 

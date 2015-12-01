@@ -72,6 +72,7 @@ public class Client {
 	
 	public void setAutoMode(int mode){ 
 		//Systemet ska gå in i auto mode, alltså att den byter mellan idle/movie och sync/async automatiskt 
+		System.out.println("mode = " + mode +" were auto = 1 and manual =0");
 		auto = mode;
 	}
 	

@@ -33,6 +33,7 @@ public class ViewThread extends Thread {
 
 		while (true) {
 			if((temp1.getMotionDetected() || temp2.getMotionDetected()) && client.isAutoMode() ){
+				System.out.println(client.isAutoMode());
 				gui.setMode(Client.MOVIE_MODE);
 				System.out.println("mode motion changed to motion movie");
 			}
@@ -92,25 +93,6 @@ public class ViewThread extends Thread {
 				time1 = temp1.getTimestamp();
 				time2 = temp2.getTimestamp();
 			}
-			// else{
-			// long diff = time2-time1;
-			// System.out.println(" (time2) diffen är " +diff);
-			// gui.refresh(temp1.getImage(), 0);
-			// try {
-			// sleep(diff);
-			// } catch (InterruptedException e) {
-			// // TODO Auto-generated catch block
-			// e.printStackTrace();
-			// }
-			// gui.refresh(temp2.getImage(), 1);
-			// }
-
-			// if (temp1 != null) {
-			// gui.refresh(temp1.getImage(), 0);
-			// }
-			// if (temp2 != null) {
-			// gui.refresh(temp2.getImage(), 1);
-			// }
 		}
 
 	}

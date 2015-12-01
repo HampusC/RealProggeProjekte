@@ -22,24 +22,9 @@ public class ClientWriteThread extends Thread {
 	public void run() {
 		while (!isInterrupted()) {
 			camH.request(cameraIndex);
-			
-			if (camH.idleMode() && !firstTime) {
-				long diff = System.currentTimeMillis() - lastTime;
-				while (diff < 5000) {
-					try {
-						System.out.println(diff);
-						sleep(5000 - diff);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					diff = System.currentTimeMillis() - lastTime;
-				}
-				
-			}
-			if (firstTime) {
-				firstTime = false;
-			}
+			if(!firstTime)
+			camH.waitInIdle(lastTime);
+		
 			try {
 				output.write(1);
 				// flush
@@ -48,6 +33,9 @@ public class ClientWriteThread extends Thread {
 				e.printStackTrace();
 			}
 			lastTime = System.currentTimeMillis();
+			if(firstTime){
+				firstTime = false;
+			}
 		}
 	try {
 		output.flush();
