@@ -20,7 +20,7 @@ public class ClientWriteThread extends Thread {
 	}
 
 	public void run() {
-		while (true) {
+		while (!isInterrupted()) {
 			camH.request(cameraIndex);
 			
 			if (camH.idleMode() && !firstTime) {
@@ -49,6 +49,12 @@ public class ClientWriteThread extends Thread {
 			}
 			lastTime = System.currentTimeMillis();
 		}
+	try {
+		output.flush();
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
 	}
 
 

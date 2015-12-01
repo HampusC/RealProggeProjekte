@@ -9,6 +9,7 @@ public class Client {
 	public final static int ASYNCHRONOUS_MODE = 1;
 	public final static long MAX_DIFF = 200;
 	public final static int AUTO_MODE = 1;
+	public static final int MANUAL_MODE = 0;
 	private int auto = AUTO_MODE;
 	private int activeSyncMode = SYNCHRONOUS_MODE; //static ofinal, använda getter?
 	

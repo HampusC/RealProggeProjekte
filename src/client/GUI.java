@@ -75,7 +75,7 @@ public class GUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				Thread queryThread = new Thread() {
 				      public void run() {
-				        setMode(Client.IDLE_MODE);
+				        setMode(Client.MANUAL_MODE);
 				      }
 				};
 				queryThread.start();
@@ -90,6 +90,7 @@ public class GUI extends JFrame {
 				Thread queryThread = new Thread() {
 				      public void run() {
 				        setMode(Client.MOVIE_MODE);
+				        client.setAutoMode(Client.MANUAL_MODE);
 				      }
 				};
 				queryThread.start();
@@ -170,6 +171,7 @@ public class GUI extends JFrame {
 				Thread queryThread = new Thread() {
 				      public void run() {
 				        setSyncType(Client.SYNCHRONOUS_MODE);
+				        client.setAutoMode(Client.MANUAL_MODE);
 				      }
 				};
 				queryThread.start();
@@ -184,6 +186,7 @@ public class GUI extends JFrame {
 				Thread queryThread = new Thread() {
 				      public void run() {
 				        setSyncType(Client.ASYNCHRONOUS_MODE);
+				        client.setAutoMode(Client.MANUAL_MODE);
 				      }
 				};
 				queryThread.start();
@@ -196,6 +199,7 @@ public class GUI extends JFrame {
 				Thread queryThread = new Thread() {
 				      public void run() {
 				        setAuto();
+				       
 				      }
 				};
 				queryThread.start();

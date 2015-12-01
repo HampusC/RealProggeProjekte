@@ -19,8 +19,8 @@ public class ClientReadThread extends Thread {
 	}
 
 	public void run() {
-		while (true) {
 
+		while (!isInterrupted()) {
 			int maxToRead = AxisM3006V.IMAGE_BUFFER_SIZE + 10; // should be + 14
 			byte[] buffer = new byte[maxToRead];
 			int read = 0;
@@ -69,7 +69,8 @@ public class ClientReadThread extends Thread {
 				camH.writeToBuffer(timestamp, motionDetected, image, cameraIndex);
 			}
 			camH.confirmRead(cameraIndex);
-		}
-
+		
+		
+	}
 	}
 }

@@ -33,15 +33,15 @@ private int cameraIndex;
 
 	}
 	public void disconnect() {
+		cWriteThread.interrupt();
+		cReadThread.interrupt();
 		try {
-	
+			
 			socket.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		cWriteThread.interrupt();
-		cReadThread.interrupt();
 		
 		
 	}
