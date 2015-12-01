@@ -19,7 +19,7 @@ public class ClientReadThread extends Thread {
 	}
 
 	public void run() {
-
+		System.out.println("clientread thread: first time");
 		while (!this.isInterrupted()) {
 			try {
 
@@ -30,7 +30,9 @@ public class ClientReadThread extends Thread {
 				int result = 0;
 				while (!this.isInterrupted() && (read < maxToRead && result != -1)) {
 					try {
+						//System.out.println("clientreadthread: beflore read");
 						result = input.read(buffer, read, maxToRead - read);
+						//System.out.println("clientreadthread: after read");
 
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
@@ -80,17 +82,17 @@ public class ClientReadThread extends Thread {
 				camH.confirmRead(cameraIndex);
 
 			} catch (Exception e) {
-				try {
-					System.out.println("Input was closed");
-					input.close();
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-				System.out.println("client thread Interupt 2");
-				this.interrupt();
-				break;
+			e.printStackTrace();
 			}
 			
+		}
+		System.out.println("readthread : Input was closed");
+		camH.confirmRead(cameraIndex);
+		try {
+			input.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 }

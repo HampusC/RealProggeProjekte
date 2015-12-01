@@ -14,18 +14,27 @@ public class ReadThread extends Thread {
 	}
 	
 	public void run(){
-		while(true) {
+		System.out.println("read thread virginity");
+		while(!isInterrupted()) {
 			try {
 				int temp = is.read();
 				if (temp == 1) { // Ska förmodligen kolla efter något annat
 					sm.requestRecieved();
 				}
-//				else if(temp == 2){
-//					System.out.println("OS wrote recieved");   //Kanske ha detta?
-//				}
+				else if(temp == 0){
+					System.out.println("OS wrote recieved");   //Kanske ha detta?
+					sm.requestClose(true);
+					this.interrupt();
+				}
 			} catch (IOException e) {
-				e.printStackTrace();
+				//e.printStackTrace();
 			}
 		}	
+		try {
+			is.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

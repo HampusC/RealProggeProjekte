@@ -27,7 +27,7 @@ public class Client {
 	public boolean connectCamera(String address, int port) { // tänk på hur
 																// disconnect
 																// och numrering
-		System.out.println("connect " + address + port);
+		System.out.println("connect " + address + "  " +  port);
 		boolean temp =cameraSockets.add(new CameraSocketHandler(address, port, camh));
 			//camh.onlyOneCamera(cameraSockets.size()<2);
 		// påverkar

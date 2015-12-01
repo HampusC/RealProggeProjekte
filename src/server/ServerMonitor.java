@@ -13,6 +13,8 @@ public class ServerMonitor {
 	private Socket clientSocket;
 	private AxisM3006V camera;
 	private boolean requestRecieved;
+	private boolean closeRequested;
+	private boolean closed;
 	
 	public ServerMonitor(ReadThread rt, WriteThread wt, ServerSocket ss, Socket s, AxisM3006V camera) throws IOException{
 		this.serverSocket = ss;
@@ -21,6 +23,8 @@ public class ServerMonitor {
 		this.rt = rt;
 		this.wt = wt;
 		requestRecieved=false;
+		closeRequested=false;
+		closed = false;
 	}
 	
 
@@ -56,6 +60,41 @@ public class ServerMonitor {
 			try {
 			wait(); //kanske måste cvara wait(1000)
 			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		
+	}
+
+
+	public synchronized void requestClose(boolean closeRequested) {
+	this.closeRequested=closeRequested;
+	notifyAll();
+		
+		
+	}
+
+
+	public synchronized boolean closedRequested() {
+		// TODO Auto-generated method stub
+		return closeRequested;
+	}
+
+
+	public synchronized void closeConfirmed() {
+		closed = true;
+		notifyAll();
+		System.out.println("server monitor: closed = true");
+		
+	}
+
+
+	public synchronized void streamClosed() {
+		while(!closed){
+			try {
+				wait();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

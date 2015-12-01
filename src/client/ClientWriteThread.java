@@ -20,9 +20,13 @@ public class ClientWriteThread extends Thread {
 	}
 
 	public void run() {
+		System.out.println("clientwrite thread: first time");
+		camH.confirmRead(cameraIndex);
 		while (!this.isInterrupted()) {
 			try {
+			System.out.println("client write thread before request");
 				camH.request(cameraIndex);
+			System.out.println("client write thread after request");
 				if (!firstTime)
 					camH.waitInIdle(lastTime);
 				try {
@@ -45,18 +49,21 @@ public class ClientWriteThread extends Thread {
 					
 				}
 			} catch (Exception e) {
-				try {
-					output.write(2);
-					System.out.println("output was closed");
-					output.close();
-				} catch (IOException e1) {
-					//e1.printStackTrace();
-				}
+				
 				System.out.println("write thread interupt");
-				this.interrupt();
-				break;
+				
 			}
 		}
+		System.out.println("client write thread before write 2");
+		try {
+			output.write(0);
+			output.flush();
+			System.out.println("output was closed");
+			output.close();
+		} catch (IOException e1) {
+			//e1.printStackTrace();
+		}
+		camH.setThreadsInterrupted(true);
 		
 	}
 

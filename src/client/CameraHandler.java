@@ -13,7 +13,7 @@ public class CameraHandler {
 	private final int offSyncLimit = 10;
 	private boolean syncMode;
 	private boolean oneCamera;
-	
+	private boolean threadsInterrupted;
 	
 	private TimeStampedImageComparator comparator;
 	
@@ -33,7 +33,7 @@ public class CameraHandler {
 		offSyncImages =0;
 		syncMode = true;
 		oneCamera=true;
-		
+		threadsInterrupted = false;
 		
 		comparator= new TimeStampedImageComparator();
 		
@@ -202,7 +202,7 @@ private void checkDelayDiff(long temp1, long temp2) {
 					wait(5000 - diff);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					//e.printStackTrace();
 				}
 				diff = System.currentTimeMillis() - lastTime;
 			}
@@ -229,6 +229,23 @@ private void checkDelayDiff(long temp1, long temp2) {
 		System.out.println("onbly one camera = " + b);
 		notifyAll();
 		
+	}
+	public synchronized void waitForInterrupted() {
+		while(!threadsInterrupted){
+			try {
+				wait();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		threadsInterrupted = false;
+		notifyAll();
+		
+	}
+	
+	public synchronized void setThreadsInterrupted(boolean threadsInterrupted){
+		this.threadsInterrupted = threadsInterrupted;
+		notifyAll();
 	}
 
 

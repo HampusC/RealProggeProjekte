@@ -29,7 +29,8 @@ public class WriteThread extends Thread {
 																	// (getJPEG
 																	// kanske är
 																	// istället)
-		while (true) {
+		System.out.println("write thread virginity");
+		while (!sm.closedRequested()) {
 			sm.shouldSend();
 			jpeg[0] = (byte) 1; // 1 if image
 			jpeg[1] = (byte) (camera.motionDetected() ? 1 : 0);
@@ -54,8 +55,17 @@ public class WriteThread extends Thread {
 				os.flush(); // flushar den innan klienten hinner läsa den?
 			
 			} catch (IOException e) {
-				e.printStackTrace();
+			break;
 			}
 		}
+		try {
+			os.flush();
+			os.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		sm.closeConfirmed();
 	}
 }

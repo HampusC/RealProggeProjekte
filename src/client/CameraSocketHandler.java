@@ -17,7 +17,9 @@ private int cameraIndex;
 		System.out.println("camindex = " + cameraIndex);
 	
 		try {
+			System.out.println("camSockHandl: beföre socket");
 			socket = new Socket(address,  port);
+			System.out.println("camSockHandl: after socket");
 			socket.setTcpNoDelay(true);
 			cWriteThread = new ClientWriteThread(socket.getOutputStream(), camH, cameraIndex);
 			cReadThread = new ClientReadThread(socket.getInputStream(), camH, cameraIndex);
@@ -34,8 +36,10 @@ private int cameraIndex;
 
 	}
 	public void disconnect() {
+		System.out.println("disconnect i sockethandöler");
 		cWriteThread.interrupt();
 		cReadThread.interrupt();
+		camH.waitForInterrupted();
 		try {
 			socket.close();
 			System.out.println("socket was closed");

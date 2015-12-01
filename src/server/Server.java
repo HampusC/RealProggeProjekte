@@ -13,12 +13,14 @@ public class Server {
 	private ServerSocket serverSocket;
 	private Socket clientSocket;
 	private AxisM3006V camera;
+	private int port;
 	
 	public Server(int port) throws IOException{
+		serverSocket = new ServerSocket(port);
 		camera = new AxisM3006V();
 		camera.init();
 		camera.setProxy("argus-1.student.lth.se", port); //ändra andressen
-		serverSocket = new ServerSocket(port);
+		this.port = port;
 		
 	}
 	
@@ -37,23 +39,27 @@ public class Server {
 	 * Waits for a message from the client and then starts the ReadThread.
 	 */
 	public void execute() throws IOException{
+		
 		while(true){
+			System.out.println("server waiting for connection");
 			clientSocket = serverSocket.accept();
+			System.out.println("server: socket accepted");
 			sm = new ServerMonitor(rt, wt, serverSocket, clientSocket, camera);
 			rt = new ReadThread(sm, clientSocket.getInputStream()); 
 			wt = new WriteThread(camera, clientSocket.getOutputStream(), sm);
 			rt.start();
 			wt.start();
-			sm.waitForDisconnect();
+			System.out.println("Server: threads started");
 			disconnect();
 		}	
 	}
 	
 	public void disconnect() {
+		sm.streamClosed();
 		rt.interrupt();
 		wt.interrupt();
 		try {
-			serverSocket.close(); //Ska denna stängas här?
+			clientSocket.close(); //Ska denna stängas här?
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
