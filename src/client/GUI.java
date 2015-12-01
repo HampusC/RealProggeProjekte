@@ -18,6 +18,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.JProgressBar;
+import javax.swing.JCheckBox;
 
 public class GUI extends JFrame {
 	private ImageIcon icon;
@@ -32,6 +33,7 @@ public class GUI extends JFrame {
 	private JLabel lblSyncTypeDisplay;
 	private JButton btnIdle, btnMovie, btnConnect1, btnDisconnect1, btnConnect2, btnDisconnect2, btnSynchronous, btnAsynchronous, btnAuto;
 	private ArrayList<JLabel> delays = new ArrayList<JLabel>();
+	private JLabel lblAuto;
 
 	/**
 	 * Launch the application.
@@ -56,6 +58,7 @@ public class GUI extends JFrame {
 		super();
 		this.client = client;
 		
+	
 		setResizable(false);
 		setSize(1316,900);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -75,7 +78,9 @@ public class GUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				Thread queryThread = new Thread() {
 				      public void run() {
-				        setMode(Client.MANUAL_MODE);
+				        setMode(Client.IDLE_MODE);
+				        lblAuto.setText("Manual");	
+				        client.setAutoMode(Client.MANUAL_MODE);
 				      }
 				};
 				queryThread.start();
@@ -90,6 +95,7 @@ public class GUI extends JFrame {
 				Thread queryThread = new Thread() {
 				      public void run() {
 				        setMode(Client.MOVIE_MODE);
+				        lblAuto.setText("Manual");	
 				        client.setAutoMode(Client.MANUAL_MODE);
 				      }
 				};
@@ -171,6 +177,7 @@ public class GUI extends JFrame {
 				Thread queryThread = new Thread() {
 				      public void run() {
 				        setSyncType(Client.SYNCHRONOUS_MODE);
+				        lblAuto.setText("Manual");	
 				        client.setAutoMode(Client.MANUAL_MODE);
 				      }
 				};
@@ -186,6 +193,7 @@ public class GUI extends JFrame {
 				Thread queryThread = new Thread() {
 				      public void run() {
 				        setSyncType(Client.ASYNCHRONOUS_MODE);
+				        lblAuto.setText("Manual");	
 				        client.setAutoMode(Client.MANUAL_MODE);
 				      }
 				};
@@ -199,7 +207,6 @@ public class GUI extends JFrame {
 				Thread queryThread = new Thread() {
 				      public void run() {
 				        setAuto();
-				       
 				      }
 				};
 				queryThread.start();
@@ -288,6 +295,13 @@ public class GUI extends JFrame {
 		delays.get(1).setBounds(745, 500, 70, 15);
 		getContentPane().add(delays.get(1));
 		
+		lblAuto = new JLabel("Auto");
+		lblAuto.setBounds(12, 612, 75, 15);
+		getContentPane().add(lblAuto);
+		
+		if(client.isAutoMode()){
+			setAuto();
+		}
 		
 		setVisible(true);
 	}
@@ -367,8 +381,7 @@ public class GUI extends JFrame {
 				btnMovie.setEnabled(true);
 				btnSynchronous.setEnabled(true);
 				btnAsynchronous.setEnabled(true);
-				lblModeDisplay.setText("Auto");
-				lblSyncTypeDisplay.setText("Auto");
+				lblAuto.setText("Auto");
 				client.setAutoMode(Client.AUTO_MODE);
 		    }
 		 });
