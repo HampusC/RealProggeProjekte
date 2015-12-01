@@ -20,30 +20,44 @@ public class ClientWriteThread extends Thread {
 	}
 
 	public void run() {
-		while (!isInterrupted()) {
-			camH.request(cameraIndex);
-			if(!firstTime)
-			camH.waitInIdle(lastTime);
-		
+		while (!this.isInterrupted()) {
 			try {
-				output.write(1);
-				// flush
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			lastTime = System.currentTimeMillis();
-			if(firstTime){
-				firstTime = false;
+				camH.request(cameraIndex);
+				if (!firstTime)
+					camH.waitInIdle(lastTime);
+				try {
+					output.write(1);
+					// flush
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					//e.printStackTrace();
+				}
+				lastTime = System.currentTimeMillis();
+				if (firstTime) {
+					firstTime = false;
+				}
+
+				try {
+					output.flush();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					//e.printStackTrace();
+					
+				}
+			} catch (Exception e) {
+				try {
+					output.write(2);
+					System.out.println("output was closed");
+					output.close();
+				} catch (IOException e1) {
+					//e1.printStackTrace();
+				}
+				System.out.println("write thread interupt");
+				this.interrupt();
+				break;
 			}
 		}
-	try {
-		output.flush();
-	} catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+		
 	}
-	}
-
 
 }

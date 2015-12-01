@@ -20,6 +20,9 @@ public class ReadThread extends Thread {
 				if (temp == 1) { // Ska förmodligen kolla efter något annat
 					sm.requestRecieved();
 				}
+//				else if(temp == 2){
+//					System.out.println("OS wrote recieved");   //Kanske ha detta?
+//				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

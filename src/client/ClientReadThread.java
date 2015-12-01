@@ -20,57 +20,77 @@ public class ClientReadThread extends Thread {
 
 	public void run() {
 
-		while (!isInterrupted()) {
-			int maxToRead = AxisM3006V.IMAGE_BUFFER_SIZE + 10; // should be + 14
-			byte[] buffer = new byte[maxToRead];
-			int read = 0;
-			int result = 0;
-			while (read < maxToRead && result != -1) {
+		while (!this.isInterrupted()) {
+			try {
+
+				int maxToRead = AxisM3006V.IMAGE_BUFFER_SIZE + 10; // should be
+																	// + 14
+				byte[] buffer = new byte[maxToRead];
+				int read = 0;
+				int result = 0;
+				while (!this.isInterrupted() && (read < maxToRead && result != -1)) {
+					try {
+						result = input.read(buffer, read, maxToRead - read);
+
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						System.out.println("client thread interrupt 1");
+						input.close();
+						System.out.println("input was closed");
+						this.interrupt();
+						break;
+					}
+					if (result != -1)
+						read = read + result;
+				}
+				// bufffer logic
+				if (buffer[0] == 1) { // vilkor = är bild
+
+					boolean motionDetected;
+					if (buffer[1] == 1) {
+						motionDetected = true;
+						System.out.println("motion detected");
+
+					} else {
+						motionDetected = false;
+					}
+
+					// Timestamp 8 bytes
+					long timestamp = 0;
+					for (int i = 2; i < 10; i++) {
+						timestamp = (timestamp << 8) + (buffer[i] & 0xff);
+					}
+					// Image, lentgh long
+					ByteBuffer b = ByteBuffer.allocate(4);
+					b.put(buffer, 10, 4);
+					b.position(0);
+					int length = b.getInt();
+
+					byte[] image = Arrays.copyOfRange(buffer, 14, length + 14); // ngra
+																				// av
+																				// bytsen
+																				// i
+																				// buffer
+					// System.out.println(" recived: first bit in pic " +
+					// image[0]+
+					// " last byte " + image[image.length-1]);
+					camH.writeToBuffer(timestamp, motionDetected, image, cameraIndex);
+				}
+				camH.confirmRead(cameraIndex);
+
+			} catch (Exception e) {
 				try {
-					result = input.read(buffer, read, maxToRead - read);
-
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println("Input was closed");
+					input.close();
+				} catch (IOException e1) {
+					e1.printStackTrace();
 				}
-				if (result != -1)
-					read = read + result;
+				System.out.println("client thread Interupt 2");
+				this.interrupt();
+				break;
 			}
-			// bufffer logic
-			if (buffer[0] == 1) { // vilkor = är bild
-
-				boolean motionDetected;
-				if (buffer[1] == 1) {
-					motionDetected = true;
-					System.out.println("motion detected");
-
-				} else {
-					motionDetected = false;
-				}
-
-				// Timestamp 8 bytes
-				long timestamp = 0;
-				for (int i = 2; i < 10; i++) {
-					timestamp = (timestamp << 8) + (buffer[i] & 0xff);
-				}
-				// Image, lentgh long
-				ByteBuffer b = ByteBuffer.allocate(4);
-				b.put(buffer, 10, 4);
-				b.position(0);
-				int length = b.getInt();
-				
-				byte[] image = Arrays.copyOfRange(buffer, 14, length + 14); // ngra
-																			// av
-																			// bytsen
-																			// i
-																			// buffer
-				// System.out.println(" recived: first bit in pic " + image[0]+
-				// " last byte " + image[image.length-1]);
-				camH.writeToBuffer(timestamp, motionDetected, image, cameraIndex);
-			}
-			camH.confirmRead(cameraIndex);
-		
-		
-	}
+			
+		}
 	}
 }

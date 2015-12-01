@@ -36,8 +36,8 @@ private int cameraIndex;
 		cWriteThread.interrupt();
 		cReadThread.interrupt();
 		try {
-			
 			socket.close();
+			System.out.println("socket was closed");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
