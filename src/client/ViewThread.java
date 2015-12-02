@@ -99,13 +99,14 @@ public class ViewThread extends Thread {
 //	}
 
 	public void run() {
-		//gui.setIdleMode(camH.isIdleMode());
 		while (true) {
 			TimeStampedImage img = camH.nextImageToShow();
 			//set auto if motion detected
 			checkMotion(img);
 			
-			gui.setSyncType(camH.isSyncMode());
+			gui.setAutoLabel(camH.isAutoMode());
+			gui.setSyncTypeLabel(camH.isSyncMode());
+			gui.setIdleModeLabel(camH.isIdleMode());
 			gui.refresh(img.getImage(), img.getCameraIndex(), System.currentTimeMillis() - img.getTimestamp());
 		}
 	}
@@ -114,7 +115,7 @@ public class ViewThread extends Thread {
 	 * @param img
 	 */
 	public void checkMotion(TimeStampedImage img){
-		if (img.getMotionDetected() && client.isAutoMode()) {
+		if (img.getMotionDetected() && camH.isAutoMode()) {
 			gui.setIdleMode(false);
 			System.out.println("mode motion changed to motion movie");
 		}

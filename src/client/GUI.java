@@ -31,6 +31,7 @@ public class GUI extends JFrame {
 	private JButton btnIdle, btnMovie, btnConnect1, btnDisconnect1, btnConnect2, btnDisconnect2, btnSynchronous, btnAsynchronous, btnAuto;
 	private ArrayList<JLabel> delays = new ArrayList<JLabel>();
 	private JLabel lblAuto;
+	private JLabel lblControl;
 
 	/**
 	 * Launch the application.
@@ -80,7 +81,7 @@ public class GUI extends JFrame {
 						btnIdle.setEnabled(false);
 						btnMovie.setEnabled(true);
 				        lblAuto.setText("Manual");	
-				        client.setAutoMode(Client.MANUAL_MODE);
+				        client.setAutoMode(false);
 				      }
 				};
 				queryThread.start();
@@ -99,7 +100,7 @@ public class GUI extends JFrame {
 						btnMovie.setEnabled(false);
 						lblAuto.setText("Manual");
 						setIdleMode(false);
-						client.setAutoMode(Client.MANUAL_MODE);
+						client.setAutoMode(false);
 				      }
 				};
 				queryThread.start();
@@ -184,7 +185,7 @@ public class GUI extends JFrame {
 						btnAsynchronous.setEnabled(true);
 						setSyncType(true);
 						lblAuto.setText("Manual");
-						client.setAutoMode(Client.MANUAL_MODE);
+						client.setAutoMode(false);
 				      }
 				};
 				queryThread.start();
@@ -203,7 +204,7 @@ public class GUI extends JFrame {
 						btnAsynchronous.setEnabled(false);
 						setSyncType(false);
 						lblAuto.setText("Manual");
-						client.setAutoMode(Client.MANUAL_MODE);
+						client.setAutoMode(false);
 				      }
 				};
 				queryThread.start();
@@ -215,7 +216,12 @@ public class GUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				Thread queryThread = new Thread() {
 				      public void run() {
-				        setAuto();
+					    btnAuto.setEnabled(false);
+						btnIdle.setEnabled(true);
+						btnMovie.setEnabled(true);
+						btnSynchronous.setEnabled(true);
+						btnAsynchronous.setEnabled(true);  
+						setAuto(true);
 				      }
 				};
 				queryThread.start();
@@ -299,12 +305,16 @@ public class GUI extends JFrame {
 		getContentPane().add(delays.get(1));
 		
 		lblAuto = new JLabel("Auto");
-		lblAuto.setBounds(12, 612, 75, 15);
+		lblAuto.setBounds(94, 612, 75, 15);
 		getContentPane().add(lblAuto);
 		
-		if(client.isAutoMode()){
-			setAuto();
-		}
+		lblControl = new JLabel("Control:");
+		lblControl.setBounds(12, 612, 70, 15);
+		getContentPane().add(lblControl);
+		
+//		if(client.isAutoMode()){
+//			setAuto();
+//		}
 		
 		setVisible(true);
 	}
@@ -332,12 +342,25 @@ public class GUI extends JFrame {
 		SwingUtilities.invokeLater(new Runnable() {
 		    public void run() {
 		    	if(mode){
-					lblModeDisplay.setText("Idle");
+		    		setIdleModeLabel(mode);
 					client.setMode(true);
 				}
 				else{
-					lblModeDisplay.setText("Movie");
+					setIdleModeLabel(mode);
 					client.setMode(false);
+				}
+		    }
+		 });	
+	}
+	
+	public void setIdleModeLabel(boolean mode) {
+		SwingUtilities.invokeLater(new Runnable() {
+		    public void run() {
+		    	if(mode){
+					lblModeDisplay.setText("Idle");
+				}
+				else{
+					lblModeDisplay.setText("Movie");
 				}
 		    }
 		 });	
@@ -350,12 +373,25 @@ public class GUI extends JFrame {
 		SwingUtilities.invokeLater(new Runnable() {
 		    public void run() {
 		    	if(isSynced){
-					lblSyncTypeDisplay.setText("Synchronous");
+		    		setSyncTypeLabel(isSynced);
 					client.setSyncMode(isSynced);
 				}
 				else{
-					lblSyncTypeDisplay.setText("Asynchronous");
+					setSyncTypeLabel(isSynced);
 					client.setSyncMode(isSynced);
+				}
+		    }
+		 });
+	}
+	
+	public void setSyncTypeLabel(boolean isSynced) {
+		SwingUtilities.invokeLater(new Runnable() {
+		    public void run() {
+		    	if(isSynced){
+					lblSyncTypeDisplay.setText("Synchronous");
+				}
+				else{
+					lblSyncTypeDisplay.setText("Asynchronous");
 				}
 		    }
 		 });
@@ -364,16 +400,23 @@ public class GUI extends JFrame {
 	/**
 	 * Sets auto mode
 	 */
-	public void setAuto(){
+	public void setAuto(boolean isAuto){
 		SwingUtilities.invokeLater(new Runnable() {
 		    public void run() {
-		    	btnAuto.setEnabled(false);
-				btnIdle.setEnabled(true);
-				btnMovie.setEnabled(true);
-				btnSynchronous.setEnabled(true);
-				btnAsynchronous.setEnabled(true);
-				lblAuto.setText("Auto");
-				client.setAutoMode(Client.AUTO_MODE);
+				setAutoLabel(isAuto);
+				client.setAutoMode(true);
+		    }
+		 });
+	}
+	
+	public void setAutoLabel(boolean isAuto){
+		SwingUtilities.invokeLater(new Runnable() {
+		    public void run() {
+		    	if(isAuto){
+		    		lblAuto.setText("Auto");
+		    	}else{
+		    		lblAuto.setText("Manual");
+		    	}
 		    }
 		 });
 	}

@@ -14,6 +14,7 @@ public class CameraHandler {
 	private boolean syncMode;
 	private boolean oneCamera;
 	private boolean threadsInterrupted;
+	private boolean isAutoMode;
 
 	private TimeStampedImageComparator comparator;
 
@@ -34,6 +35,7 @@ public class CameraHandler {
 		syncMode = true;
 		oneCamera = true;
 		threadsInterrupted = false;
+		isAutoMode=true;
 
 		comparator = new TimeStampedImageComparator();
 
@@ -202,7 +204,7 @@ public class CameraHandler {
 	}
 
 	private void checkDelayDiff(long temp1, long temp2) {
-		if (Client.auto == Client.AUTO_MODE) {
+		if (isAutoMode) {
 			long diff = temp1 - temp2;
 			if (Math.abs(diff) > Client.MAX_DIFF) {
 				offSyncImages++;
@@ -280,21 +282,30 @@ public class CameraHandler {
 
 	}
 
-	public synchronized void waitForInterrupted() {
-		while (!threadsInterrupted) {
-			try {
-				wait();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-		threadsInterrupted = false;
-		notifyAll();
+//	public synchronized void waitForInterrupted() {
+//		while (!threadsInterrupted) {
+//			try {
+//				wait();
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+//		}
+//		threadsInterrupted = false;
+//		notifyAll();
+//
+//	}
+//
+//	public synchronized void setThreadsInterrupted(boolean threadsInterrupted) {
+//		this.threadsInterrupted = threadsInterrupted;
+//		notifyAll();
+//	}
 
+	public synchronized boolean isAutoMode() {
+		return isAutoMode;
 	}
 
-	public synchronized void setThreadsInterrupted(boolean threadsInterrupted) {
-		this.threadsInterrupted = threadsInterrupted;
+	public synchronized void setAutoMode(boolean b) {
+		isAutoMode=b;
 		notifyAll();
 	}
 

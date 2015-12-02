@@ -12,7 +12,6 @@ public class Client {
 	public final static long MAX_DIFF = 200;
 	public final static int AUTO_MODE = 1;
 	public static final int MANUAL_MODE = 0;
-	public static int auto = AUTO_MODE; //ändra .... flytta till camhandler?
 	private int activeSyncMode = SYNCHRONOUS_MODE; //static ofinal, använda getter?
 	
 	
@@ -77,21 +76,28 @@ public class Client {
 	public void setMode(boolean mode){
 			camh.setIdle(mode);
 	}
+	
 	public boolean isAutoMode(){
-		return auto==AUTO_MODE;
+		return camh.isAutoMode();
 	}
+	
 	public boolean isSynced(){
 		return camh.isSyncMode();
 	}
 	public void setSyncMode(boolean syncMode){
 	camh.setSyncMode(syncMode);
 	}
-	
-	public void setAutoMode(int mode){ 
-		//Systemet ska gå in i auto mode, alltså att den byter mellan idle/movie och sync/async automatiskt 
-		System.out.println("mode = " + mode +" were auto = 1 and manual =0");
-		auto = mode;
+
+	public void setAutoMode(boolean mode) {
+		camh.setAutoMode(mode);
+		
 	}
+	
+//	public void setAutoMode(int mode){ 
+//		//Systemet ska gå in i auto mode, alltså att den byter mellan idle/movie och sync/async automatiskt 
+//		System.out.println("mode = " + mode +" were auto = 1 and manual =0");
+//		auto = mode;
+//	}
 	
 	
 }
