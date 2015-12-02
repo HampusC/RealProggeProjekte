@@ -74,13 +74,8 @@ public class Client {
 		
 		
 	}
-	public void setMode(int mode){
-		if(mode == IDLE_MODE){
-			camh.setIdle(true);
-		}else if( mode == MOVIE_MODE){
-			camh.setIdle(false);
-		}
-		
+	public void setMode(boolean mode){
+			camh.setIdle(mode);
 	}
 	public boolean isAutoMode(){
 		return auto==AUTO_MODE;

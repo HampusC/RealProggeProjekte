@@ -75,7 +75,7 @@ public class GUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				Thread queryThread = new Thread() {
 				      public void run() {
-				        setMode(Client.IDLE_MODE);
+				        setIdleMode(true);
 				        btnAuto.setEnabled(true);
 						btnIdle.setEnabled(false);
 						btnMovie.setEnabled(true);
@@ -98,7 +98,7 @@ public class GUI extends JFrame {
 						btnIdle.setEnabled(true);
 						btnMovie.setEnabled(false);
 						lblAuto.setText("Manual");
-						setMode(Client.MOVIE_MODE);
+						setIdleMode(false);
 						client.setAutoMode(Client.MANUAL_MODE);
 				      }
 				};
@@ -132,7 +132,7 @@ public class GUI extends JFrame {
 				Thread queryThread = new Thread() {
 				      public void run() {
 				        client.disconnect(0);
-				        System.out.println("Button clicked");
+				        
 				      }
 				};
 				queryThread.start();
@@ -305,7 +305,6 @@ public class GUI extends JFrame {
 		if(client.isAutoMode()){
 			setAuto();
 		}
-		lblModeDisplay.setText("Idle");
 		
 		setVisible(true);
 	}
@@ -329,16 +328,16 @@ public class GUI extends JFrame {
 	/**
 	 * Sets the operating mode of the system. 0 or 1
 	 */
-	public void setMode(int mode){
+	public void setIdleMode(boolean mode){
 		SwingUtilities.invokeLater(new Runnable() {
 		    public void run() {
-		    	if(mode == Client.IDLE_MODE){
+		    	if(mode){
 					lblModeDisplay.setText("Idle");
-					client.setMode(Client.IDLE_MODE);
+					client.setMode(true);
 				}
-				else if(mode == Client.MOVIE_MODE){
+				else{
 					lblModeDisplay.setText("Movie");
-					client.setMode(Client.MOVIE_MODE);
+					client.setMode(false);
 				}
 		    }
 		 });	

@@ -232,6 +232,10 @@ public class CameraHandler {
 		notifyAll();
 
 	}
+	
+	public boolean isIdleMode(){
+		return idleMode;
+	}
 
 	public synchronized void setSyncMode(boolean mode) {
 		syncMode = mode;
