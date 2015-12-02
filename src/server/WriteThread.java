@@ -30,16 +30,24 @@ public class WriteThread extends Thread {
 																	// kanske är
 																	// istället)
 		System.out.println("write thread virginity");
+		if (!camera.connect()) { //bugletande
+			System.out.println("Failed to connect to camera!");
+		}
 		try{
 		while (!isInterrupted()) {
+			System.out.println("write before should");
 			sm.shouldSend();
+		
 			jpeg[0] = (byte) 1; // 1 if image
-			jpeg[1] = (byte) (camera.motionDetected() ? 1 : 0);
 
 			// the image, written on 14 and onwards
+			System.out.println("write after should");
 			int len = camera.getJPEG(jpeg, 6 + AxisM3006V.TIME_ARRAY_SIZE);
+			System.out.println("write after getjpeg");
+			jpeg[1] = (byte) (camera.motionDetected() ? 1 : 0);
+			System.out.println("write after motiondeteccted");
 			camera.getTime(jpeg, 2);
-		
+			System.out.println("write after gettime");
 //			System.out.println("first bit in pic " + jpeg[6 + AxisM3006V.TIME_ARRAY_SIZE] + " last byte "
 //					+ jpeg[6 + AxisM3006V.TIME_ARRAY_SIZE + len - 1]);
 
@@ -53,6 +61,7 @@ public class WriteThread extends Thread {
 
 			
 				os.write(jpeg);
+				System.out.println("write after write");
 				os.flush(); // flushar den innan klienten hinner läsa den?
 			
 			

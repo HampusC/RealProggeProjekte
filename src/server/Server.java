@@ -20,7 +20,8 @@ public class Server {
 		serverSocket = new ServerSocket(port);
 		camera = new AxisM3006V();
 		camera.init();
-		camera.setProxy("argus-1.student.lth.se", port); //ändra andressen
+		camera.setProxy("argus-7.student.lth.se", 5050); //ändra andressen argus-1.student.lth.se
+		
 		this.port = port;
 		
 	}

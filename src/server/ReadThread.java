@@ -21,6 +21,7 @@ public class ReadThread extends Thread {
 				int temp = is.read();
 				if (temp == 1) { // Ska förmodligen kolla efter något annat
 					sm.requestRecieved();
+					System.out.println("server request recived");
 				} else{
 					System.out.println("not 1 in read thread server");
 					break;

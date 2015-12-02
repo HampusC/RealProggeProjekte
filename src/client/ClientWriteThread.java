@@ -34,6 +34,7 @@ public class ClientWriteThread extends Thread {
 
 				output.write(1);
 				output.flush();
+				System.out.println("client reqest img");
 				// flush
 
 				lastTime = System.currentTimeMillis();

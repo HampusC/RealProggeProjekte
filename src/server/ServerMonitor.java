@@ -32,9 +32,7 @@ public class ServerMonitor {
 	 * Confirm that the message from the client was a request and sends back an image.
 	 */
 	public synchronized void requestRecieved(){
-		if (!camera.connect()) { //bugletande
-			System.out.println("Failed to connect to camera!");
-		}
+		
 		requestRecieved=true;
 		notifyAll();
 //		wt.start();
