@@ -171,6 +171,7 @@ public class GUI extends JFrame {
 				        client.disconnect(1); 
 				        motions.get(1).setText("");
 				        canvas.get(1).getGraphics().clearRect(0, 0, 640, 480);
+			
 				      }
 				};
 				queryThread.start();
