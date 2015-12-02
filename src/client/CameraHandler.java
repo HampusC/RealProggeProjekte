@@ -125,32 +125,7 @@ public class CameraHandler {
 
 	public synchronized TimeStampedImage nextImageToShow() {
 		TimeStampedImage temp = null;
-		if (syncMode && !oneCamera) {
-			while (imageBuffers.get(0).isEmpty() || imageBuffers.get(1).isEmpty()) {
-				try {
-					wait();
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-			}
-
-			TimeStampedImage temp1 = imageBuffers.get(0).peek();
-			TimeStampedImage temp2 = imageBuffers.get(1).peek();
-			checkDelayDiff(temp1.getTimestamp(), temp2.getTimestamp());
-			if (temp1.getTimestamp() > temp2.getTimestamp()) {
-
-				temp = imageBuffers.get(1).poll();
-			} else {
-				temp = imageBuffers.get(0).poll();
-			}
-
-			System.out.println("sync mode");
-
-			notifyAll();
-
-		} else {
+		
 			while (imageBuffers.get(0).isEmpty() && imageBuffers.get(1).isEmpty()) {
 				try {
 					wait();
@@ -160,17 +135,70 @@ public class CameraHandler {
 				}
 
 			}
+			
+
 			TimeStampedImage temp1 = imageBuffers.get(0).peek();
 			TimeStampedImage temp2 = imageBuffers.get(1).peek();
 			if (temp1 == null) {
 				temp = imageBuffers.get(1).poll();
-			} else {
+			} else if(temp2 ==null) {
 				temp = imageBuffers.get(0).poll();
 
+			} else{
+				checkDelayDiff(temp1.getTimestamp(), temp2.getTimestamp());
+				System.out.println("delay checked for sync");
+				if (temp1.getTimestamp() > temp2.getTimestamp()) {
+
+					temp = imageBuffers.get(1).poll();
+				} else {
+					temp = imageBuffers.get(0).poll();
+				}
 			}
-			System.out.println("no sync mode");
-		}
+			long delay = System.currentTimeMillis()-temp.getTimestamp();
+			System.out.println("delay is " + delay);
+		while(syncMode&&delay<500){
+				try {
+					wait(500-delay);
+					delay = System.currentTimeMillis()-temp.getTimestamp();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		return temp;
+			
+//			if (temp1.getTimestamp() > temp2.getTimestamp()) {
+//
+//				temp = imageBuffers.get(1).poll();
+//			} else {
+//				temp = imageBuffers.get(0).poll();
+//			}
+//
+//			System.out.println("sync mode");
+//
+//			notifyAll();
+//
+//		} else {
+//			while (imageBuffers.get(0).isEmpty() && imageBuffers.get(1).isEmpty()) {
+//				try {
+//					wait();
+//				} catch (InterruptedException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//
+//			}
+//			TimeStampedImage temp1 = imageBuffers.get(0).peek();
+//			TimeStampedImage temp2 = imageBuffers.get(1).peek();
+//			if (temp1 == null) {
+//				temp = imageBuffers.get(1).poll();
+//			} else {
+//				temp = imageBuffers.get(0).poll();
+//
+//			}
+//			System.out.println("no sync mode");
+//		}
+//		return temp;
 	}
 
 	private void checkDelayDiff(long temp1, long temp2) {
@@ -204,10 +232,7 @@ public class CameraHandler {
 	// }
 	//
 	// }
-	public synchronized boolean idleMode() {
-		return idleMode;
-	}
-
+	
 	public synchronized void waitInIdle(long lastTime) {
 
 		if (idleMode) {
@@ -233,7 +258,7 @@ public class CameraHandler {
 
 	}
 	
-	public boolean isIdleMode(){
+	public synchronized boolean isIdleMode(){
 		return idleMode;
 	}
 
@@ -243,7 +268,7 @@ public class CameraHandler {
 
 	}
 
-	public boolean isSyncMode() {
+	public synchronized boolean isSyncMode() {
 		// TODO Auto-generated method stub
 		return syncMode;
 	}
