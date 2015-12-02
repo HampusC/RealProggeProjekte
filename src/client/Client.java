@@ -39,7 +39,7 @@ public class Client {
 		 //change to void
 		// timme
 		}catch(IOException e){
-			throw new Exception("Error: Could not connect to the server! CHeck the address and port again!");
+			throw new Exception("Error: Could not connect to the server! Check the address and port again!");
 		}
 			}else{
 				throw new Exception("Error: This window is already connected to a camera! Disconnect first.");
