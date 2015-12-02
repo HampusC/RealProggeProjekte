@@ -16,7 +16,7 @@ public class ViewThread extends Thread {
 
 	public ViewThread(CameraHandler camH, Client client) {
 		this.camH = camH;
-		gui = new GUI(client);
+		gui = new GUI(client, camH);
 		this.client = client;
 		offSyncImages = 0;
 

@@ -20,6 +20,7 @@ import javax.swing.JTextField;
 public class GUI extends JFrame {
 	private ImageIcon icon;
 	private Client client;
+	private CameraHandler camH;
 
 	private ArrayList<Canvas> canvas = new ArrayList<Canvas>();
 	private JTextField textField_1;
@@ -52,9 +53,10 @@ public class GUI extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public GUI(Client client) {
+	public GUI(Client client, CameraHandler camH) {
 		super();
 		this.client = client;
+		this.camH=camH;
 		
 	
 		setResizable(false);
@@ -82,7 +84,7 @@ public class GUI extends JFrame {
 						btnIdle.setEnabled(false);
 						btnMovie.setEnabled(true);
 				        lblAuto.setText("Manual");	
-				        client.setAutoMode(false);
+				        camH.setAutoMode(false);
 				        resetMotionTriggered();
 				      }
 				};
@@ -102,7 +104,7 @@ public class GUI extends JFrame {
 						btnMovie.setEnabled(false);
 						lblAuto.setText("Manual");
 						setIdleMode(false);
-						client.setAutoMode(false);
+						camH.setAutoMode(false);
 				      }
 				};
 				queryThread.start();
@@ -135,6 +137,13 @@ public class GUI extends JFrame {
 				Thread queryThread = new Thread() {
 				      public void run() {
 				        client.disconnect(0);
+				        camH.buffertConfirmedCleared(0);
+				        try {
+							sleep(50);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 				        motions.get(0).setText("");
 				        canvas.get(0).getGraphics().clearRect(0, 0, 640, 480);
 				      }
@@ -169,6 +178,13 @@ public class GUI extends JFrame {
 				Thread queryThread = new Thread() {
 				      public void run() {
 				        client.disconnect(1); 
+				        camH.buffertConfirmedCleared(1);
+				        try {
+							sleep(50);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 				        motions.get(1).setText("");
 				        canvas.get(1).getGraphics().clearRect(0, 0, 640, 480);
 			
@@ -190,7 +206,7 @@ public class GUI extends JFrame {
 						btnAsynchronous.setEnabled(true);
 						setSyncType(true);
 						lblAuto.setText("Manual");
-						client.setAutoMode(false);
+						camH.setAutoMode(false);
 				      }
 				};
 				queryThread.start();
@@ -209,7 +225,7 @@ public class GUI extends JFrame {
 						btnAsynchronous.setEnabled(false);
 						setSyncType(false);
 						lblAuto.setText("Manual");
-						client.setAutoMode(false);
+						camH.setAutoMode(false);
 				      }
 				};
 				queryThread.start();
@@ -356,11 +372,11 @@ public class GUI extends JFrame {
 		    public void run() {
 		    	if(mode){
 		    		setIdleModeLabel(mode);
-					client.setMode(true);
+					camH.setIdle(true);
 				}
 				else{
 					setIdleModeLabel(mode);
-					client.setMode(false);
+					camH.setIdle(false);
 				}
 		    }
 		 });	
@@ -387,11 +403,11 @@ public class GUI extends JFrame {
 		    public void run() {
 		    	if(isSynced){
 		    		setSyncTypeLabel(isSynced);
-					client.setSyncMode(isSynced);
+					camH.setSyncMode(isSynced);
 				}
 				else{
 					setSyncTypeLabel(isSynced);
-					client.setSyncMode(isSynced);
+					camH.setSyncMode(isSynced);
 				}
 		    }
 		 });
@@ -417,7 +433,7 @@ public class GUI extends JFrame {
 		SwingUtilities.invokeLater(new Runnable() {
 		    public void run() {
 				setAutoLabel(isAuto);
-				client.setAutoMode(true);
+				camH.setAutoMode(true);
 				
 		    }
 		 });

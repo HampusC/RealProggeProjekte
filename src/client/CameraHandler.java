@@ -4,22 +4,19 @@ import java.util.ArrayList;
 import java.util.PriorityQueue;
 
 import com.sun.org.apache.xerces.internal.util.SynchronizedSymbolTable;
+import com.sun.swing.internal.plaf.synth.resources.synth;
 
 public class CameraHandler {
 	private int index;
 	private boolean[] packageRead;
 	private boolean idleMode;
 	private int offSyncImages;
-	private final int offSyncLimit = 3;
+	private final int offSyncLimit = 8;
 	private boolean syncMode;
-	private boolean oneCamera;
-	private boolean threadsInterrupted;
 	private boolean isAutoMode;
-	private final int BUFFERT_LIMIT= 5;
-	private final int SYNC_DELAY= 600;
-
-	private TimeStampedImageComparator comparator;
-
+	private final int BUFFERT_LIMIT= 50;
+	private final int SYNC_DELAY= 500;
+	public final static long MAX_DIFF = 200;
 	private ArrayList<PriorityQueue<TimeStampedImage>> imageBuffers;
 
 	public CameraHandler() {
@@ -35,11 +32,8 @@ public class CameraHandler {
 		idleMode = true;
 		offSyncImages = 0;
 		syncMode = true;
-		oneCamera = true;
-		threadsInterrupted = false;
 		isAutoMode=true;
 
-		comparator = new TimeStampedImageComparator();
 
 	}
 
@@ -220,7 +214,7 @@ public class CameraHandler {
 		if (isAutoMode) {
 			long diff = temp1 - temp2;
 			System.out.println("dif between pics is " + diff);
-			if (Math.abs(diff) > Client.MAX_DIFF) {
+			if (Math.abs(diff) > MAX_DIFF) {
 				offSyncImages++;
 				if (offSyncImages > offSyncLimit) {
 					syncMode = false;
@@ -293,12 +287,6 @@ public class CameraHandler {
 		return syncMode;
 	}
 
-	public synchronized void onlyOneCamera(boolean b) {
-		oneCamera = b;
-		System.out.println("onbly one camera = " + b);
-		notifyAll();
-
-	}
 
 //	public synchronized void waitForInterrupted() {
 //		while (!threadsInterrupted) {
@@ -329,7 +317,17 @@ public class CameraHandler {
 
 	public synchronized void flushBuffert(int index) {
 	imageBuffers.get(index).clear();
+	notifyAll();
 		
 	}
-
+	public synchronized void buffertConfirmedCleared(int index){
+		while(!imageBuffers.get(index).isEmpty()){
+			try {
+				wait();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
 }

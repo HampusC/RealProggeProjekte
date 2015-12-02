@@ -5,16 +5,6 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 public class Client {
-	public final static int IDLE_MODE = 0;
-	public final static int MOVIE_MODE = 1;
-	public final static int SYNCHRONOUS_MODE = 0;
-	public final static int ASYNCHRONOUS_MODE = 1;
-	public final static long MAX_DIFF = 20;
-	public final static int AUTO_MODE = 1;
-	public static final int MANUAL_MODE = 0;
-	private int activeSyncMode = SYNCHRONOUS_MODE; //static ofinal, använda getter?
-	
-	
 	private ArrayList<CameraSocketHandler> cameraSockets;
 	private CameraHandler camh;
 
@@ -62,7 +52,7 @@ public class Client {
 		viewThread.start();
 	}
 	public boolean disconnect( int index){
-		camh.onlyOneCamera(true);
+	
 		CameraSocketHandler temp =cameraSockets.get(index);		
 		if(temp != null){
 		temp.disconnect();
@@ -70,29 +60,12 @@ public class Client {
 		camh.flushBuffert(index);
 		return true;
 		}
+		
 		return false;
 		
 		
 	}
-	public void setMode(boolean mode){
-			camh.setIdle(mode);
-	}
-	
-	public boolean isAutoMode(){
-		return camh.isAutoMode();
-	}
-	
-	public boolean isSynced(){
-		return camh.isSyncMode();
-	}
-	public void setSyncMode(boolean syncMode){
-	camh.setSyncMode(syncMode);
-	}
 
-	public void setAutoMode(boolean mode) {
-		camh.setAutoMode(mode);
-		
-	}
 	
 //	public void setAutoMode(int mode){ 
 //		//Systemet ska gå in i auto mode, alltså att den byter mellan idle/movie och sync/async automatiskt 
