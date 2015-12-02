@@ -82,6 +82,7 @@ public class GUI extends JFrame {
 						btnMovie.setEnabled(true);
 				        lblAuto.setText("Manual");	
 				        client.setAutoMode(false);
+				        resetMotionTriggered();
 				      }
 				};
 				queryThread.start();
@@ -133,7 +134,7 @@ public class GUI extends JFrame {
 				Thread queryThread = new Thread() {
 				      public void run() {
 				        client.disconnect(0);
-				        
+				        motions.get(0).setText("");
 				      }
 				};
 				queryThread.start();
@@ -166,7 +167,7 @@ public class GUI extends JFrame {
 				Thread queryThread = new Thread() {
 				      public void run() {
 				        client.disconnect(1); 
-				        System.out.println("Button clicked");
+				        motions.get(1).setText("");
 				      }
 				};
 				queryThread.start();
@@ -440,14 +441,15 @@ public class GUI extends JFrame {
 	public void motionTriggedBy(int index){
 		SwingUtilities.invokeLater(new Runnable() {
 		    public void run() {
-		    	for(int i = 0; i < motions.size(); i++){
-		    		if(i != index){
-		    			motions.get(i).setText("");
-		    		}
-		    	}
 		    	motions.get(index).setText("Motion Triggered By Camera " + (index+1));
 		    }
 		 });
+	}
+	
+	private void resetMotionTriggered(){
+        for(int i = 0; i < motions.size(); i++){
+        	motions.get(i).setText("");
+        }
 	}
 	
 }
