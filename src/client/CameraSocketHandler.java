@@ -39,10 +39,10 @@ private int cameraIndex;
 		System.out.println("disconnect i sockethandöler");
 		cWriteThread.interrupt();
 		cReadThread.interrupt();
-		camH.waitForInterrupted();
+		
 		try {
 			socket.close();
-			System.out.println("socket was closed");
+			System.out.println("socket was closed - client side");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

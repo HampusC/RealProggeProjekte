@@ -19,19 +19,21 @@ public class Client {
 
 	public Client(String address, int port, CameraHandler camh) {
 		this.camh = camh;
-		cameraSockets = new ArrayList<CameraSocketHandler>();
-		connectCamera(address, port);
+		cameraSockets = new ArrayList<CameraSocketHandler>(2);
+		cameraSockets.add(null);
+		cameraSockets.add(null);
+		connectCamera(0,address, port);
 		
 	}
 
-	public boolean connectCamera(String address, int port) { // tänk på hur
+	public boolean connectCamera(int camIndex, String address, int port) { // tänk på hur
 																// disconnect
 																// och numrering
 		System.out.println("connect " + address + "  " +  port);
-		boolean temp =cameraSockets.add(new CameraSocketHandler(address, port, camh));
+		cameraSockets.set(camIndex, new CameraSocketHandler(address, port, camh));
 			//camh.onlyOneCamera(cameraSockets.size()<2);
 		// påverkar
-		return temp;
+		return true; //change to void
 		// timme
 
 	}
@@ -44,7 +46,7 @@ public class Client {
 			System.exit(1);
 		}
 		Client c = new Client(args[0], Integer.parseInt(args[1]), camH);
-		c.connectCamera(args[2], Integer.parseInt(args[3]));
+		c.connectCamera(1,args[2], Integer.parseInt(args[3]));
 //		c.setMode(Client.IDLE_MODE, 0);
 //		c.setMode(Client.IDLE_MODE, 1);
 		ViewThread viewThread = new ViewThread(camH, c);
@@ -54,7 +56,7 @@ public class Client {
 		camh.onlyOneCamera(true);
 		CameraSocketHandler temp =cameraSockets.get(index);		
 		temp.disconnect();
-		cameraSockets.remove(index);
+		
 		
 		
 	}

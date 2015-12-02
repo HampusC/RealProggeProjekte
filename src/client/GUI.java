@@ -114,7 +114,7 @@ public class GUI extends JFrame {
 				Thread queryThread = new Thread() {
 				      public void run() {
 				    	  try {
-				    		  client.connectCamera(textField_1.getText(), Integer.parseInt(textField_2.getText())); 
+				    		  client.connectCamera(0,textField_1.getText(), Integer.parseInt(textField_2.getText())); 
 				    	  } catch (Exception e) {
 				    		  JOptionPane.showMessageDialog(GUI.this, "Couldn't connect to the server", "Error", JOptionPane.ERROR_MESSAGE);
 				    	  }
@@ -147,7 +147,7 @@ public class GUI extends JFrame {
 				Thread queryThread = new Thread() {
 				      public void run() {
 				    	  try {
-				    		  client.connectCamera(textField_3.getText(), Integer.parseInt(textField_4.getText())); 
+				    		  client.connectCamera(1,textField_3.getText(), Integer.parseInt(textField_4.getText())); 
 				    	  } catch (Exception e) {
 				    		  JOptionPane.showMessageDialog(GUI.this, "Couldn't connect to the server", "Error", JOptionPane.ERROR_MESSAGE);
 				    	  }

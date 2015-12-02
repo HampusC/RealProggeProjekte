@@ -47,10 +47,18 @@ public class Server {
 			sm = new ServerMonitor(rt, wt, serverSocket, clientSocket, camera);
 			rt = new ReadThread(sm, clientSocket.getInputStream()); 
 			wt = new WriteThread(camera, clientSocket.getOutputStream(), sm);
-			rt.start();
+			rt.start(); // join så att samma 
 			wt.start();
-			System.out.println("Server: threads started");
-			disconnect();
+			try {
+				rt.join();
+				System.out.println("joined after rt");
+				wt.join();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		
 		}	
 	}
 	

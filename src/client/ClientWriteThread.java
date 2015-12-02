@@ -6,7 +6,7 @@ import java.io.OutputStream;
 public class ClientWriteThread extends Thread {
 	private OutputStream output;
 	private CameraHandler camH;
-	
+
 	private long lastTime;
 	private boolean firstTime;
 	private int cameraIndex;
@@ -22,49 +22,41 @@ public class ClientWriteThread extends Thread {
 	public void run() {
 		System.out.println("clientwrite thread: first time");
 		camH.confirmRead(cameraIndex);
-		while (!this.isInterrupted()) {
-			try {
-			System.out.println("client write thread before request");
+		try {
+			while (!isInterrupted()) {
+
+				
 				camH.request(cameraIndex);
-			System.out.println("client write thread after request");
+				
 				if (!firstTime)
 					camH.waitInIdle(lastTime);
-				try {
-					output.write(1);
-					// flush
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					//e.printStackTrace();
-				}
+
+				output.write(1);
+				// flush
+
 				lastTime = System.currentTimeMillis();
 				if (firstTime) {
 					firstTime = false;
 				}
 
-				try {
-					output.flush();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					//e.printStackTrace();
-					
-				}
-			} catch (Exception e) {
-				
-				System.out.println("write thread interupt");
-				
-			}
-		}
-		System.out.println("client write thread before write 2");
-		try {
-			output.write(0);
-			output.flush();
-			System.out.println("output was closed");
-			output.close();
-		} catch (IOException e1) {
-			//e1.printStackTrace();
-		}
-		camH.setThreadsInterrupted(true);
-		
-	}
+				output.flush();
 
+			}
+
+			output.flush();
+			output.close();
+			// try {
+			// output.write(0);
+			// output.flush();
+			// System.out.println("output was closed");
+			// output.close();
+			// } catch (IOException e1) {
+			// //e1.printStackTrace();
+			// }
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
 }

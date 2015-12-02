@@ -20,29 +20,29 @@ public class ClientReadThread extends Thread {
 
 	public void run() {
 		System.out.println("clientread thread: first time");
-		while (!this.isInterrupted()) {
-			try {
+		try {
+			while (!isInterrupted()) {
 
 				int maxToRead = AxisM3006V.IMAGE_BUFFER_SIZE + 10; // should be
 																	// + 14
 				byte[] buffer = new byte[maxToRead];
 				int read = 0;
 				int result = 0;
-				while (!this.isInterrupted() && (read < maxToRead && result != -1)) {
-					try {
-						//System.out.println("clientreadthread: beflore read");
-						result = input.read(buffer, read, maxToRead - read);
-						//System.out.println("clientreadthread: after read");
 
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-						System.out.println("client thread interrupt 1");
-						input.close();
-						System.out.println("input was closed");
-						this.interrupt();
-						break;
-					}
+				while (read < maxToRead && result != -1) {
+					// System.out.println("clientreadthread: beflore read");
+					result = input.read(buffer, read, maxToRead - read);
+					// System.out.println("clientreadthread: after read");
+
+					// } catch (Exception e) {
+					// // TODO Auto-generated catch block
+					// e.printStackTrace();
+					// System.out.println("client thread interrupt 1");
+					// input.close();
+					// System.out.println("input was closed");
+					// this.interrupt();
+					// break;
+					// }
 					if (result != -1)
 						read = read + result;
 				}
@@ -81,18 +81,11 @@ public class ClientReadThread extends Thread {
 				}
 				camH.confirmRead(cameraIndex);
 
-			} catch (Exception e) {
-			e.printStackTrace();
 			}
-			
-		}
-		System.out.println("readthread : Input was closed");
-		camH.confirmRead(cameraIndex);
-		try {
 			input.close();
+			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
+
 	}
 }
