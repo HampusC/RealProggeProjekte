@@ -11,12 +11,12 @@ private ClientReadThread cReadThread;
 private CameraHandler camH; //monjuitor med bildbuffertar
 
 private int cameraIndex;
-	public CameraSocketHandler(int camNbr,String address, int port, CameraHandler camH){
+	public CameraSocketHandler(int camNbr,String address, int port, CameraHandler camH) throws UnknownHostException, IOException{
 		this.camH = camH;
 		cameraIndex=camNbr;
 		System.out.println("camindex = " + cameraIndex);
 	
-		try {
+		
 			System.out.println("camSockHandl: beföre socket");
 			socket = new Socket(address,  port);
 			System.out.println("camSockHandl: after socket");
@@ -25,14 +25,7 @@ private int cameraIndex;
 			cReadThread = new ClientReadThread(socket.getInputStream(), camH, cameraIndex);
 			cWriteThread.start();
 			cReadThread.start();
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			
-		}
+	
 
 	}
 	public void disconnect() {

@@ -22,12 +22,7 @@ public class ClientWriteThread extends Thread {
 	public void run() {
 		System.out.println("clientwrite thread: first time");
 		camH.confirmRead(cameraIndex);
-		try {
-			sleep(5000);
-		} catch (InterruptedException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+	
 		try {
 			while (!isInterrupted()) {
 
@@ -61,7 +56,9 @@ public class ClientWriteThread extends Thread {
 			// }
 
 		} catch (IOException e) {
+			System.out.println("cliwentviewthread: should be dead");
 			e.printStackTrace();
+			this.interrupt();
 		}
 
 	}

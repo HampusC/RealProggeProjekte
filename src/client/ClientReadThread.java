@@ -85,6 +85,7 @@ public class ClientReadThread extends Thread {
 			input.close();
 			
 		} catch (IOException e) {
+			camH.confirmRead(cameraIndex);
 		}
 
 	}

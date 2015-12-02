@@ -1,5 +1,7 @@
 package client;
 
+import java.io.IOException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 public class Client {
@@ -26,15 +28,23 @@ public class Client {
 		
 	}
 
-	public void connectCamera(int camIndex, String address, int port) { // tänk på hur
+	public void connectCamera(int camIndex, String address, int port) throws Exception { // tänk på hur
 																// disconnect
-																// och numrering
+			if(cameraSockets.get(camIndex) ==null){												// och numrering
 		System.out.println("connect " + address + "  " +  port);
+		try{
 		cameraSockets.set(camIndex, new CameraSocketHandler(camIndex,address, port, camh));
 			//camh.onlyOneCamera(cameraSockets.size()<2);
 		// påverkar
 		 //change to void
 		// timme
+		}catch(IOException e){
+			throw new Exception("Error: Could not connect to the server! CHeck the address and port again!");
+		}
+			}else{
+				throw new Exception("Error: This window is already connected to a camera! Disconnect first.");
+				
+			}
 
 	}
 
@@ -52,11 +62,15 @@ public class Client {
 		ViewThread viewThread = new ViewThread(camH, c);
 		viewThread.start();
 	}
-	public void disconnect( int index){
+	public boolean disconnect( int index){
 		camh.onlyOneCamera(true);
 		CameraSocketHandler temp =cameraSockets.get(index);		
+		if(temp != null){
 		temp.disconnect();
-		
+		cameraSockets.set(index, null);
+		return true;
+		}
+		return false;
 		
 		
 	}
