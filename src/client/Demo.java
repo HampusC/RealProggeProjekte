@@ -10,11 +10,11 @@ public class Demo {
 		s1.start();
 		Server2 s2 = new Server2();
 		s2.start();
-		try {
-			Thread.currentThread().sleep(5000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			Thread.currentThread().sleep(5000);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
 		Client1 c = new Client1();
 		c.start();
 	

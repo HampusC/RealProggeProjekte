@@ -11,9 +11,9 @@ private ClientReadThread cReadThread;
 private CameraHandler camH; //monjuitor med bildbuffertar
 
 private int cameraIndex;
-	public CameraSocketHandler(String address, int port, CameraHandler camH){
+	public CameraSocketHandler(int camNbr,String address, int port, CameraHandler camH){
 		this.camH = camH;
-		cameraIndex=camH.cameraIndex();
+		cameraIndex=camNbr;
 		System.out.println("camindex = " + cameraIndex);
 	
 		try {

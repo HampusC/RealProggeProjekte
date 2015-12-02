@@ -53,6 +53,7 @@ public class Server {
 				rt.join();
 				System.out.println("joined after rt");
 				wt.join();
+				System.out.println("joined after wt");
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

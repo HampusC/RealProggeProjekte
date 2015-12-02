@@ -23,6 +23,12 @@ public class ClientWriteThread extends Thread {
 		System.out.println("clientwrite thread: first time");
 		camH.confirmRead(cameraIndex);
 		try {
+			sleep(5000);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		try {
 			while (!isInterrupted()) {
 
 				
@@ -32,6 +38,7 @@ public class ClientWriteThread extends Thread {
 					camH.waitInIdle(lastTime);
 
 				output.write(1);
+				output.flush();
 				// flush
 
 				lastTime = System.currentTimeMillis();
@@ -39,7 +46,6 @@ public class ClientWriteThread extends Thread {
 					firstTime = false;
 				}
 
-				output.flush();
 
 			}
 
