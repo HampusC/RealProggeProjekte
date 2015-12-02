@@ -69,6 +69,7 @@ public class GUI extends JFrame {
 		canvas.get(1).setBounds(663, 12, 640, 480);
 		getContentPane().add(canvas.get(1));
 		
+		
 		btnIdle = new JButton("Idle");
 		btnIdle.setBounds(12, 725, 314, 49);
 		getContentPane().add(btnIdle);
@@ -135,6 +136,7 @@ public class GUI extends JFrame {
 				      public void run() {
 				        client.disconnect(0);
 				        motions.get(0).setText("");
+				        canvas.get(0).getGraphics().clearRect(0, 0, 640, 480);
 				      }
 				};
 				queryThread.start();
@@ -168,6 +170,7 @@ public class GUI extends JFrame {
 				      public void run() {
 				        client.disconnect(1); 
 				        motions.get(1).setText("");
+				        canvas.get(1).getGraphics().clearRect(0, 0, 640, 480);
 				      }
 				};
 				queryThread.start();
