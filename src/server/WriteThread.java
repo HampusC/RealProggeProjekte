@@ -35,10 +35,10 @@ public class WriteThread extends Thread {
 			sm.shouldSend();
 			jpeg[0] = (byte) 1; // 1 if image
 			jpeg[1] = (byte) (camera.motionDetected() ? 1 : 0);
-			camera.getTime(jpeg, 2);
 
 			// the image, written on 14 and onwards
 			int len = camera.getJPEG(jpeg, 6 + AxisM3006V.TIME_ARRAY_SIZE);
+			camera.getTime(jpeg, 2);
 		
 //			System.out.println("first bit in pic " + jpeg[6 + AxisM3006V.TIME_ARRAY_SIZE] + " last byte "
 //					+ jpeg[6 + AxisM3006V.TIME_ARRAY_SIZE + len - 1]);

@@ -15,14 +15,14 @@ public class ClientWriteThread extends Thread {
 		this.output = os;
 		this.camH = camH;
 		this.cameraIndex = cameraIndex;
-		lastTime = System.currentTimeMillis();
+		
 		firstTime = true;
 	}
 
 	public void run() {
 		System.out.println("clientwrite thread: first time");
 		camH.confirmRead(cameraIndex);
-	
+		lastTime = System.currentTimeMillis();
 		try {
 			while (!isInterrupted()) {
 

@@ -10,7 +10,7 @@ public class CameraHandler {
 	private boolean[] packageRead;
 	private boolean idleMode;
 	private int offSyncImages;
-	private final int offSyncLimit = 10;
+	private final int offSyncLimit = 3;
 	private boolean syncMode;
 	private boolean oneCamera;
 	private boolean threadsInterrupted;
@@ -206,17 +206,22 @@ public class CameraHandler {
 	private void checkDelayDiff(long temp1, long temp2) {
 		if (isAutoMode) {
 			long diff = temp1 - temp2;
+			System.out.println("dif between pics is " + diff);
 			if (Math.abs(diff) > Client.MAX_DIFF) {
 				offSyncImages++;
 				if (offSyncImages > offSyncLimit) {
 					syncMode = false;
 					offSyncImages = offSyncLimit;
+					System.out.println("syncMode false");
+					notifyAll();
 				}
 			} else {
 				offSyncImages--;
 				if (offSyncImages < 0) {
 					syncMode = true;
+					System.out.println("syncMode true");
 					offSyncImages = 0;
+					notifyAll();
 				}
 			}
 
