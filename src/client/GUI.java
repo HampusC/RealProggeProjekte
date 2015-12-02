@@ -31,7 +31,6 @@ public class GUI extends JFrame {
 	private JButton btnIdle, btnMovie, btnConnect1, btnDisconnect1, btnConnect2, btnDisconnect2, btnSynchronous, btnAsynchronous, btnAuto;
 	private ArrayList<JLabel> delays = new ArrayList<JLabel>();
 	private JLabel lblAuto;
-	private JLabel lblControl;
 
 	/**
 	 * Launch the application.
@@ -304,11 +303,11 @@ public class GUI extends JFrame {
 		delays.get(1).setBounds(745, 500, 70, 15);
 		getContentPane().add(delays.get(1));
 		
-		lblAuto = new JLabel("Auto");
+		lblAuto = new JLabel("");
 		lblAuto.setBounds(94, 612, 75, 15);
 		getContentPane().add(lblAuto);
 		
-		lblControl = new JLabel("Control:");
+		JLabel lblControl = new JLabel("Control:");
 		lblControl.setBounds(12, 612, 70, 15);
 		getContentPane().add(lblControl);
 		
