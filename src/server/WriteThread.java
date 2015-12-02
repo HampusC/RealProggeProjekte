@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 
-import se.lth.cs.eda040.fakecamera.AxisM3006V;
+import se.lth.cs.eda040.proxycamera.AxisM3006V;
 
 public class WriteThread extends Thread {
 
@@ -30,9 +30,7 @@ public class WriteThread extends Thread {
 																	// kanske är
 																	// istället)
 		System.out.println("write thread virginity");
-		if (!camera.connect()) { //bugletande
-			System.out.println("Failed to connect to camera!");
-		}
+	
 		try{
 		while (!isInterrupted()) {
 			System.out.println("write before should");
@@ -68,9 +66,10 @@ public class WriteThread extends Thread {
 		}
 		os.flush();
 		os.close();
+		camera.close(); //finns camera.destroy();
 			
 		} catch (IOException e) {
-			
+			camera.close();
 				e.printStackTrace();
 			}
 			

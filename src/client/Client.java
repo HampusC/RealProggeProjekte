@@ -67,6 +67,7 @@ public class Client {
 		if(temp != null){
 		temp.disconnect();
 		cameraSockets.set(index, null);
+		camh.flushBuffert(index);
 		return true;
 		}
 		return false;

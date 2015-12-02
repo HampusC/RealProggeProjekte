@@ -15,6 +15,8 @@ public class CameraHandler {
 	private boolean oneCamera;
 	private boolean threadsInterrupted;
 	private boolean isAutoMode;
+	private final int BUFFERT_LIMIT= 5;
+	private final int SYNC_DELAY= 600;
 
 	private TimeStampedImageComparator comparator;
 
@@ -67,6 +69,14 @@ public class CameraHandler {
 	 *            - index for the buffer
 	 */
 	public synchronized void writeToBuffer(long timestamp, boolean motionDetected, byte[] image, int cameraIndex) {
+		while(imageBuffers.get(cameraIndex).size()>BUFFERT_LIMIT){
+			try {
+				wait();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		imageBuffers.get(cameraIndex).add(new TimeStampedImage(timestamp, motionDetected, image, cameraIndex));
 
 		notifyAll();
@@ -158,15 +168,18 @@ public class CameraHandler {
 			}
 			long delay = System.currentTimeMillis()-temp.getTimestamp();
 			System.out.println("delay is " + delay);
-		while(syncMode&&delay<500){
+		while(syncMode&&delay<SYNC_DELAY){
 				try {
-					wait(500-delay);
+					wait(SYNC_DELAY-delay);
 					delay = System.currentTimeMillis()-temp.getTimestamp();
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
+		System.out.println("crnt size imgae buffer 1 " + imageBuffers.get(0).size() + " img buffer 2 = "
+				+ imageBuffers.get(1).size());
+		notifyAll();
 		return temp;
 			
 //			if (temp1.getTimestamp() > temp2.getTimestamp()) {
@@ -312,6 +325,11 @@ public class CameraHandler {
 	public synchronized void setAutoMode(boolean b) {
 		isAutoMode=b;
 		notifyAll();
+	}
+
+	public synchronized void flushBuffert(int index) {
+	imageBuffers.get(index).clear();
+		
 	}
 
 }

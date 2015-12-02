@@ -23,13 +23,13 @@ public class Demo {
 	
 	private static class Server1 extends Thread {
 		public void run() {
-			Server.main(new String[] {"6077"});
+			Server.main(new String[] {"argus-5.student.lth.se", "6077"});
 		}
 	}
 	
 	private static class Server2 extends Thread {
 		public void run() {
-			Server.main(new String[] {"6078"});
+			Server.main(new String[] {"argus-3.student.lth.se" ,"6078"});
 		}
 	}
 	

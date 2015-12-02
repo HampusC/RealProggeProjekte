@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import se.lth.cs.eda040.fakecamera.AxisM3006V;
+import se.lth.cs.eda040.proxycamera.AxisM3006V;
 
 
 public class Server {
@@ -25,10 +25,19 @@ public class Server {
 		this.port = port;
 		
 	}
+	public Server(String url ,int port) throws IOException{
+		serverSocket = new ServerSocket(port);
+		camera = new AxisM3006V();
+		camera.init();
+		camera.setProxy(url, 5050); //ändra andressen argus-1.student.lth.se
+		
+		this.port = port;
+		
+	}
 	
 	public static void main(String[] args){
 		try {
-			Server s = new Server(Integer.parseInt(args[0]));
+			Server s = new Server(args[0],Integer.parseInt(args[1]));
 			s.execute();
 		} catch(IOException e) {
 			System.out.println("Error!");
@@ -45,6 +54,7 @@ public class Server {
 		while(true){
 			System.out.println("server waiting for connection");
 			clientSocket = serverSocket.accept();
+			camera.connect();
 			System.out.println("server: socket accepted");
 			sm = new ServerMonitor(rt, wt, serverSocket, clientSocket, camera);
 			rt = new ReadThread(sm, clientSocket.getInputStream()); 
