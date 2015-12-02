@@ -26,8 +26,8 @@ public class ClientWriteThread extends Thread {
 		try {
 			while (!isInterrupted()) {
 
-				
 				camH.request(cameraIndex);
+				
 				
 				if (!firstTime)
 					camH.waitInIdle(lastTime);

@@ -78,6 +78,7 @@ public class ClientReadThread extends Thread {
 					// image[0]+
 					// " last byte " + image[image.length-1]);
 					camH.writeToBuffer(timestamp, motionDetected, image, cameraIndex);
+					System.out.println("image added to buffer - delay is " + (System.currentTimeMillis()-timestamp));
 				}
 				camH.confirmRead(cameraIndex);
 
