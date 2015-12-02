@@ -31,6 +31,7 @@ public class GUI extends JFrame {
 	private JButton btnIdle, btnMovie, btnConnect1, btnDisconnect1, btnConnect2, btnDisconnect2, btnSynchronous, btnAsynchronous, btnAuto;
 	private ArrayList<JLabel> delays = new ArrayList<JLabel>();
 	private JLabel lblAuto;
+	private ArrayList<JLabel> motions = new ArrayList<JLabel>();
 
 	/**
 	 * Launch the application.
@@ -311,6 +312,14 @@ public class GUI extends JFrame {
 		lblControl.setBounds(12, 612, 70, 15);
 		getContentPane().add(lblControl);
 		
+		motions.add(new JLabel("")); 
+		motions.get(0).setBounds(256, 500, 70, 15);
+		getContentPane().add(motions.get(0));
+		
+		motions.add(new JLabel(""));
+		motions.get(1).setBounds(907, 500, 70, 15);
+		getContentPane().add(motions.get(1));
+		
 //		if(client.isAutoMode()){
 //			setAuto();
 //		}
@@ -423,7 +432,15 @@ public class GUI extends JFrame {
 	/**
 	 * Updates the delay label
 	 */
-	public void updateDelay(long delay, int index){
+	private void updateDelay(long delay, int index){
 		delays.get(index).setText(delay + "");
+	}
+	
+	public void motionTriggedBy(int index){
+		SwingUtilities.invokeLater(new Runnable() {
+		    public void run() {
+		    	motions.get(index).setText("Motion Triggered!");
+		    }
+		 });
 	}
 }
