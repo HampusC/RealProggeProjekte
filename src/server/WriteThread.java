@@ -69,8 +69,9 @@ public class WriteThread extends Thread {
 		camera.close(); //finns camera.destroy();
 			
 		} catch (IOException e) {
+
 			camera.close();
-				e.printStackTrace();
+			//e.printStackTrace();
 			}
 			
 		}

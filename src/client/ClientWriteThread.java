@@ -58,7 +58,7 @@ public class ClientWriteThread extends Thread {
 
 		} catch (IOException e) {
 			System.out.println("cliwentviewthread: should be dead");
-			e.printStackTrace();
+			//e.printStackTrace();
 			this.interrupt();
 		}
 
