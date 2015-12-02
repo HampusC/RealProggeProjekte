@@ -313,11 +313,11 @@ public class GUI extends JFrame {
 		getContentPane().add(lblControl);
 		
 		motions.add(new JLabel("")); 
-		motions.get(0).setBounds(256, 500, 70, 15);
+		motions.get(0).setBounds(256, 500, 300, 15);
 		getContentPane().add(motions.get(0));
 		
 		motions.add(new JLabel(""));
-		motions.get(1).setBounds(907, 500, 70, 15);
+		motions.get(1).setBounds(907, 500, 300, 15);
 		getContentPane().add(motions.get(1));
 		
 //		if(client.isAutoMode()){
@@ -413,6 +413,7 @@ public class GUI extends JFrame {
 		    public void run() {
 				setAutoLabel(isAuto);
 				client.setAutoMode(true);
+				
 		    }
 		 });
 	}
@@ -439,8 +440,14 @@ public class GUI extends JFrame {
 	public void motionTriggedBy(int index){
 		SwingUtilities.invokeLater(new Runnable() {
 		    public void run() {
-		    	motions.get(index).setText("Motion Triggered!");
+		    	for(int i = 0; i < motions.size(); i++){
+		    		if(i != index){
+		    			motions.get(i).setText("");
+		    		}
+		    	}
+		    	motions.get(index).setText("Motion Triggered By Camera " + (index+1));
 		    }
 		 });
 	}
+	
 }

@@ -117,6 +117,7 @@ public class ViewThread extends Thread {
 	public void checkMotion(TimeStampedImage img){
 		if (img.getMotionDetected() && camH.isAutoMode()) {
 			gui.setIdleMode(false);
+			gui.motionTriggedBy(img.getCameraIndex());
 			System.out.println("mode motion changed to motion movie");
 		}
 	}
