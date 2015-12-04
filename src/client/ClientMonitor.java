@@ -15,8 +15,8 @@ public class ClientMonitor {
 	private boolean syncMode;
 	private boolean isAutoMode;
 	private final int BUFFERT_LIMIT = 50;
-	private final int SYNC_DELAY = 250;
-	public final static long MAX_DIFF = 35;
+	private final int SYNC_DELAY = 500;
+	public final static long MAX_DIFF = 200;
 	public final static long DELAY_FOR_IDLE = 5000;
 	private ArrayList<PriorityQueue<TimeStampedImage>> imageBuffers;
 
