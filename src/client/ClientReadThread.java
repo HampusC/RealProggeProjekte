@@ -9,19 +9,19 @@ import se.lth.cs.eda040.fakecamera.AxisM3006V;
 
 public class ClientReadThread extends Thread {
 	private InputStream input;
-	private CameraHandler camH;
+	private ClientMonitor monitor;
 	private int cameraIndex;
 
 	/**
 	 * Creates the read thread in the client
 	 * @param is - the input stream
-	 * @param camH - the monitor
+	 * @param monitor - the client monitor
 	 * @param cameraIndex - the index of the camera
 	 */
-	public ClientReadThread(InputStream is, CameraHandler camH, int cameraIndex) {
+	public ClientReadThread(InputStream is, ClientMonitor monitor, int cameraIndex) {
 		this.input = is;
 		this.cameraIndex = cameraIndex;
-		this.camH = camH;
+		this.monitor = monitor;
 	}
 
 	public void run() {
@@ -64,16 +64,16 @@ public class ClientReadThread extends Thread {
 					//the image
 					byte[] image = Arrays.copyOfRange(buffer, 14, length + 14); 
 					System.out.println("before buffer - delay is " + (System.currentTimeMillis()-timestamp));
-					camH.writeToBuffer(timestamp, motionDetected, image, cameraIndex);
+					monitor.writeToBuffer(timestamp, motionDetected, image, cameraIndex);
 				
 				}
-				camH.confirmRead(cameraIndex);
+				monitor.confirmRead(cameraIndex);
 
 			}
 			input.close();
 			
 		} catch (IOException e) {
-			camH.confirmRead(cameraIndex);
+			monitor.confirmRead(cameraIndex);
 		}
 
 	}

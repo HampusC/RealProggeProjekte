@@ -9,7 +9,7 @@ public class CameraSocketHandler {
 	private Socket socket;
 	private ClientWriteThread cWriteThread;
 	private ClientReadThread cReadThread;
-	private CameraHandler camH;
+	private ClientMonitor monitor;
 	private int cameraIndex;
 
 	/**
@@ -21,25 +21,21 @@ public class CameraSocketHandler {
 	 *            -the web-address of the server
 	 * @param port
 	 *            - the port number
-	 * @param camH
-	 *            - the monitor
+	 * @param monitor
+	 *            - the client monitor
 	 * @throws UnknownHostException
 	 *             - thrown when connection can't be established
 	 * @throws IOException
 	 *             - thrown when connection can't be established
 	 */
-	public CameraSocketHandler(int camNbr, String address, int port, CameraHandler camH)
+	public CameraSocketHandler(int camNbr, String address, int port, ClientMonitor monitor)
 			throws UnknownHostException, IOException {
-		this.camH = camH;
+		this.monitor = monitor;
 		cameraIndex = camNbr;
-		System.out.println("camindex = " + cameraIndex);
-
-		System.out.println("camSockHandl: beföre socket");
 		socket = new Socket(address, port);
-		System.out.println("camSockHandl: after socket");
 		socket.setTcpNoDelay(true);
-		cWriteThread = new ClientWriteThread(socket.getOutputStream(), camH, cameraIndex);
-		cReadThread = new ClientReadThread(socket.getInputStream(), camH, cameraIndex);
+		cWriteThread = new ClientWriteThread(socket.getOutputStream(), monitor, cameraIndex);
+		cReadThread = new ClientReadThread(socket.getInputStream(), monitor, cameraIndex);
 		cWriteThread.start();
 		cReadThread.start();
 

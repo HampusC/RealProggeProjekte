@@ -5,7 +5,7 @@ import java.io.OutputStream;
 
 public class ClientWriteThread extends Thread {
 	private OutputStream output;
-	private CameraHandler camH;
+	private ClientMonitor monitor;
 
 	private long lastTime;
 	private boolean firstTime;
@@ -16,26 +16,26 @@ public class ClientWriteThread extends Thread {
 	 * 
 	 * @param os
 	 *            - the output stream
-	 * @param camH
-	 *            - the monitor
+	 * @param monitor
+	 *            - the client monitor
 	 * @param cameraIndex
 	 *            - the index of the camera
 	 */
-	public ClientWriteThread(OutputStream os, CameraHandler camH, int cameraIndex) {
+	public ClientWriteThread(OutputStream os, ClientMonitor monitor, int cameraIndex) {
 		this.output = os;
-		this.camH = camH;
+		this.monitor = monitor;
 		this.cameraIndex = cameraIndex;
 		firstTime = true;
 	}
 
 	public void run() {
-		camH.confirmRead(cameraIndex);
+		monitor.confirmRead(cameraIndex);
 		lastTime = System.currentTimeMillis();
 		try {
 			while (!isInterrupted()) {
-				camH.request(cameraIndex);
+				monitor.request(cameraIndex);
 				if (!firstTime)
-					camH.waitInIdle(lastTime);
+					monitor.waitInIdle(lastTime);
 
 				output.write(1);
 				output.flush();
@@ -49,7 +49,6 @@ public class ClientWriteThread extends Thread {
 			output.flush();
 			output.close();
 		} catch (IOException e) {
-			System.out.println("clientviewthread: should be dead");
 			this.interrupt();
 		}
 

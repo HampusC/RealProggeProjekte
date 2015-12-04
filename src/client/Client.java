@@ -6,16 +6,16 @@ import java.util.ArrayList;
 
 public class Client {
 	private ArrayList<CameraSocketHandler> cameraSockets;
-	private CameraHandler camh;
+	private ClientMonitor monitor;
 
 	/**
 	 * Creates a client
 	 * 
-	 * @param camh
-	 *            - the monitor
+	 * @param monitor
+	 *            - the client monitor
 	 */
-	public Client(CameraHandler camh) {
-		this.camh = camh;
+	public Client(ClientMonitor monitor) {
+		this.monitor = monitor;
 		cameraSockets = new ArrayList<CameraSocketHandler>(2);
 		cameraSockets.add(null);
 		cameraSockets.add(null);
@@ -34,9 +34,8 @@ public class Client {
 	 */
 	public void connectCamera(int camIndex, String address, int port) throws Exception {
 		if (cameraSockets.get(camIndex) == null) {
-			System.out.println("connect " + address + "  " + port);
 			try {
-				cameraSockets.set(camIndex, new CameraSocketHandler(camIndex, address, port, camh));
+				cameraSockets.set(camIndex, new CameraSocketHandler(camIndex, address, port, monitor));
 			} catch (IOException e) {
 				throw new Exception("Error: Could not connect to the server! Check the address and port again!");
 			}
@@ -48,7 +47,7 @@ public class Client {
 	}
 
 	public static void main(String[] args) {
-		CameraHandler camH = new CameraHandler();
+		ClientMonitor camH = new ClientMonitor();
 		Client c = new Client(camH);
 		ViewThread viewThread = new ViewThread(camH, c);
 		viewThread.start();
@@ -67,7 +66,7 @@ public class Client {
 		if (temp != null) {
 			temp.disconnect();
 			cameraSockets.set(index, null);
-			camh.flushBuffert(index);
+			monitor.flushBuffert(index);
 			return true;
 		}
 

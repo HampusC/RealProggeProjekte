@@ -8,7 +8,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class ViewThread extends Thread {
-	private CameraHandler camH;
+	private ClientMonitor monitor;
 	private GUI gui;
 	private Client client;
 	private int offSyncImages;
@@ -16,37 +16,42 @@ public class ViewThread extends Thread {
 
 	/**
 	 * Creates a viewthread to update the GUI
-	 * @param camH - the monitor
-	 * @param client - the client
+	 * 
+	 * @param monitor
+	 *            - the client monitor
+	 * @param client
+	 *            - the client
 	 */
-	public ViewThread(CameraHandler camH, Client client) {
-		this.camH = camH;
-		gui = new GUI(client, camH);
+	public ViewThread(ClientMonitor monitor, Client client) {
+		this.monitor = monitor;
+		gui = new GUI(client, monitor);
 		this.client = client;
 		offSyncImages = 0;
 
 	}
-	
+
 	public void run() {
 		while (true) {
-			TimeStampedImage img = camH.nextImageToShow();
+			TimeStampedImage img = monitor.nextImageToShow();
 			checkMotion(img);
-			
-			gui.setAutoLabel(camH.isAutoMode());
-			gui.setSyncTypeLabel(camH.isSyncMode());
-			gui.setIdleModeLabel(camH.isIdleMode());
+
+			gui.setAutoLabel(monitor.isAutoMode());
+			gui.setSyncTypeLabel(monitor.isSyncMode());
+			gui.setIdleModeLabel(monitor.isIdleMode());
 			gui.refresh(img.getImage(), img.getCameraIndex(), System.currentTimeMillis() - img.getTimestamp());
 		}
 	}
+
 	/**
-	 * Method to check for motion, uses the "motionDetected" attribute in TimeStampedImage
+	 * Method to check for motion, uses the "motionDetected" attribute in
+	 * TimeStampedImage
+	 * 
 	 * @param img
 	 */
-	public void checkMotion(TimeStampedImage img){
-		if (img.getMotionDetected() && camH.isAutoMode() && camH.isIdleMode()) {
+	public void checkMotion(TimeStampedImage img) {
+		if (img.getMotionDetected() && monitor.isAutoMode() && monitor.isIdleMode()) {
 			gui.setIdleMode(false);
 			gui.motionTriggedBy(img.getCameraIndex());
-			System.out.println("mode motion changed to motion movie");
 		}
 	}
 

@@ -6,7 +6,7 @@ import java.util.PriorityQueue;
 import com.sun.org.apache.xerces.internal.util.SynchronizedSymbolTable;
 import com.sun.swing.internal.plaf.synth.resources.synth;
 
-public class CameraHandler {
+public class ClientMonitor {
 	private int index;
 	private boolean[] packageRead;
 	private boolean idleMode;
@@ -20,7 +20,7 @@ public class CameraHandler {
 	public final static long DELAY_FOR_IDLE = 5000;
 	private ArrayList<PriorityQueue<TimeStampedImage>> imageBuffers;
 
-	public CameraHandler() {
+	public ClientMonitor() {
 		imageBuffers = new ArrayList<PriorityQueue<TimeStampedImage>>(2);
 
 		imageBuffers.add(new PriorityQueue<TimeStampedImage>());
