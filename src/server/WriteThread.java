@@ -2,9 +2,8 @@ package server;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.ByteBuffer;
 
-import se.lth.cs.eda040.proxycamera.AxisM3006V;
+import se.lth.cs.eda040.realcamera.AxisM3006V;
 
 public class WriteThread extends Thread {
 
@@ -50,17 +49,15 @@ public class WriteThread extends Thread {
 //					+ jpeg[6 + AxisM3006V.TIME_ARRAY_SIZE + len - 1]);
 
 			// the length of the image, converted from int to 4 byte
-			ByteBuffer b = ByteBuffer.allocate(4);
-			b.putInt(len);
-			byte[] result = b.array();
-			for (int i = 0; i < 4; i++) {
-				jpeg[i + 10] = result[i];
-			}
+			jpeg[10] = (byte) (len >> 24);
+			jpeg[11] = (byte) (len >> 16);
+			jpeg[12] = (byte) (len >> 8);
+			jpeg[13] = (byte) (len >> 0);
 
 			
-				os.write(jpeg);
-				System.out.println("write after write");
-				os.flush(); // flushar den innan klienten hinner läsa den?
+			os.write(jpeg);
+			System.out.println("write after write");
+			os.flush(); // flushar den innan klienten hinner läsa den?
 			
 			
 		}
