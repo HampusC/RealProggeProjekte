@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import se.lth.cs.eda040.realcamera.AxisM3006V;
+import se.lth.cs.eda040.proxycamera.AxisM3006V;
 
 public class ServerMonitor {
 	private ReadThread rt;
