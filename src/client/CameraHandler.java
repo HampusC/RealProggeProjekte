@@ -14,16 +14,16 @@ public class CameraHandler {
 	private final int offSyncLimit = 8;
 	private boolean syncMode;
 	private boolean isAutoMode;
-	private final int BUFFERT_LIMIT= 50;
-	private final int SYNC_DELAY= 500;
+	private final int BUFFERT_LIMIT = 50;
+	private final int SYNC_DELAY = 500;
 	public final static long MAX_DIFF = 200;
+	public final static long DELAY_FOR_IDLE = 5000;
 	private ArrayList<PriorityQueue<TimeStampedImage>> imageBuffers;
 
 	public CameraHandler() {
 		imageBuffers = new ArrayList<PriorityQueue<TimeStampedImage>>(2);
 
-		imageBuffers.add(new PriorityQueue<TimeStampedImage>()); // tänk över
-																	// struktur
+		imageBuffers.add(new PriorityQueue<TimeStampedImage>());
 		imageBuffers.add(new PriorityQueue<TimeStampedImage>());
 		index = 0;
 		packageRead = new boolean[2]; // true from start
@@ -32,22 +32,8 @@ public class CameraHandler {
 		idleMode = true;
 		offSyncImages = 0;
 		syncMode = true;
-		isAutoMode=true;
+		isAutoMode = true;
 
-
-	}
-
-	/**
-	 * Get index of which imagebuffer to use
-	 * 
-	 * @return index
-	 */
-	public synchronized int cameraIndex() {
-		// TODO Auto-generated method stub
-		int temp = index;
-		index = (index + 1) % 2; // modolu division med 2 ifall vi anropar fler
-									// gånger än 2?
-		return temp;
 	}
 
 	/**
@@ -63,7 +49,7 @@ public class CameraHandler {
 	 *            - index for the buffer
 	 */
 	public synchronized void writeToBuffer(long timestamp, boolean motionDetected, byte[] image, int cameraIndex) {
-		while(imageBuffers.get(cameraIndex).size()>BUFFERT_LIMIT){
+		while (imageBuffers.get(cameraIndex).size() > BUFFERT_LIMIT) {
 			try {
 				wait();
 			} catch (InterruptedException e) {
@@ -89,7 +75,7 @@ public class CameraHandler {
 				wait();
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
-				//e.printStackTrace();
+				// e.printStackTrace();
 			}
 		}
 		packageRead[cameraIndex] = false;
@@ -109,11 +95,16 @@ public class CameraHandler {
 		return imageBuffers.get(index).isEmpty();
 	}
 
-	public synchronized TimeStampedImage getLatestImage(int index) { // should
-																		// it
-																		// remove?
+	/**
+	 * A blocking method that gives the oldest (since grabbed from a camera) of
+	 * all images in all buffers
+	 * 
+	 * @return An appropiate image to show
+	 */
+	public synchronized TimeStampedImage nextImageToShow() {
+		TimeStampedImage temp = null;
 
-		while (imageBuffers.get(index).isEmpty()) {
+		while (imageBuffers.get(0).isEmpty() && imageBuffers.get(1).isEmpty()) {
 			try {
 				wait();
 			} catch (InterruptedException e) {
@@ -122,92 +113,39 @@ public class CameraHandler {
 			}
 
 		}
-		TimeStampedImage temp = imageBuffers.get(index).poll();
-		notifyAll();
-		System.out.println("crnt size imgae buffer 1 " + imageBuffers.get(0).size() + " img buffer 2 = "
-				+ imageBuffers.get(1).size());
-		return temp;
-	}
 
-	public synchronized TimeStampedImage nextImageToShow() {
-		TimeStampedImage temp = null;
-		
-			while (imageBuffers.get(0).isEmpty() && imageBuffers.get(1).isEmpty()) {
-				try {
-					wait();
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+		TimeStampedImage temp1 = imageBuffers.get(0).peek();
+		TimeStampedImage temp2 = imageBuffers.get(1).peek();
+		if (temp1 == null) {
+			temp = imageBuffers.get(1).poll();
+		} else if (temp2 == null) {
+			temp = imageBuffers.get(0).poll();
 
-			}
-			
+		} else {
+			checkDelayDiff(temp1.getTimestamp(), temp2.getTimestamp());
+			System.out.println("delay checked for sync");
+			if (temp1.getTimestamp() > temp2.getTimestamp()) {
 
-			TimeStampedImage temp1 = imageBuffers.get(0).peek();
-			TimeStampedImage temp2 = imageBuffers.get(1).peek();
-			if (temp1 == null) {
 				temp = imageBuffers.get(1).poll();
-			} else if(temp2 ==null) {
+			} else {
 				temp = imageBuffers.get(0).poll();
-
-			} else{
-				checkDelayDiff(temp1.getTimestamp(), temp2.getTimestamp());
-				System.out.println("delay checked for sync");
-				if (temp1.getTimestamp() > temp2.getTimestamp()) {
-
-					temp = imageBuffers.get(1).poll();
-				} else {
-					temp = imageBuffers.get(0).poll();
-				}
 			}
-			long delay = System.currentTimeMillis()-temp.getTimestamp();
-			System.out.println("delay is " + delay);
-		while(syncMode&&delay<SYNC_DELAY){
-				try {
-					wait(SYNC_DELAY-delay);
-					delay = System.currentTimeMillis()-temp.getTimestamp();
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+		}
+		long delay = System.currentTimeMillis() - temp.getTimestamp();
+		System.out.println("delay is " + delay);
+		while (syncMode && delay < SYNC_DELAY) {
+			try {
+				wait(SYNC_DELAY - delay);
+				delay = System.currentTimeMillis() - temp.getTimestamp();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
+		}
 		System.out.println("crnt size imgae buffer 1 " + imageBuffers.get(0).size() + " img buffer 2 = "
 				+ imageBuffers.get(1).size());
 		notifyAll();
 		return temp;
-			
-//			if (temp1.getTimestamp() > temp2.getTimestamp()) {
-//
-//				temp = imageBuffers.get(1).poll();
-//			} else {
-//				temp = imageBuffers.get(0).poll();
-//			}
-//
-//			System.out.println("sync mode");
-//
-//			notifyAll();
-//
-//		} else {
-//			while (imageBuffers.get(0).isEmpty() && imageBuffers.get(1).isEmpty()) {
-//				try {
-//					wait();
-//				} catch (InterruptedException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-//
-//			}
-//			TimeStampedImage temp1 = imageBuffers.get(0).peek();
-//			TimeStampedImage temp2 = imageBuffers.get(1).peek();
-//			if (temp1 == null) {
-//				temp = imageBuffers.get(1).poll();
-//			} else {
-//				temp = imageBuffers.get(0).poll();
-//
-//			}
-//			System.out.println("no sync mode");
-//		}
-//		return temp;
 	}
 
 	private void checkDelayDiff(long temp1, long temp2) {
@@ -235,18 +173,13 @@ public class CameraHandler {
 		}
 	}
 
-	// public synchronized void newImage() {
-	// while(imageBuffers.get(0).isEmpty() || imageBuffers.get(1).isEmpty() ){
-	// try {
-	// wait();
-	// } catch (InterruptedException e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// }
-	// }
-	//
-	// }
-	
+	/**
+	 * A blocking method, blocks until appropiate time from has passed
+	 * (DELAY_FOR_IDLE) since "lastTime"
+	 * 
+	 * @param lastTime
+	 *            - lastTime a request for a picture was made
+	 */
 	public synchronized void waitInIdle(long lastTime) {
 
 		if (idleMode) {
@@ -256,8 +189,7 @@ public class CameraHandler {
 					System.out.println(diff);
 					wait(5000 - diff);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					// e.printStackTrace();
+					e.printStackTrace();
 				}
 				diff = System.currentTimeMillis() - lastTime;
 			}
@@ -266,62 +198,88 @@ public class CameraHandler {
 
 	}
 
+	/**
+	 * Set current mode
+	 * 
+	 * @param boolean
+	 *            true for idle mode false for movie mode
+	 */
 	public synchronized void setIdle(boolean b) {
 		idleMode = b;
 		notifyAll();
 
 	}
-	
-	public synchronized boolean isIdleMode(){
+
+	/**
+	 * Return wheater or not system is in Idle mode
+	 * 
+	 * @return true if Idle mode false if Movie mode
+	 */
+	public synchronized boolean isIdleMode() {
 		return idleMode;
 	}
 
+	/**
+	 * Set current SyncMode
+	 * 
+	 * @param mode
+	 *            true for sync and false for async
+	 */
 	public synchronized void setSyncMode(boolean mode) {
 		syncMode = mode;
 		notifyAll();
 
 	}
 
+	/**
+	 * Return wheater or not system is in sync mode
+	 * 
+	 * @return true if sync mode false if async mode
+	 */
 	public synchronized boolean isSyncMode() {
-		// TODO Auto-generated method stub
 		return syncMode;
 	}
 
-
-//	public synchronized void waitForInterrupted() {
-//		while (!threadsInterrupted) {
-//			try {
-//				wait();
-//			} catch (InterruptedException e) {
-//				e.printStackTrace();
-//			}
-//		}
-//		threadsInterrupted = false;
-//		notifyAll();
-//
-//	}
-//
-//	public synchronized void setThreadsInterrupted(boolean threadsInterrupted) {
-//		this.threadsInterrupted = threadsInterrupted;
-//		notifyAll();
-//	}
-
+	/**
+	 * Return wheater or not system is in Auto mode
+	 * 
+	 * @return true if Auto mode false if Manual mode
+	 */
 	public synchronized boolean isAutoMode() {
 		return isAutoMode;
 	}
 
+	/**
+	 * Set Auto mode
+	 * 
+	 * @param mode
+	 *            true for auto and false for manual
+	 */
 	public synchronized void setAutoMode(boolean b) {
-		isAutoMode=b;
+		isAutoMode = b;
 		notifyAll();
 	}
 
+	/**
+	 * Set current SyncMode
+	 * 
+	 * @param int
+	 *            true for sync and false for async
+	 */
 	public synchronized void flushBuffert(int index) {
-	imageBuffers.get(index).clear();
-	notifyAll();
-		
+		imageBuffers.get(index).clear();
+		notifyAll();
+
 	}
-	public synchronized void buffertConfirmedCleared(int index){
-		while(!imageBuffers.get(index).isEmpty()){
+
+	/**
+	 * Blocking method - blocks until buffer is empty
+	 * 
+	 * @param int
+	 *            index - the index of the buffer to wait for clear
+	 */
+	public synchronized void buffertConfirmedCleared(int index) {
+		while (!imageBuffers.get(index).isEmpty()) {
 			try {
 				wait();
 			} catch (InterruptedException e) {

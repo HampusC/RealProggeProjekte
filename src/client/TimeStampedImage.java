@@ -6,11 +6,23 @@ public class TimeStampedImage implements Comparable {
 	private byte[] image;
 	private int cameraNbr;
 
-	public TimeStampedImage(long timestamp, boolean motionDetected, byte[] image, int cameraNbr) {
+	/**
+	 * Creates an image object with a timestamp and various extra attributes
+	 * 
+	 * @param timestamp
+	 *            - the time the image was taken
+	 * @param motionDetected
+	 *            - true if motion was detected, false otherwise
+	 * @param image
+	 *            - the image
+	 * @param cameraIndex
+	 *            - the index of the camera the image was taken from
+	 */
+	public TimeStampedImage(long timestamp, boolean motionDetected, byte[] image, int cameraIndex) {
 		this.timestamp = timestamp;
 		this.motionDetected = motionDetected;
 		this.image = image;
-		this.cameraNbr = cameraNbr; 
+		this.cameraNbr = cameraIndex;
 	}
 
 	@Override
@@ -27,31 +39,51 @@ public class TimeStampedImage implements Comparable {
 		}
 		throw new ClassCastException("not of TimeStampedImage type");
 	}
-	public boolean equals(Object o){ // bilder med samma timstamp men olika bildarrays kommer vara equal varandra
+
+	public boolean equals(Object o) {
 		if (o instanceof TimeStampedImage) {
-			if(this.compareTo(o) == 0){
+			if (this.compareTo(o) == 0) {
 				return true;
 			}
 		}
 		return false;
 	}
 
+	/**
+	 * Return the time of when the image was taken.
+	 * 
+	 * @return - the time
+	 */
 	public long getTimestamp() {
 		// TODO Auto-generated method stub
 		return timestamp;
 	}
 
+	/**
+	 * Return the image as an byte array
+	 * 
+	 * @return - the image
+	 */
 	public byte[] getImage() {
-		// TODO Auto-generated method stub
 		return image;
 	}
-	public boolean getMotionDetected(){
+
+	/**
+	 * Return wheater or not motion was detected
+	 * 
+	 * @return - true if motion was detected, false otherwise
+	 */
+	public boolean getMotionDetected() {
 		return motionDetected;
 	}
 
+	/**
+	 * Return the index of the camera who took this image
+	 * 
+	 * @return - the index
+	 */
 	public int getCameraIndex() {
-		// TODO Auto-generated method stub
 		return cameraNbr;
 	}
-	
+
 }

@@ -12,6 +12,12 @@ public class ClientReadThread extends Thread {
 	private CameraHandler camH;
 	private int cameraIndex;
 
+	/**
+	 * Creates the read thread in the client
+	 * @param is - the input stream
+	 * @param camH - the monitor
+	 * @param cameraIndex - the index of the camera
+	 */
 	public ClientReadThread(InputStream is, CameraHandler camH, int cameraIndex) {
 		this.input = is;
 		this.cameraIndex = cameraIndex;
@@ -19,7 +25,6 @@ public class ClientReadThread extends Thread {
 	}
 
 	public void run() {
-		System.out.println("clientread thread: first time");
 		try {
 			while (!isInterrupted()) {
 
@@ -30,23 +35,10 @@ public class ClientReadThread extends Thread {
 				int result = 0;
 
 				while (read < maxToRead && result != -1) {
-					// System.out.println("clientreadthread: beflore read");
 					result = input.read(buffer, read, maxToRead - read);
-					// System.out.println("clientreadthread: after read");
-
-					// } catch (Exception e) {
-					// // TODO Auto-generated catch block
-					// e.printStackTrace();
-					// System.out.println("client thread interrupt 1");
-					// input.close();
-					// System.out.println("input was closed");
-					// this.interrupt();
-					// break;
-					// }
 					if (result != -1)
 						read = read + result;
 				}
-				// bufffer logic
 				if (buffer[0] == 1) { // vilkor = är bild
 
 					boolean motionDetected;
@@ -63,20 +55,14 @@ public class ClientReadThread extends Thread {
 					for (int i = 2; i < 10; i++) {
 						timestamp = (timestamp << 8) + (buffer[i] & 0xff);
 					}
-					// Image, lentgh long
+					// length of the image, long
 					ByteBuffer b = ByteBuffer.allocate(4);
 					b.put(buffer, 10, 4);
 					b.position(0);
 					int length = b.getInt();
-
-					byte[] image = Arrays.copyOfRange(buffer, 14, length + 14); // ngra
-																				// av
-																				// bytsen
-																				// i
-																				// buffer
-					// System.out.println(" recived: first bit in pic " +
-					// image[0]+
-					// " last byte " + image[image.length-1]);
+					
+					//the image
+					byte[] image = Arrays.copyOfRange(buffer, 14, length + 14); 
 					System.out.println("before buffer - delay is " + (System.currentTimeMillis()-timestamp));
 					camH.writeToBuffer(timestamp, motionDetected, image, cameraIndex);
 				

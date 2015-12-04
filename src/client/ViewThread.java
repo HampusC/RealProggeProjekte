@@ -14,6 +14,11 @@ public class ViewThread extends Thread {
 	private int offSyncImages;
 	private final int offSyncLimit = 10;
 
+	/**
+	 * Creates a viewthread to update the GUI
+	 * @param camH - the monitor
+	 * @param client - the client
+	 */
 	public ViewThread(CameraHandler camH, Client client) {
 		this.camH = camH;
 		gui = new GUI(client, camH);
@@ -21,87 +26,10 @@ public class ViewThread extends Thread {
 		offSyncImages = 0;
 
 	}
-
-//	public void run1() {
-//		// camH.newImage();
-//		TimeStampedImage temp1 = camH.getLatestImage(0);
-//		TimeStampedImage temp2 = camH.getLatestImage(1);
-//		long time1 = temp1.getTimestamp();
-//		long time2 = temp2.getTimestamp();
-//
-//		while (true) {
-//			if ((temp1.getMotionDetected() || temp2.getMotionDetected()) && client.isAutoMode()) {
-//				System.out.println(client.isAutoMode());
-//				gui.setMode(Client.MOVIE_MODE);
-//				System.out.println("mode motion changed to motion movie");
-//			}
-//			long diff = time1 - time2;
-//			System.out.println("diff = " + diff);
-//
-//			// if more than ~10 images offsync "in row" make asyncro, if back to
-//			// 0 make synchro
-//			if (client.isAutoMode()) {
-//				if (Math.abs(diff) > Client.MAX_DIFF) {
-//					offSyncImages++;
-//					if (offSyncImages > offSyncLimit) {
-//						gui.setSyncType(Client.ASYNCHRONOUS_MODE);
-//						offSyncImages = offSyncLimit;
-//					}
-//				} else {
-//					offSyncImages--;
-//					if (offSyncImages < 0) {
-//						gui.setSyncType(Client.SYNCHRONOUS_MODE);
-//						offSyncImages = 0;
-//					}
-//				}
-//			}
-//
-//			if (client.isSyncMode()) {
-//
-//				if (diff > 0) {
-//					gui.refresh(temp2.getImage(), 1, System.currentTimeMillis() - temp2.getTimestamp());
-//
-//					// camH.newImage();
-//					temp2 = camH.getLatestImage(1);
-//					time2 = temp2.getTimestamp();
-//				}
-//				if (diff < 0) {
-//					gui.refresh(temp1.getImage(), 0, System.currentTimeMillis() - temp1.getTimestamp());
-//
-//					// camH.newImage();
-//					temp1 = camH.getLatestImage(0);
-//					time1 = temp1.getTimestamp();
-//				} else {
-//					gui.refresh(temp1.getImage(), 0, System.currentTimeMillis() - temp1.getTimestamp());
-//					gui.refresh(temp2.getImage(), 1, System.currentTimeMillis() - temp2.getTimestamp());
-//					// camH.newImage();
-//					temp1 = camH.getLatestImage(0);
-//					temp2 = camH.getLatestImage(1);
-//					time1 = temp1.getTimestamp();
-//					time2 = temp2.getTimestamp();
-//				}
-//			} else {
-//
-//				gui.refresh(temp1.getImage(), 0, System.currentTimeMillis() - temp1.getTimestamp()); // samma
-//																										// som
-//																										// ovanstående
-//																										// else,
-//				// duplicerad kod?
-//				gui.refresh(temp2.getImage(), 1, System.currentTimeMillis() - temp2.getTimestamp());
-//				// camH.newImage();
-//				temp1 = camH.getLatestImage(0);
-//				temp2 = camH.getLatestImage(1);
-//				time1 = temp1.getTimestamp();
-//				time2 = temp2.getTimestamp();
-//			}
-//		}
-//
-//	}
-
+	
 	public void run() {
 		while (true) {
 			TimeStampedImage img = camH.nextImageToShow();
-			//set auto if motion detected
 			checkMotion(img);
 			
 			gui.setAutoLabel(camH.isAutoMode());
