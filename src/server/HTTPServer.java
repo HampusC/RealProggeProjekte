@@ -1,60 +1,32 @@
 package server;
 
-/*
- * Real-time and concurrent programming
- *
- * Minimalistic HTTP server solution.
- *
- * Package created by Patrik Persson, maintained by klas@cs.lth.se
- * Adapted for Axis cameras by Roger Henriksson 
- */
+import java.net.*; // Provides ServerSocket, Socket
+import java.io.*; // Provides InputStream, OutputStream
 
-import java.net.*;                  // Provides ServerSocket, Socket
-import java.io.*;                   // Provides InputStream, OutputStream
-
-import se.lth.cs.eda040.realcamera.*;      // Provides AxisM3006V
+import se.lth.cs.eda040.proxycamera.*; // Provides AxisM3006V
 
 /**
- * Itsy bitsy teeny weeny web server. Always returns an image, regardless
- * of the requested file name.
+ * Itsy bitsy teeny weeny web server. Always returns an image, regardless of the
+ * requested file name.
  */
-public class HTTPServer extends Thread{
-	
+public class HTTPServer extends Thread {
+
 	private AxisM3006V myCamera;
-	private int myPort;                             // TCP port for HTTP server
-	private static final byte[] CRLF      = { 13, 10 };
+	private int myPort; // TCP port for HTTP server
+	private static final byte[] CRLF = { 13, 10 };
 	// By convention, these bytes are always sent between lines
 	// (CR = 13 = carriage return, LF = 10 = line feed)
-
-	// ----------------------------------------------------------- MAIN PROGRAM
-
-
-	
-//	public static void main(String[]args) {
-//		HTTPServer theServer = new HTTPServer(null, args[0], Integer.parseInt(args[1]));
-//		try {
-//			theServer.handleRequests();
-//		} catch(IOException e) {
-//			System.out.println("Error!");
-//			theServer.destroy();
-//			System.exit(1);
-//		}
-//	}
 
 	// ------------------------------------------------------------ CONSTRUCTOR
 
 	/**
-	 * @param   port   The TCP port the server should listen to
+	 * @param port
+	 *            The TCP port the server should listen to
 	 */
 	public HTTPServer(AxisM3006V myCamera, String url, int port) {
-		myPort   = 1 + port;
-//		myCamera = new AxisM3006V();
-//		myCamera.init();
-//		myCamera.setProxy(url, port);
+		myPort = 1 + port;
 		this.myCamera = myCamera;
 	}
-
-	// --------------------------------------------------------- PUBLIC METHODS
 
 	/**
 	 * This method handles client requests. Runs in an eternal loop that does
@@ -66,8 +38,8 @@ public class HTTPServer extends Thread{
 	 * <LI>Closes the socket, i.e. disconnects from the client.
 	 * </UL>
 	 *
-	 * Two simple help methods (getLine/putLine) are used to read/write
-	 * entire text lines from/to streams. Their implementations follow below.
+	 * Two simple help methods (getLine/putLine) are used to read/write entire
+	 * text lines from/to streams. Their implementations follow below.
 	 */
 	public void run() {
 		byte[] jpeg = new byte[AxisM3006V.IMAGE_BUFFER_SIZE];
@@ -77,25 +49,11 @@ public class HTTPServer extends Thread{
 			System.out.println("HTTP server operating at port " + myPort + ".");
 
 			while (true) {
-
-				//myCamera.connect();
-				// The 'accept' method waits for a client to connect, then
-				// returns a socket connected to that client.
 				Socket clientSocket = serverSocket.accept();
-
-				// The socket is bi-directional. It has an input stream to read
-				// from and an output stream to write to. The InputStream can
-				// be read from using read(...) and the OutputStream can be
-				// written to using write(...). However, we use our own
-				// getLine/putLine methods below.
 				InputStream is = clientSocket.getInputStream();
 				OutputStream os = clientSocket.getOutputStream();
 
-				// Read the request
 				String request = getLine(is);
-
-				// The request is followed by some additional header lines,
-				// followed by a blank line. Those header lines are ignored.
 				String header;
 				boolean cont;
 				do {
@@ -103,27 +61,14 @@ public class HTTPServer extends Thread{
 					cont = !(header.equals(""));
 				} while (cont);
 
-				System.out.println("HTTP request '" + request + "' received.");
-
-				// Interpret the request. Complain about everything but GET.
-				// Ignore the file name.
 				if (request.substring(0, 4).equals("GET ")) {
-					// Got a GET request. Respond with a JPEG image from the
-					// camera. Tell the client not to cache the image
 					putLine(os, "HTTP/1.0 200 OK");
 					putLine(os, "Content-Type: image/jpeg");
 					putLine(os, "Pragma: no-cache");
 					putLine(os, "Cache-Control: no-cache");
-					putLine(os, ""); // Means 'end of header'
-
-//					if (!myCamera.connect()) {
-//						System.out.println("Failed to connect to camera!");
-//						System.exit(1);
-//					}
+					putLine(os, "");
 					int len = myCamera.getJPEG(jpeg, 0);
 					os.write(jpeg, 0, len);
-
-					// myCamera.close();
 				} else {
 					// Got some other request. Respond with an error message.
 					putLine(os, "HTTP/1.0 501 Method not implemented");
@@ -134,39 +79,30 @@ public class HTTPServer extends Thread{
 					System.out.println("Unsupported HTTP request!");
 				}
 
-				os.flush(); // Flush any remaining content
-				clientSocket.close(); // Disconnect from the client
+				os.flush();
+				clientSocket.close();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
-//	public void destroy() {
-//		myCamera.destroy();
-//	}
-	
-	
-	// -------------------------------------------------------- PRIVATE METHODS
 
 	/**
-	 * Read a line from InputStream 's', terminated by CRLF. The CRLF is
-	 * not included in the returned string.
+	 * Read a line from InputStream 's', terminated by CRLF. The CRLF is not
+	 * included in the returned string.
 	 */
-	private static String getLine(InputStream s)
-			throws IOException {
+	private static String getLine(InputStream s) throws IOException {
 		boolean done = false;
 		String result = "";
 
-		while(!done) {
-			int ch = s.read();        // Read
+		while (!done) {
+			int ch = s.read(); // Read
 			if (ch <= 0 || ch == 10) {
 				// Something < 0 means end of data (closed socket)
 				// ASCII 10 (line feed) means end of line
 				done = true;
-			}
-			else if (ch >= ' ') {
-				result += (char)ch;
+			} else if (ch >= ' ') {
+				result += (char) ch;
 			}
 		}
 
@@ -177,13 +113,11 @@ public class HTTPServer extends Thread{
 	 * Send a line on OutputStream 's', terminated by CRLF. The CRLF should not
 	 * be included in the string str.
 	 */
-	private static void putLine(OutputStream s, String str)
-			throws IOException {
+	private static void putLine(OutputStream s, String str) throws IOException {
 		s.write(str.getBytes());
 		s.write(CRLF);
 	}
 
 	// ----------------------------------------------------- PRIVATE ATTRIBUTES
 
-	
 }

@@ -27,9 +27,7 @@ public class ClientReadThread extends Thread {
 	public void run() {
 		try {
 			while (!isInterrupted()) {
-
-				int maxToRead = AxisM3006V.IMAGE_BUFFER_SIZE + 10; // should be
-																	// + 14
+				int maxToRead = AxisM3006V.IMAGE_BUFFER_SIZE + 10; 
 				byte[] buffer = new byte[maxToRead];
 				int read = 0;
 				int result = 0;
@@ -44,8 +42,6 @@ public class ClientReadThread extends Thread {
 					boolean motionDetected;
 					if (buffer[1] == 1) {
 						motionDetected = true;
-						System.out.println("motion detected");
-
 					} else {
 						motionDetected = false;
 					}
@@ -63,7 +59,6 @@ public class ClientReadThread extends Thread {
 					
 					//the image
 					byte[] image = Arrays.copyOfRange(buffer, 14, length + 14); 
-					System.out.println("before buffer - delay is " + (System.currentTimeMillis()-timestamp));
 					monitor.writeToBuffer(timestamp, motionDetected, image, cameraIndex);
 				
 				}

@@ -9,7 +9,6 @@ public class CameraSocketHandler {
 	private Socket socket;
 	private ClientWriteThread cWriteThread;
 	private ClientReadThread cReadThread;
-	private ClientMonitor monitor;
 	private int cameraIndex;
 
 	/**
@@ -30,7 +29,6 @@ public class CameraSocketHandler {
 	 */
 	public CameraSocketHandler(int camNbr, String address, int port, ClientMonitor monitor)
 			throws UnknownHostException, IOException {
-		this.monitor = monitor;
 		cameraIndex = camNbr;
 		socket = new Socket(address, port);
 		socket.setTcpNoDelay(true);
@@ -47,10 +45,8 @@ public class CameraSocketHandler {
 	public void disconnect() {
 		cWriteThread.interrupt();
 		cReadThread.interrupt();
-
 		try {
 			socket.close();
-			System.out.println("socket was closed - client side");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

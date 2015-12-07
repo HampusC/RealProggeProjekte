@@ -45,7 +45,6 @@ public class ClientWriteThread extends Thread {
 				}
 
 			}
-
 			output.flush();
 			output.close();
 		} catch (IOException e) {

@@ -6,7 +6,6 @@ public class TimeStampedImageComparator implements Comparator{
 
 	@Override
 	public int compare(Object o1, Object o2) {
-		// TODO Auto-generated method stub
 		TimeStampedImage temp1 = (TimeStampedImage) o1;
 			TimeStampedImage temp2 = (TimeStampedImage) o2;
 			long timestamp1 = temp1.getTimestamp() ;

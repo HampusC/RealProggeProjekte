@@ -1,8 +1,6 @@
 package client;
 
 import java.io.IOException;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
 
 public class Client {
 	private CameraSocketHandler[] cameraSockets;
@@ -10,14 +8,12 @@ public class Client {
 
 	/**
 	 * Creates a client
-	 * 
 	 * @param monitor
 	 *            - the client monitor
 	 */
 	public Client(ClientMonitor monitor) {
 		this.monitor = monitor;
 		cameraSockets = new CameraSocketHandler[2];
-	
 	}
 
 	/**
@@ -40,7 +36,6 @@ public class Client {
 			}
 		} else {
 			throw new Exception("Error: This window is already connected to a camera! Disconnect first.");
-
 		}
 
 	}
@@ -60,7 +55,6 @@ public class Client {
 	 * @return true if the camera successfully got disconnected, false otherwise
 	 */
 	public boolean disconnect(int index) {
-
 		CameraSocketHandler temp = cameraSockets[index];
 		if (temp != null) {
 			temp.disconnect();
@@ -68,9 +62,7 @@ public class Client {
 			monitor.flushBuffert(index);
 			return true;
 		}
-
 		return false;
-
 	}
 
 }

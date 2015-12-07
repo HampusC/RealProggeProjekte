@@ -27,7 +27,6 @@ public class TimeStampedImage implements Comparable {
 
 	@Override
 	public int compareTo(Object o) {
-		// TODO Auto-generated method stub
 		if (o instanceof TimeStampedImage) {
 			TimeStampedImage temp = (TimeStampedImage) o;
 			if (timestamp - temp.timestamp < 0) {
@@ -39,7 +38,8 @@ public class TimeStampedImage implements Comparable {
 		}
 		throw new ClassCastException("not of TimeStampedImage type");
 	}
-
+	
+	@Override
 	public boolean equals(Object o) {
 		if (o instanceof TimeStampedImage) {
 			if (this.compareTo(o) == 0) {
@@ -55,7 +55,6 @@ public class TimeStampedImage implements Comparable {
 	 * @return - the time
 	 */
 	public long getTimestamp() {
-		// TODO Auto-generated method stub
 		return timestamp;
 	}
 
