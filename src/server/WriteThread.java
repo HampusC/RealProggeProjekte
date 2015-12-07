@@ -18,7 +18,7 @@ public class WriteThread extends Thread {
 	}
 
 	public void run() {
-		byte[] jpeg = new byte[AxisM3006V.IMAGE_BUFFER_SIZE + 10];
+		byte[] jpeg = new byte[AxisM3006V.IMAGE_BUFFER_SIZE+10 ];
 		try {
 			while (!isInterrupted()) {
 				sm.shouldSend();

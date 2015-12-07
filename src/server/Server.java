@@ -24,13 +24,17 @@ public class Server {
 	}
 
 	public static void main(String[] args) {
-		try {
-			Server s = new Server(args[0], Integer.parseInt(args[1]));
-			s.execute();
-		} catch (IOException e) {
-			System.out.println("Error!");
-			e.printStackTrace();
-			System.exit(1);
+		if (args.length != 2) {
+			System.out.println("The server needs two arguments; server address and port number!");
+		} else {
+			try {
+				Server s = new Server(args[0], Integer.parseInt(args[1]));
+				s.execute();
+			} catch (IOException e) {
+				System.out.println("Error!");
+				e.printStackTrace();
+
+			}
 		}
 	}
 
