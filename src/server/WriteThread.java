@@ -8,12 +8,12 @@ import se.lth.cs.eda040.realcamera.AxisM3006V;
 public class WriteThread extends Thread {
 
 	private OutputStream os;
-	private AxisM3006V camera;
 	private ServerMonitor sm;
+	private AxisM3006V myCamera;
 
-	public WriteThread(AxisM3006V camera, OutputStream os, ServerMonitor sm) {
+	public WriteThread(AxisM3006V myCamera, OutputStream os, ServerMonitor sm) {
 		this.os = os;
-		this.camera = camera;
+		this.myCamera = myCamera;
 		this.sm = sm;
 	}
 
@@ -39,11 +39,11 @@ public class WriteThread extends Thread {
 
 			// the image, written on 14 and onwards
 			System.out.println("write after should");
-			int len = camera.getJPEG(jpeg, 6 + AxisM3006V.TIME_ARRAY_SIZE);
+			int len = myCamera.getJPEG(jpeg, 6 + AxisM3006V.TIME_ARRAY_SIZE);
 			System.out.println("write after getjpeg");
-			jpeg[1] = (byte) (camera.motionDetected() ? 1 : 0);
+			jpeg[1] = (byte) (myCamera.motionDetected() ? 1 : 0);
 			System.out.println("write after motiondeteccted");
-			camera.getTime(jpeg, 2);
+			myCamera.getTime(jpeg, 2);
 			System.out.println("write after gettime");
 //			System.out.println("first bit in pic " + jpeg[6 + AxisM3006V.TIME_ARRAY_SIZE] + " last byte "
 //					+ jpeg[6 + AxisM3006V.TIME_ARRAY_SIZE + len - 1]);
@@ -63,11 +63,11 @@ public class WriteThread extends Thread {
 		}
 		os.flush();
 		os.close();
-		camera.close(); //finns camera.destroy();
+		//myCamera.close(); //finns myCamera.destroy();
 			
 		} catch (IOException e) {
 
-			camera.close();
+			myCamera.close();
 			//e.printStackTrace();
 			}
 			

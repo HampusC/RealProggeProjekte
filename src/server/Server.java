@@ -16,35 +16,16 @@ public class Server {
 	private AxisM3006V camera;
 	private int port;
 	
-	public Server(int port) throws IOException{
-		serverSocket = new ServerSocket(port);
-		camera = new AxisM3006V();
-		camera.init();
-		camera.setProxy("argus-2", 5051); //ändra andressen argus-1.student.lth.se
-		
-		this.port = port;
-		
-	}
 	public Server(String url ,int port) throws IOException{
 		serverSocket = new ServerSocket(port);
 		camera = new AxisM3006V();
 		camera.init();
 		camera.setProxy(url, port); //ändra andressen argus-1.student.lth.se
-		
 		this.port = port;
-		
+		HTTPServer https = new HTTPServer(camera, url, port);
+		https.start();
 	}
 	
-	public static void main2(String[] args){
-		try {
-			Server s = new Server(5051);
-			s.execute();
-		} catch(IOException e) {
-			System.out.println("Error!");
-			e.printStackTrace();
-			System.exit(1);
-		}
-	}
 	public static void main(String[] args){
 		try {
 			Server s = new Server(args[0],Integer.parseInt(args[1]));
@@ -85,26 +66,26 @@ public class Server {
 		}	
 	}
 	
-	public void disconnect() {
-		sm.streamClosed();
-		rt.interrupt();
-		wt.interrupt();
-		try {
-			clientSocket.close(); //Ska denna stängas här?
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public void destroy() {
-		camera.destroy();
-	}
-	
-
-	public void closeSocket() throws IOException{
-		clientSocket.close();
-	}
-	
+//	public void disconnect() {
+//		sm.streamClosed();
+//		rt.interrupt();
+//		wt.interrupt();
+//		try {
+//			clientSocket.close(); //Ska denna stängas här?
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//	}
+//	
+//	public void destroy() {
+//		camera.destroy();
+//	}
+//	
+//
+//	public void closeSocket() throws IOException{
+//		clientSocket.close();
+//	}
+//	
 	
 	
 	

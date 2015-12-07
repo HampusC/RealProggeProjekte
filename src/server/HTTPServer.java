@@ -18,31 +18,40 @@ import se.lth.cs.eda040.realcamera.*;      // Provides AxisM3006V
  * Itsy bitsy teeny weeny web server. Always returns an image, regardless
  * of the requested file name.
  */
-public class HTTPServer {
+public class HTTPServer extends Thread{
+	
+	private AxisM3006V myCamera;
+	private int myPort;                             // TCP port for HTTP server
+	private static final byte[] CRLF      = { 13, 10 };
+	// By convention, these bytes are always sent between lines
+	// (CR = 13 = carriage return, LF = 10 = line feed)
 
 	// ----------------------------------------------------------- MAIN PROGRAM
 
-	public static void main(String[]args) {
-		HTTPServer theServer = new HTTPServer(5051);
-		try {
-			theServer.handleRequests();
-		} catch(IOException e) {
-			System.out.println("Error!");
-			theServer.destroy();
-			System.exit(1);
-		}
-	}
+
+	
+//	public static void main(String[]args) {
+//		HTTPServer theServer = new HTTPServer(null, args[0], Integer.parseInt(args[1]));
+//		try {
+//			theServer.handleRequests();
+//		} catch(IOException e) {
+//			System.out.println("Error!");
+//			theServer.destroy();
+//			System.exit(1);
+//		}
+//	}
 
 	// ------------------------------------------------------------ CONSTRUCTOR
 
 	/**
 	 * @param   port   The TCP port the server should listen to
 	 */
-	public HTTPServer(int port) {
-		myPort   = port;
-		myCamera = new AxisM3006V();
-		myCamera.init();
-		myCamera.setProxy("argus-4.student.lth.se", port);
+	public HTTPServer(AxisM3006V myCamera, String url, int port) {
+		myPort   = 1 + port;
+//		myCamera = new AxisM3006V();
+//		myCamera.init();
+//		myCamera.setProxy(url, port);
+		this.myCamera = myCamera;
 	}
 
 	// --------------------------------------------------------- PUBLIC METHODS
@@ -60,13 +69,16 @@ public class HTTPServer {
 	 * Two simple help methods (getLine/putLine) are used to read/write
 	 * entire text lines from/to streams. Their implementations follow below.
 	 */
-	public void handleRequests() throws IOException {
+	public void run() {
 		byte[] jpeg = new byte[AxisM3006V.IMAGE_BUFFER_SIZE];
-		ServerSocket serverSocket = new ServerSocket(myPort);
-		System.out.println("HTTP server operating at port " + myPort + ".");
+		ServerSocket serverSocket;
+		try {
+			serverSocket = new ServerSocket(myPort);
+			System.out.println("HTTP server operating at port " + myPort + ".");
 
-		while (true) {
-			try {
+			while (true) {
+
+				//myCamera.connect();
 				// The 'accept' method waits for a client to connect, then
 				// returns a socket connected to that client.
 				Socket clientSocket = serverSocket.accept();
@@ -76,7 +88,7 @@ public class HTTPServer {
 				// be read from using read(...) and the OutputStream can be
 				// written to using write(...). However, we use our own
 				// getLine/putLine methods below.
-				InputStream  is = clientSocket.getInputStream();
+				InputStream is = clientSocket.getInputStream();
 				OutputStream os = clientSocket.getOutputStream();
 
 				// Read the request
@@ -85,58 +97,54 @@ public class HTTPServer {
 				// The request is followed by some additional header lines,
 				// followed by a blank line. Those header lines are ignored.
 				String header;
-				boolean cont; 
+				boolean cont;
 				do {
 					header = getLine(is);
 					cont = !(header.equals(""));
 				} while (cont);
 
-				System.out.println("HTTP request '" + request
-						+ "' received.");
+				System.out.println("HTTP request '" + request + "' received.");
 
 				// Interpret the request. Complain about everything but GET.
 				// Ignore the file name.
-				if (request.substring(0,4).equals("GET ")) {
+				if (request.substring(0, 4).equals("GET ")) {
 					// Got a GET request. Respond with a JPEG image from the
 					// camera. Tell the client not to cache the image
 					putLine(os, "HTTP/1.0 200 OK");
 					putLine(os, "Content-Type: image/jpeg");
 					putLine(os, "Pragma: no-cache");
 					putLine(os, "Cache-Control: no-cache");
-					putLine(os, "");                   // Means 'end of header'
+					putLine(os, ""); // Means 'end of header'
 
-					if (!myCamera.connect()) {
-						System.out.println("Failed to connect to camera!");
-						System.exit(1);
-					}
+//					if (!myCamera.connect()) {
+//						System.out.println("Failed to connect to camera!");
+//						System.exit(1);
+//					}
 					int len = myCamera.getJPEG(jpeg, 0);
 					os.write(jpeg, 0, len);
-					
-					myCamera.close();
-				}
-				else {
+
+					// myCamera.close();
+				} else {
 					// Got some other request. Respond with an error message.
 					putLine(os, "HTTP/1.0 501 Method not implemented");
 					putLine(os, "Content-Type: text/plain");
 					putLine(os, "");
-					putLine(os, "No can do. Request '" + request
-							+ "' not understood.");
+					putLine(os, "No can do. Request '" + request + "' not understood.");
 
 					System.out.println("Unsupported HTTP request!");
 				}
 
-				os.flush();                      // Flush any remaining content
-				clientSocket.close();	          // Disconnect from the client
+				os.flush(); // Flush any remaining content
+				clientSocket.close(); // Disconnect from the client
 			}
-			catch (IOException e) {
-				System.out.println("Caught exception " + e);
-			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 	
-	public void destroy() {
-		myCamera.destroy();
-	}
+//	public void destroy() {
+//		myCamera.destroy();
+//	}
 	
 	
 	// -------------------------------------------------------- PRIVATE METHODS
@@ -177,11 +185,5 @@ public class HTTPServer {
 
 	// ----------------------------------------------------- PRIVATE ATTRIBUTES
 
-	private int myPort;                             // TCP port for HTTP server
-	private AxisM3006V myCamera;                    // Makes up the JPEG images
-
-	// By convention, these bytes are always sent between lines
-	// (CR = 13 = carriage return, LF = 10 = line feed)
-
-	private static final byte[] CRLF      = { 13, 10 };
+	
 }
