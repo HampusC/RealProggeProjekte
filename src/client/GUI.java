@@ -136,6 +136,17 @@ public class GUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				Thread queryThread = new Thread() {
 				      public void run() {
+				    	setIdleMode(true);
+				    	btnAuto.setEnabled(true); 
+						btnIdle.setEnabled(false); 
+ 						btnMovie.setEnabled(true); 
+				    	monitor.setAutoMode(false);
+				        resetMotionTriggered();
+				    	try {
+				    		sleep(100);
+				    	} catch (InterruptedException e) {
+				    		e.printStackTrace();
+				    	}
 				        client.disconnect(0);
 				        monitor.buffertConfirmedCleared(0);
 				        try {
@@ -177,17 +188,27 @@ public class GUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				Thread queryThread = new Thread() {
 				      public void run() {
-				        client.disconnect(1); 
-				        monitor.buffertConfirmedCleared(1);
-				        try {
-							sleep(50);
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-				        motions.get(1).setText("");
-				        canvas.get(1).getGraphics().clearRect(0, 0, 640, 480);
-			
+				    	    setIdleMode(true);
+					    	btnAuto.setEnabled(true); 
+							btnIdle.setEnabled(false); 
+	 						btnMovie.setEnabled(true); 
+					    	monitor.setAutoMode(false);
+					        resetMotionTriggered();
+					    	try {
+					    		sleep(100);
+					    	} catch (InterruptedException e) {
+					    		e.printStackTrace();
+					    	}
+					        client.disconnect(1);
+					        monitor.buffertConfirmedCleared(1);
+					        try {
+								sleep(50);
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+					        motions.get(1).setText("");
+					        canvas.get(1).getGraphics().clearRect(0, 0, 640, 480);
 				      }
 				};
 				queryThread.start();
