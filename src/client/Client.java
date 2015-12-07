@@ -5,7 +5,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 public class Client {
-	private ArrayList<CameraSocketHandler> cameraSockets;
+	private CameraSocketHandler[] cameraSockets;
 	private ClientMonitor monitor;
 
 	/**
@@ -16,9 +16,8 @@ public class Client {
 	 */
 	public Client(ClientMonitor monitor) {
 		this.monitor = monitor;
-		cameraSockets = new ArrayList<CameraSocketHandler>(2);
-		cameraSockets.add(null);
-		cameraSockets.add(null);
+		cameraSockets = new CameraSocketHandler[2];
+	
 	}
 
 	/**
@@ -33,9 +32,9 @@ public class Client {
 	 *             - thrown when an connection couldn't be handled
 	 */
 	public void connectCamera(int camIndex, String address, int port) throws Exception {
-		if (cameraSockets.get(camIndex) == null) {
+		if (cameraSockets[camIndex] == null) {
 			try {
-				cameraSockets.set(camIndex, new CameraSocketHandler(camIndex, address, port, monitor));
+				cameraSockets[camIndex] = new CameraSocketHandler(camIndex, address, port, monitor);
 			} catch (IOException e) {
 				throw new Exception("Error: Could not connect to the server! Check the address and port again!");
 			}
@@ -62,10 +61,10 @@ public class Client {
 	 */
 	public boolean disconnect(int index) {
 
-		CameraSocketHandler temp = cameraSockets.get(index);
+		CameraSocketHandler temp = cameraSockets[index];
 		if (temp != null) {
 			temp.disconnect();
-			cameraSockets.set(index, null);
+			cameraSockets[index]= null;
 			monitor.flushBuffert(index);
 			return true;
 		}
