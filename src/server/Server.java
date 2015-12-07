@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import se.lth.cs.eda040.proxycamera.AxisM3006V;
+import se.lth.cs.eda040.realcamera.AxisM3006V;
 
 
 public class Server {
@@ -29,7 +29,7 @@ public class Server {
 		serverSocket = new ServerSocket(port);
 		camera = new AxisM3006V();
 		camera.init();
-		camera.setProxy(url, 5051); //ändra andressen argus-1.student.lth.se
+		camera.setProxy(url, port); //ändra andressen argus-1.student.lth.se
 		
 		this.port = port;
 		

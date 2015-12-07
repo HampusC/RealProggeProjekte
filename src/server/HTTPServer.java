@@ -12,7 +12,7 @@ package server;
 import java.net.*;                  // Provides ServerSocket, Socket
 import java.io.*;                   // Provides InputStream, OutputStream
 
-import se.lth.cs.eda040.proxycamera.*;      // Provides AxisM3006V
+import se.lth.cs.eda040.realcamera.*;      // Provides AxisM3006V
 
 /**
  * Itsy bitsy teeny weeny web server. Always returns an image, regardless
